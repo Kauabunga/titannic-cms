@@ -10,7 +10,7 @@
     "socketsNeedle": "// Insert sockets below",
     "filters": {
       "js": true,
-      "html": true,
+      "jade": true,
       "less": true,
       "uirouter": true,
       "bootstrap": true,
@@ -19,7 +19,9 @@
       "mongoose": true,
       "auth": true,
       "oauth": true,
-      "googleAuth": true
+      "googleAuth": true,
+      "facebookAuth": true,
+      "twitterAuth": true
     }
   },
   "generator-ng-component": {
@@ -34,7 +36,7 @@
     ],
     "extensions": [
       "js",
-      "html",
+      "jade",
       "less"
     ],
     "directiveSimpleTemplates": "",

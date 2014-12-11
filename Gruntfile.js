@@ -90,6 +90,12 @@ module.exports = function (grunt) {
           '<%= yeoman.client %>/{app,components}/**/*.less'],
         tasks: ['less', 'autoprefixer']
       },
+      jade: {
+        files: [
+          '<%= yeoman.client %>/{app,components}/*',
+          '<%= yeoman.client %>/{app,components}/**/*.jade'],
+        tasks: ['jade']
+      },
       gruntfile: {
         files: ['Gruntfile.js']
       },
@@ -404,9 +410,11 @@ module.exports = function (grunt) {
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
+        'jade',
         'less',
       ],
       test: [
+        'jade',
         'less',
       ],
       debug: {
@@ -419,6 +427,7 @@ module.exports = function (grunt) {
         }
       },
       dist: [
+        'jade',
         'less',
         'imagemin',
         'svgmin'
@@ -461,6 +470,26 @@ module.exports = function (grunt) {
         NODE_ENV: 'production'
       },
       all: localConfig
+    },
+
+    // Compiles Jade to html
+    jade: {
+      compile: {
+        options: {
+          data: {
+            debug: false
+          }
+        },
+        files: [{
+          expand: true,
+          cwd: '<%= yeoman.client %>',
+          src: [
+            '{app,components}/**/*.jade'
+          ],
+          dest: '.tmp',
+          ext: '.html'
+        }]
+      }
     },
 
     // Compiles Less to CSS
