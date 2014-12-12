@@ -60,6 +60,42 @@ exports.show = function(req, res) {
             var documentObject = document.toObject();
             documentObject.content = deserialisedContent;
 
+
+            //TODO fetch this from a google id also
+            documentObject.schema = {
+              "title": "Nav",
+              "type": "object",
+              "properties": {
+                "navItems": {
+                  "type": "array",
+                  "format": "table",
+                  "title": "Navs",
+                  "uniqueItems": true,
+                  "items": {
+                    "type": "object",
+                    "title": "Nav",
+                    "properties": {
+                      "label": {
+                        "type": "string"
+                      },
+                      "path": {
+                        "type": "string"
+                      },
+                      "title": {
+                        "type": "string"
+                      },
+                      "description": {
+                        "type": "string"
+                      },
+                      "keywords": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            };
+
             res.status(200).json(documentObject);
           }
           catch (error) {

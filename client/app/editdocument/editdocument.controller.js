@@ -1,51 +1,66 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http) {
+  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, $rootScope) {
 
     $scope.document = undefined;
     $scope.documentContent = undefined;
 
     $log.debug('Editing document', $stateParams);
 
+
+    $scope.$watch('document', function(){
+      updateContent();
+    }, true);
+
+
+    function updateContent(){
+
+      if($scope.document){
+        $scope.documentContent = JSON.stringify($scope.document.content);
+        $log.debug($scope.documentContent);
+      }
+      else{
+        $log.error('Content not a json object', $scope.document);
+      }
+
+    }
+
     /**
      *
      */
-    $http.get('/api/documents/' + $stateParams.documentId).success(function(document) {
-      $log.debug('Editing document response', document, document.content);
+    (function init(){
 
-      $scope.document = document;
+      var getDocumentDeferred = Document.getDocument($stateParams.documentId);
+      getDocumentDeferred.finally(function(){});
 
+      getDocumentDeferred.then(
+        function success(document){
 
-      //TODO Should really load this in an external service / component
-      if(typeof document.content === 'object'){
-        $scope.documentContent = JSON.stringify(document.content);
-      }
-      else{
-        //error
-      }
+          $scope.document = document;
 
+        },
+        function error(data, statusCode){
 
+          if(statusCode === 423){
+            //TODO Document is already in use
+            $log.error('Document already in use', data, statusCode);
+          }
+          else{
+            //TODO generic
+            $log.error('Something went wrong getting document', data, statusCode);
+          }
 
-      //TODO handle socket updating document on client until submission -> lasts as long as user session? As long as lock on file? Locks can be removed by admin?
-      //socket.syncUpdates('document', $scope.documentList);
+        });
 
-    }).error(function(data, statusCode){
+    })();
 
-      if(statusCode === 423){
-        //TODO Document is already in use
-      }
-      else{
-        //TODO generic
-      }
-
-    });
 
     /**
      *
      */
     $scope.updateDocument = function updateDocument(){
-
+      Document.updateDocument();
     };
 
 
