@@ -6,6 +6,8 @@ angular.module('titannicCmsApp')
     var _document;
     var _deferred;
 
+    var self = this;
+
 
     /**
      *
@@ -21,7 +23,7 @@ angular.module('titannicCmsApp')
      *
      * @returns {*}
      */
-    this.getDocument = function(docId){
+    self.getDocument = function(docId){
 
       $log.debug('Getting document', docId);
 
@@ -48,7 +50,7 @@ angular.module('titannicCmsApp')
     /**
      *
      */
-    this.updateDocument = function(){
+    self.updateDocument = function(){
       $log.debug('Submitting document', _document);
 
       var deferred = $q.defer();
@@ -56,6 +58,9 @@ angular.module('titannicCmsApp')
       $http.put('/api/documents/' + _document._id, _document)
         .success(function(){
           deferred.resolve();
+
+          self.clearDocument();
+
         })
         .error(function(){
           deferred.reject();
@@ -67,7 +72,7 @@ angular.module('titannicCmsApp')
     /**
      *
      */
-    this.clearDocument = function(){
+    self.clearDocument = function(){
       _deferred = undefined;
       _document = undefined;
     };
