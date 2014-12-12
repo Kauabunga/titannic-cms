@@ -1,2 +1,14 @@
-.col-md-12
-    | This is the createdocument view.
+div(ng-include='"components/navbar/navbar.html"')
+
+
+.container
+  form.document-form
+    label Link a new Google doc to the cms
+    p.input-group
+
+      input.form-control(type='text', placeholder='Name', ng-model='document.name')
+      input.form-control(type='text', placeholder='Info', ng-model='document.info')
+      input.form-control(type='text', placeholder='Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.googleDocContentId')
+
+      span.input-group-btn
+        button.btn.btn-primary(type='submit', ng-click='newDocument()') Add New

@@ -9,10 +9,13 @@ var DocumentSchema = new Schema({
   active: Boolean,
 
   //id of the google drive
-  googleDocId: String,
+  googleDocContentId: String,
 
   //local copy of the document before/after it is pushed to google docs
   localDocCopy: String,
+
+  //link to google doc json of the schema
+  googleDocSchemaId: String,
 
   //environment the document targets
   environment: String,

@@ -15,16 +15,13 @@ header#banner.hero-unit
         li
           a(ng-click='editDocument(document)', tooltip='{{document.info}}')
             | {{document.name}}
-            button.close(type='button', ng-click='deleteDocument(document)') ×
+            = ' | '
+            | {{document.googleDocContentId}}
+            button.close(type='button', ng-click='deleteDocument($event, document)') ×
 
-
-  form.document-form
-    label Syncs in realtime across clients
-    p.input-group
-      input.form-control(type='text', placeholder='Add a new document here.', ng-model='document')
-      span.input-group-btn
-        button.btn.btn-primary(type='submit', ng-click='addDocument()') Add New
-
+  .row
+    .col-lg-12
+      button.btn.btn-primary(type='button', ng-click='createDocument()') Add new Docuemnt
 
 footer.footer
   .container
