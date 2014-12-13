@@ -51,10 +51,33 @@ var schemas = [
         googleDocContentId: '0B84YdCmz0nrQYVBZcHVkTVNTQjg'
       }
     ]
+  },
+  {
+    schema: {
+      name : 'About us schema',
+      info : 'About us schema',
+      googleDocSchemaId: '0B84YdCmz0nrQSEdrdXMzbDhhMm8'
+    },
+    documents: [
+      {
+        name : 'About us dev content',
+        info : 'About us dev json content',
+        googleDocContentId: '0B84YdCmz0nrQal9TRjhMMHZhTVk'
+      },
+      {
+        name : 'About us live content',
+        info : 'About us live json content',
+        googleDocContentId: '0B84YdCmz0nrQck5TWG9TZC1jTGs'
+      }
+    ]
   }
 
 ];
 
+/**
+ *
+ * @param document
+ */
 function createDocument(document){
 
   Document.create(document, function(){
@@ -62,6 +85,10 @@ function createDocument(document){
   });
 }
 
+/**
+ *
+ * @param currentSchema
+ */
 function createSchema(currentSchema){
 
   Schema.create(currentSchema.schema, function(event, schemaMongo){
