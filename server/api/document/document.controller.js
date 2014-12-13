@@ -1,7 +1,10 @@
 'use strict';
 
 var _ = require('lodash');
+var q = require('q');
 var Document = require('./document.model');
+var Schema = require('./../schema/schema.model');
+var googledrive = require('../../googledrive/googledrive.service');
 var https = require('follow-redirects').https;
 
 
@@ -16,8 +19,12 @@ exports.index = function(req, res) {
   });
 };
 
+
 // Get a single document
 exports.show = function(req, res) {
+
+  var schemaDeferred = q.defer();
+
   Document.findById(req.params.id, function (err, document) {
 
     if(err) { return handleError(res, err); }
@@ -28,122 +35,74 @@ exports.show = function(req, res) {
       return res.send(423);
     }
 
-    //TODO we need to fetch the google doc from goooogle - should really be using correct api + library as we will have to when editing?
-    //TODO distinguish google errors from server errors
-
-    //TODO this should be in a separate module
-    var httpsGoogleOptions = {
-      host: 'docs.google.com',
-      path: '/uc?id=' + document.googleDocContentId + '&export=download' + '&random=' + (Math.random() * 100000),
-      agent: false
-    };
-
-    console.log('REQUEST : ' + document.name + '    id: ' + document.googleDocContentId + '    url: ' + httpsGoogleOptions.host + httpsGoogleOptions.path);
-
-    var googleRequest = https.get(httpsGoogleOptions, function googleResponse(googleResponse){
-      if(googleResponse.statusCode === 200) {
-
-        // Buffer the body entirely for processing as a whole.
-        var bodyChunks = [];
-        googleResponse.on('data', function (chunk) {
-          // You can process streamed parts here...
-          bodyChunks.push(chunk);
-        }).on('end', function () {
-
-          var content = '';
-
-          try {
-            content = Buffer.concat(bodyChunks);
-            console.log('    ---> CONTENT found for document: ' + document.name + '\n');
-
-            var deserialisedContent = JSON.parse(content);
-            var documentObject = document.toObject();
-            documentObject.content = deserialisedContent;
+    console.log('Document: ' + JSON.stringify(document));
+    console.log('Schema id: ' + document.schemaId);
 
 
-            //TODO fetch this from a google id also
-            documentObject.schema = {
-              "title": "Nav",
-              "type": "object",
-              "properties": {
-                "navItems": {
-                  "type": "array",
-                  "format": "table",
-                  "title": "Navs",
-                  "uniqueItems": true,
-                  "items": {
-                    "type": "object",
-                    "title": "Nav",
-                    "properties": {
-                      "label": {
-                        "type": "string"
-                      },
-                      "path": {
-                        "type": "string"
-                      },
-                      "title": {
-                        "type": "string"
-                      },
-                      "description": {
-                        "type": "string"
-                      },
-                      "keywords": {
-                        "type": "string"
-                      }
-                    }
-                  }
-                }
-              }
-            };
+    //Get the documents schema
+    Schema.findById(document.schemaId, function (err, schema){
+      console.log('Schema found: ' + JSON.stringify(schema));
+      schemaDeferred.resolve(schema);
+    });
 
-            res.status(200).json(documentObject);
-          }
-          catch (error) {
-            console.log('    ---> Error parsing response for document: ' + document.name);
-            console.log('         CONTENT: ' + content);
-            console.log('         URL: ' + httpsGoogleOptions.host + httpsGoogleOptions.path);
+    schemaDeferred.promise.then(
+      function success(schema){
+
+        //TODO we need to fetch the google doc from goooogle - should really be using correct api + library as we will have to when editing?
+        //TODO distinguish google errors from server errors
+
+
+        console.log('Fetching google doc and schema');
+        var googleContentDeferred = googledrive.fetchGoogleDoc(document.name, document.googleDocContentId);
+        var googleSchemaDeferred = googledrive.fetchGoogleDoc(schema.name, schema.googleDocSchemaId);
+
+        /**
+         *
+         */
+        q.all([googleContentDeferred, googleSchemaDeferred]).then(
+          function success(responseBodies){
+            console.log('          ---> Creating Response');
+            console.log(responseBodies);
+
+            try{
+
+              var deserialisedContent = JSON.parse(responseBodies[0]);
+              var deserialisedSchema = JSON.parse(responseBodies[1]);
+              var documentObject = document.toObject();
+              documentObject.content = deserialisedContent;
+              documentObject.schema = deserialisedSchema;
+
+              console.log('          ---> 200 RESPONSE to client' + '\n');
+              res.status(200).json(documentObject);
+
+            }
+            catch(error){
+              console.log(error);
+              res.status(500);
+            }
+
+
+          },
+          function error(error){
             console.log(error);
-
             res.status(500);
-          }
+          });
 
-        }).on('error', function(error){
-          console.log('        ---> ERROR https.get error: ' + error);
-          res.status(500);
-        });
-      }
-      else{
-        console.log('          ---> ERROR Non 200 response = ' + googleResponse.statusCode);
 
+        //TODO we need to store the content in our own database using the User id as a key
+        //      if the document is not saved we can keep the edit for as long as it doesn't get updated by someone else
+        //      if the document is updated then we need to only allow the user to view their old edits and perhaps copy them
+        //      somewhere else
+
+        //TODO we need to lock (active) the current copy so other users are not able to edit it at the same time
+
+
+      },
+      function error(error){
+        console.log(error);
         res.status(500);
       }
-
-    });
-
-    /**
-     *
-     */
-    googleRequest.setTimeout(20000, function(error){
-      console.log('        ---> Google doc timeout: ' + error);
-      res.status(408);
-    });
-
-    /**
-     *
-     */
-    googleRequest.on('error', function(error){
-      console.log('        ---> ERROR https.get error: ' + error);
-      res.status(500);
-    });
-
-
-
-    //TODO we need to store the content in our own database using the User id as a key
-    //      if the document is not saved we can keep the edit for as long as it doesn't get updated by someone else
-    //      if the document is updated then we need to only allow the user to view their old edits and perhaps copy them
-    //      somewhere else
-
-    //TODO we need to lock (active) the current copy so other users are not able to edit it at the same time
+    );
 
 
   });
