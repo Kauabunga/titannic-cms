@@ -62,7 +62,6 @@ exports.show = function(req, res) {
         q.all([googleContentDeferred, googleSchemaDeferred]).then(
           function success(responseBodies){
             console.log('          ---> Creating Response');
-            console.log(responseBodies);
 
             try{
 

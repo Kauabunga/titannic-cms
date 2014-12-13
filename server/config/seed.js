@@ -16,8 +16,8 @@ var Schema = require('../api/schema/schema.model');
 var schemas = [
   {
     schema: {
-      name : 'Nav dev schema',
-      info : 'Nav dev json schema',
+      name : 'Nav schema',
+      info : 'Nav schema',
       googleDocSchemaId: '0B84YdCmz0nrQWjc5SzdDVEYwWXM'
     },
     documents: [
@@ -32,12 +32,51 @@ var schemas = [
         googleDocContentId: '0B84YdCmz0nrQZUtVODBYNkJFTVE'
       }
     ]
+  },
+  {
+    schema: {
+      name : 'Careers schema',
+      info : 'Careers schema',
+      googleDocSchemaId: '0B84YdCmz0nrQWjBrWERhVlhJNDg'
+    },
+    documents: [
+      {
+        name : 'Careers dev content',
+        info : 'Careers dev json content',
+        googleDocContentId: '0B84YdCmz0nrQcXlrQjQ2MlVqUVU'
+      },
+      {
+        name : 'Careers live content',
+        info : 'Careers live json content',
+        googleDocContentId: '0B84YdCmz0nrQYVBZcHVkTVNTQjg'
+      }
+    ]
   }
 
 ];
 
+function createDocument(document){
 
+  Document.create(document, function(){
+    console.log('seeded document ' + document.name);
+  });
+}
 
+function createSchema(currentSchema){
+
+  Schema.create(currentSchema.schema, function(event, schemaMongo){
+
+    console.log('seeded schema ' + currentSchema.schema.name);
+
+    var j;
+    for(j = 0; j < currentSchema.documents.length; j++){
+      var currentDocument = currentSchema.documents[j];
+      currentDocument.schemaId = schemaMongo._id;
+      createDocument(currentDocument);
+    }
+
+  });
+}
 
 /**
  *
@@ -49,22 +88,7 @@ Schema.find({}).remove(function() {
 
     for(i = 0; i < schemas.length; i++){
       var currentSchema = schemas[i];
-
-      Schema.create(currentSchema.schema, function(event, schemaMongo){
-
-        console.log('seeded schema ' + currentSchema.schema.name);
-
-        var j;
-        for(j = 0; j < currentSchema.documents.length; j++){
-          var currentDocument = currentSchema.documents[j];
-          currentDocument.schemaId = schemaMongo._id;
-
-          Document.create(currentDocument, function(){
-            console.log('seeded document ' + currentDocument.name);
-          });
-        }
-
-      });
+      createSchema(currentSchema);
 
     }
 
