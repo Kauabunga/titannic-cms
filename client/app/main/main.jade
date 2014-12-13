@@ -11,7 +11,7 @@ header#banner.hero-unit
   .row
     .col-lg-12
       h1.page-header Documents:
-      ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='document in documentList')
+      ul.nav.nav-tabs.nav-stacked.col-md-6.col-lg-6.col-sm-6(ng-repeat='document in documentList')
         li
           a(ng-click='editDocument(document)', tooltip='{{document.info}}')
             | {{document.name}}
@@ -22,6 +22,24 @@ header#banner.hero-unit
   .row
     .col-lg-12
       button.btn.btn-primary(type='button', ng-click='createDocument()') Add new Docuemnt
+
+
+.container
+  .row
+    .col-lg-12
+      h1.page-header Schemas:
+      ul.nav.nav-tabs.nav-stacked.col-md-6.col-lg-6.col-sm-6(ng-repeat='schema in schemaList')
+        li
+          a(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
+            | {{schema.name}}
+            = ' | '
+            | {{schema.googleDocSchemaId}}
+          button.close(type='button', ng-click='deleteSchema($event, schema)') ×
+
+  .row
+    .col-lg-12
+      button.btn(type='button', ng-click='createSchema()') Add new Schema
+
 
 footer.footer
   .container

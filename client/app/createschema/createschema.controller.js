@@ -1,41 +1,23 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('CreatedocumentCtrl', function ($scope, $log, $http, $q, Document, $location, Schema) {
-
+  .controller('CreateschemaCtrl', function ($scope, $log, $http, $q, $location) {
 
     //Document model
     $scope.document = {
       name: '',
       info: '',
-      googleDocContentId: '',
-      schemaId: ''
+      googleDocSchemaId: ''
     };
 
-    $scope.schemaList = undefined;
-
     //TODO permission levels
-
-    (function init(){
-      var schemaDeferred = Schema.getAll();
-
-      schemaDeferred.then(
-        function success(schemas){
-          $scope.schemaList = schemas;
-        },
-        function error(){
-
-        }
-      );
-
-    })();
 
     /**
      *
      */
-    $scope.newDocument = function newDocument() {
+    $scope.newSchema = function newDocument() {
 
-      $log.debug('Adding new document', $scope);
+      $log.debug('Adding new schema', $scope);
 
       var deferred = $q.defer();
 
@@ -49,15 +31,14 @@ angular.module('titannicCmsApp')
           }
           else{
 
-            var createDeferred = Document.createDocument($scope.document);
-            createDeferred.then(
-              function success(){
+            $http.post('/api/schemas', $scope.schema)
+              .success(function(data, status){
+                deferred.resolve(data, status);
                 $location.path('/');
-              },
-              function error(){
-
-            })
-
+              })
+              .error(function(data, status){
+                deferred.reject(data, status);
+              });
           }
 
         },
@@ -81,9 +62,8 @@ angular.module('titannicCmsApp')
       var deferred = $q.defer();
       var valid = true;
 
-      if($scope.document.name === '' ||
-          $scope.document.googleDocContentId === '' ||
-          $scope.document.schemaId === ''){
+      if($scope.schema.name === '' ||
+        $scope.schema.googleDocSchemaId === ''){
 
         valid = false;
       }
@@ -97,13 +77,15 @@ angular.module('titannicCmsApp')
      *
      */
     function reset(){
-      $scope.document = {
+      $scope.schema = {
         name: '',
         info: '',
-        googleDocContentId: '',
-        schemaId: ''
+        googleDocSchemaId: ''
       }
     }
+
+
+
 
 
   });

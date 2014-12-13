@@ -1,33 +1,58 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('MainCtrl', function ($scope, $http, socket, $location) {
+  .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document) {
+
+    $scope.documentList = undefined;
+    $scope.schemaList = undefined;
 
 
     /**
-     * Initial fetch of documents list
      *
      */
-    $http.get('/api/documents').success(function(documents) {
-      $scope.documentList = documents;
-      socket.syncUpdates('document', $scope.documentList);
-    }).error(function(data, statusCode){
+    (function init(){
 
-      if(statusCode === 401){
-        //TODO handle unauthorised
-      }
-      else{
-        //TODO generic
-      }
+      var documentDeferred = Document.getAll();
 
-    });
+      documentDeferred.then(
+        function success(documents){
+          $scope.documentList = documents;
+          socket.syncUpdates('document', $scope.documentList);
+        },
+        function error(){
+
+        });
+
+
+      var schemaDeferred = Schema.getAll();
+
+      schemaDeferred.then(
+        function success(schemas){
+          $scope.schemaList = schemas;
+          socket.syncUpdates('schema', $scope.schemaList);
+
+        },
+        function error(){
+
+      });
+
+    })();
+
 
     /**
      *
      * @param document
      */
     $scope.editDocument = function editDocument(document){
-        $location.path('/editdocument/' + document._id);
+      $location.path('/editdocument/' + document._id);
+    };
+
+    /**
+     *
+     * @param schema
+     */
+    $scope.editSchema = function editSchema(schema){
+      $location.path('/editschema/' + schema._id);
     };
 
     /**
@@ -35,6 +60,13 @@ angular.module('titannicCmsApp')
      */
     $scope.createDocument = function createDocument(){
       $location.path('/createdocument');
+    };
+
+    /**
+     *
+     */
+    $scope.createSchema = function createSchema(){
+      $location.path('/createschema');
     };
 
     /**
@@ -48,7 +80,8 @@ angular.module('titannicCmsApp')
       $event.preventDefault();
       $event.stopPropagation();
 
-      $http.delete('/api/documents/' + document._id);
+      Document.deleteDocument(document._id);
+
     };
 
     /**
@@ -56,5 +89,6 @@ angular.module('titannicCmsApp')
      */
     $scope.$on('$destroy', function () {
       socket.unsyncUpdates('document');
+      socket.unsyncUpdates('schema');
     });
   });
