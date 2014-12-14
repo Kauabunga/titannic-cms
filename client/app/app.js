@@ -7,6 +7,10 @@ angular.module('titannicCmsApp', [
   'btford.socket-io',
   'ui.router'
 ])
+/**
+ *
+ * Config
+ */
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
     $urlRouterProvider
       .otherwise('/');
@@ -15,6 +19,10 @@ angular.module('titannicCmsApp', [
     $httpProvider.interceptors.push('authInterceptor');
   })
 
+/**
+ * Interceptor
+ *
+ */
   .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
     return {
       // Add authorization token to headers
@@ -40,8 +48,11 @@ angular.module('titannicCmsApp', [
       }
     };
   })
-
-  .run(function ($rootScope, $location, Auth) {
+/**
+ * App run
+ *
+ */
+  .run(function ($rootScope, $location, Auth, $window, Notification, $log) {
     // Redirect to login if route requires auth and you're not logged in
     $rootScope.$on('$stateChangeStart', function (event, next) {
       Auth.isLoggedInAsync(function(loggedIn) {
@@ -50,4 +61,17 @@ angular.module('titannicCmsApp', [
         }
       });
     });
+
+
+    //bind to the global error handler so we can create notifications for unhandled exceptions
+    var onErrorOriginal = $window.onerror || function(){};
+    $window.onerror = function(errorMsg, url, lineNumber) {
+
+      onErrorOriginal();
+      Notification.error('Uncaught explosions!!! ' + errorMsg);
+      $log.error(errorMsg);
+      $log.error(url + ' ' + lineNumber);
+
+    };
+
   });

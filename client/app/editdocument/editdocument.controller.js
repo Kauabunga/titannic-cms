@@ -19,10 +19,11 @@ angular.module('titannicCmsApp')
     /**
      *
      */
-    $scope.$on('$destroy', function(){
+    var destroyHandle = $scope.$on('$destroy', function(){
       $log.debug('EditdocumentCtrl $destroy');
 
       Document.clearDocument();
+      destroyHandle();
     });
 
 

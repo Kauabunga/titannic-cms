@@ -111,11 +111,12 @@ angular.module('titannicCmsApp')
         /**
          *
          */
-        scope.$on('$destroy', function(){
+        var destroyHandle = scope.$on('$destroy', function(){
 
           if(editor){
             editor.off('change', changeHandle);
           }
+          destroyHandle();
         });
 
       }
