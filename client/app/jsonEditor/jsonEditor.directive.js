@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .directive('jsonEditor', function ($log, $q, Document, $timeout, Notification) {
+  .directive('jsonEditor', function ($log, $q, Document, $timeout, Notification, $stateParams) {
     return {
       templateUrl: 'app/jsonEditor/jsonEditor.html',
       restrict: 'EAC',
@@ -30,7 +30,6 @@ angular.module('titannicCmsApp')
         */
 
         var editor;
-
         scope.editorValid = true;
 
 
@@ -42,7 +41,7 @@ angular.module('titannicCmsApp')
           //dont block TODO sort out this getDocument -> getCurrentDocument which resolves when the next getDocument call is made
           //                need a document factory
           $timeout(function(){
-            var deferred = Document.getDocument();
+            var deferred = Document.getDocument($stateParams.documentId);
 
             deferred.finally(function(){
 
@@ -93,7 +92,7 @@ angular.module('titannicCmsApp')
               scope.editorValid = true;
             }
 
-            Document.setDocumentContent(editor.getValue());
+            Document.setDocumentContent($stateParams.documentId, editor.getValue());
           });
         }
 

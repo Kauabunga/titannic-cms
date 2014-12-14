@@ -3,8 +3,8 @@
 angular.module('titannicCmsApp')
   .service('Document', function ($log, $q, $http, $rootScope, Notification) {
 
-    var _document;
-    var _deferredGetDocument;
+    var _documents = {};
+    var _deferredGetDocument = {};
 
     var self = this;
 
@@ -13,10 +13,10 @@ angular.module('titannicCmsApp')
      *
      * @param document
      */
-    self.setDocumentContent = function (content){
+    self.setDocumentContent = function (docId, content){
       $log.debug('DocumentService setting document', content);
-      _document.content = content;
-      $rootScope.$emit('Document:update', _document);
+      _documents[docId].content = content;
+      $rootScope.$emit('Document:' + docId + ':update', _documents[docId]);
     };
 
 
@@ -43,6 +43,13 @@ angular.module('titannicCmsApp')
      */
     self.deleteDocument = function(id){
       $http.delete('/api/documents/' + id);
+
+      if(_documents[id]){
+        delete _documents[id];
+      }
+      if(_deferredGetDocument[id]){
+        delete _deferredGetDocument[id];
+      }
     };
 
     /**
@@ -69,44 +76,54 @@ angular.module('titannicCmsApp')
      *
      * @returns {*}
      */
-    self.getDocument = function(docId){
+    self.getDocument = function(docId, options){
+
+      options = options || {};
+
+      if(docId === undefined){
+        $log.warn('Document.getDocument docId is undefined');
+        return $q.reject();
+      }
 
       $log.debug('Getting document', docId);
 
-      if(! _deferredGetDocument){
-        _deferredGetDocument = $q.defer();
+      if(! _deferredGetDocument[docId] || options.force){
+        _deferredGetDocument[docId] = $q.defer();
 
         $http.get('/api/documents/' + docId).success(function(document) {
 
-          _document = document;
-          _deferredGetDocument.resolve(document);
+          _documents[docId] = document;
+          _deferredGetDocument[docId].resolve(document);
 
           //TODO handle socket updating document on client until submission -> lasts as long as user session? As long as lock on file? Locks can be removed by admin?
           //socket.syncUpdates('document', $scope.documentList);
 
         }).error(function(data, statusCode){
-          _deferredGetDocument.reject(data, statusCode);
+          _deferredGetDocument[docId].reject(data, statusCode);
           Notification.error('Document service failed to get single document');
         });
 
       }
 
-      return _deferredGetDocument.promise;
+      return _deferredGetDocument[docId].promise;
     };
 
     /**
      *
      */
-    self.updateDocument = function(){
-      $log.debug('Submitting document', _document);
+    self.updateDocument = function(docId){
+      $log.debug('Submitting document', _documents[docId]);
 
       var deferred = $q.defer();
 
-      $http.put('/api/documents/' + _document._id, _document)
+      //Dont need to be passing the schema back to the webservice
+      var updateDocument = angular.copy({}, _documents[docId]);
+      delete updateDocument.schema;
+
+      $http.put('/api/documents/' + updateDocument._id, updateDocument)
         .success(function(){
           deferred.resolve();
 
-          self.clearDocument();
           Notification.success('Document updated');
 
         })
@@ -122,13 +139,6 @@ angular.module('titannicCmsApp')
       return deferred.promise;
     };
 
-    /**
-     *
-     */
-    self.clearDocument = function(){
-      _deferredGetDocument = undefined;
-      _document = undefined;
-    };
 
   });
 
