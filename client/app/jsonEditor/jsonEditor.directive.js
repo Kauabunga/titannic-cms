@@ -31,12 +31,16 @@ angular.module('titannicCmsApp')
 
         var editor;
 
+        scope.editorValid = true;
+
+
         /**
          *
          */
         (function init(){
 
           //dont block TODO sort out this getDocument -> getCurrentDocument which resolves when the next getDocument call is made
+          //                need a document factory
           $timeout(function(){
             var deferred = Document.getDocument();
 
@@ -50,7 +54,11 @@ angular.module('titannicCmsApp')
                 var jsonEditorOptions = {
                   schema: document.schema,
                   theme: 'bootstrap3',
-                  startval: document.content
+                  startval: document.content,
+                  disable_properties: true,
+                  disable_collapse: true,
+                  disable_edit_json: true,
+                  show_errors: 'always'
 
                 };
 
@@ -72,8 +80,20 @@ angular.module('titannicCmsApp')
          */
         function changeHandle(){
           scope.$apply(function(){
-            // Do something
-            $log.debug(editor.getValue());
+
+            //validate the form
+            var errors = editor.validate();
+            if(errors.length) {
+
+              $log.error('Invalid json');
+              $log.error(errors);
+
+              scope.editorValid = false;
+            }
+            else{
+              scope.editorValid = true;
+            }
+
 
             //TODO validate
             Document.setDocumentContent(editor.getValue());

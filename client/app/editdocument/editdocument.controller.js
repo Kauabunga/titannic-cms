@@ -9,11 +9,24 @@ angular.module('titannicCmsApp')
     $log.debug('Editing document', $stateParams);
 
 
+    /**
+     * 
+     */
     $scope.$watch('document', function(){
       updateContent();
     }, true);
 
+    /**
+     *
+     */
+    $scope.$on('$destroy', function(){
+      Document.clearDocument();
+    });
 
+
+    /**
+     *
+     */
     function updateContent(){
 
       if($scope.document){

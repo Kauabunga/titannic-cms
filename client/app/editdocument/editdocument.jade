@@ -3,20 +3,20 @@ div(ng-include='"components/navbar/navbar.html"')
 
 
 .container
-form.document-form
-  label Document name
-  p.input-group
-    input.form-control(type='text', placeholder='Name', ng-model='document.name')
-  p.input-group
-    input.form-control(type='text', placeholder='Info', ng-model='document.info')
-  p.input-group
-    input.form-control(type='text', placeholder='Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.googleDocContentId')
+  form.document-form
+    label Document name
+    p.input-group
+      input.form-control(type='text', placeholder='Name', ng-model='document.name')
+    p.input-group
+      input.form-control(type='text', placeholder='Info', ng-model='document.info')
+    p.input-group
+      input.form-control(type='text', placeholder='Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.googleDocContentId')
 
-  p.input-group
-    textarea.formcontrol(type='text', placeholder='Google doc content', ng-model='documentContent')
+    p.input-group
+      textarea.formcontrol(type='text', placeholder='Google doc content', ng-model='documentContent')
 
-  p.input-group
-    div.json-editor
+    p.input-group
+     div.json-editor
 
   span.input-group-btn
   button.btn.btn-primary(type='submit', ng-click='updateDocument()') Update
