@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .directive('jsonEditor', function ($log, $q, Document, $timeout) {
+  .directive('jsonEditor', function ($log, $q, Document, $timeout, Notification) {
     return {
       templateUrl: 'app/jsonEditor/jsonEditor.html',
       restrict: 'EAC',
@@ -68,7 +68,7 @@ angular.module('titannicCmsApp')
 
               },
               function error(){
-
+                Notification.error('Editor failed to get document');
             });
           });
 
@@ -87,6 +87,7 @@ angular.module('titannicCmsApp')
 
               $log.error('Invalid json');
               $log.error(errors);
+              Notification.error('Json invalid');
 
               scope.editorValid = false;
             }
@@ -94,8 +95,6 @@ angular.module('titannicCmsApp')
               scope.editorValid = true;
             }
 
-
-            //TODO validate
             Document.setDocumentContent(editor.getValue());
           });
         }

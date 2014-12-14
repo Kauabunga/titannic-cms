@@ -1,6 +1,28 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .service('notification', function () {
-    // AngularJS will instantiate a singleton by calling "new" on this function
+  .service('Notification', function () {
+
+
+    var self = this;
+
+
+    /**
+     *
+     * @param content
+     */
+    self.error = function(content){
+      var n = noty({
+        text: content,
+        animation: {
+          open: 'animated bounceInLeft', // Animate.css class names
+          close: 'animated bounceOutLeft', // Animate.css class names
+          easing: 'swing', // unavailable - no need
+          speed: 500 // unavailable - no need
+        }
+      });
+
+    };
+
+
   });

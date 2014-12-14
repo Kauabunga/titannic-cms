@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document) {
+  .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document, Notification, $log) {
 
     $scope.documentList = undefined;
     $scope.schemaList = undefined;
@@ -19,8 +19,9 @@ angular.module('titannicCmsApp')
           $scope.documentList = documents;
           socket.syncUpdates('document', $scope.documentList);
         },
-        function error(){
-
+        function error(error){
+          Notification.error('Error loading document list');
+          $log.error('Error loading document list', error);
         });
 
 
@@ -32,8 +33,9 @@ angular.module('titannicCmsApp')
           socket.syncUpdates('schema', $scope.schemaList);
 
         },
-        function error(){
-
+        function error(error){
+          Notification.error('Error loading schema list');
+          $log.error('Error loading schema list', error);
       });
 
     })();

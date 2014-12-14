@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('CreatedocumentCtrl', function ($scope, $log, $http, $q, Document, $location, Schema) {
+  .controller('CreatedocumentCtrl', function ($scope, $log, $http, $q, Document, $location, Schema, Notification) {
 
 
     //Document model
@@ -24,7 +24,7 @@ angular.module('titannicCmsApp')
           $scope.schemaList = schemas;
         },
         function error(){
-
+          Notification.error('Failed to get schema list');
         }
       );
 
@@ -55,7 +55,7 @@ angular.module('titannicCmsApp')
                 $location.path('/');
               },
               function error(){
-
+                Notification.error('Server failed to create new document');
             })
 
           }
@@ -63,6 +63,8 @@ angular.module('titannicCmsApp')
         },
         function error(){
           //TODO handle validation error
+          Notification.error('New document form invalid');
+
         });
 
 

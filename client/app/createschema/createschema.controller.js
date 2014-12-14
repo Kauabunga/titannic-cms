@@ -38,12 +38,13 @@ angular.module('titannicCmsApp')
               })
               .error(function(data, status){
                 deferred.reject(data, status);
+                Notification.error('Server failed to create new schema');
               });
           }
 
         },
         function error(){
-          //TODO handle validation error
+          Notification.error('Schema invalid');
         });
 
 
