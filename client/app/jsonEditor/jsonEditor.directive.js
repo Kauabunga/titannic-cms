@@ -62,9 +62,7 @@ angular.module('titannicCmsApp')
 
                 };
 
-                editor = new JSONEditor(element[0], jsonEditorOptions);
-
-                bindEditor(editor);
+                editor = newEditor(jsonEditorOptions);
 
               },
               function error(){
@@ -103,15 +101,21 @@ angular.module('titannicCmsApp')
          *
          * @param editor
          */
-        function bindEditor(editor){
+        function newEditor(options){
+
+          var editor = new JSONEditor(element[0], options);
           editor.on('change', changeHandle);
+          return editor;
         }
 
         /**
          *
          */
         scope.$on('$destroy', function(){
-          editor.off('change', changeHandle);
+
+          if(editor){
+            editor.off('change', changeHandle);
+          }
         });
 
       }
