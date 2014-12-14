@@ -112,13 +112,14 @@ angular.module('titannicCmsApp')
      *
      */
     self.updateDocument = function(docId){
-      $log.debug('Submitting document', _documents[docId]);
 
       var deferred = $q.defer();
 
       //Dont need to be passing the schema back to the webservice
-      var updateDocument = angular.copy({}, _documents[docId]);
+      var updateDocument = angular.copy(_documents[docId]);
       delete updateDocument.schema;
+
+      $log.debug('Submitting document', updateDocument);
 
       $http.put('/api/documents/' + updateDocument._id, updateDocument)
         .success(function(){
