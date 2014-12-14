@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .service('Document', function ($log, $q, $http, $rootScope) {
+  .service('Document', function ($log, $q, $http, $rootScope, Notification) {
 
     var _document;
     var _deferredGetDocument;
@@ -31,6 +31,7 @@ angular.module('titannicCmsApp')
         deferred.resolve(documents);
       }).error(function(data, statusCode){
         deferred.reject(data, statusCode);
+        Notification.error('Document service failed to fetch all documents');
       });
 
       return deferred.promise;
@@ -58,6 +59,7 @@ angular.module('titannicCmsApp')
         })
         .error(function(data, status){
           deferred.reject(data, status);
+          Notification.error('Document service failed to create document');
         });
 
       return deferred.promise;
@@ -84,6 +86,7 @@ angular.module('titannicCmsApp')
 
         }).error(function(data, statusCode){
           _deferredGetDocument.reject(data, statusCode);
+          Notification.error('Document service failed to get single document');
         });
 
       }
@@ -104,10 +107,16 @@ angular.module('titannicCmsApp')
           deferred.resolve();
 
           self.clearDocument();
+          Notification.success('Document updated');
 
         })
-        .error(function(){
+        .error(function(error){
           deferred.reject();
+
+          $log.error(error);
+
+          Notification.error('Document service failed to update document');
+
         });
 
       return deferred.promise;

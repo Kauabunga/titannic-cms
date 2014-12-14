@@ -68,6 +68,7 @@ angular.module('titannicCmsApp', [
     $window.onerror = function(errorMsg, url, lineNumber) {
 
       onErrorOriginal();
+
       Notification.error('Uncaught explosions!!! ' + errorMsg);
       $log.error(errorMsg);
       $log.error(url + ' ' + lineNumber);

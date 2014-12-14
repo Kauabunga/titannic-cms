@@ -11,6 +11,23 @@ angular.module('titannicCmsApp')
      *
      * @param content
      */
+    self.success = function(content){
+      var n = noty({
+        text: content,
+        animation: {
+          type: 'success',
+          open: 'animated bounceInLeft', // Animate.css class names
+          close: 'animated bounceOutLeft', // Animate.css class names
+          easing: 'swing', // unavailable - no need
+          speed: 500 // unavailable - no need
+        }
+      });
+    };
+
+    /**
+     *
+     * @param content
+     */
     self.error = function(content){
       var n = noty({
         text: content,
