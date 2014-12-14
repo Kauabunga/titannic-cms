@@ -14,8 +14,10 @@ angular.module('titannicCmsApp')
     self.success = function(content){
       var n = noty({
         text: content,
+        type: 'success',
+        timeout: 5000,
+        theme: 'relax',
         animation: {
-          type: 'success',
           open: 'animated bounceInLeft', // Animate.css class names
           close: 'animated bounceOutLeft', // Animate.css class names
           easing: 'swing', // unavailable - no need
@@ -31,8 +33,10 @@ angular.module('titannicCmsApp')
     self.error = function(content){
       var n = noty({
         text: content,
+        type: 'error',
+        timeout: 5000,
+        theme: 'relax',
         animation: {
-          type: 'error',
           open: 'animated bounceInLeft', // Animate.css class names
           close: 'animated bounceOutLeft', // Animate.css class names
           easing: 'swing', // unavailable - no need
@@ -41,6 +45,8 @@ angular.module('titannicCmsApp')
       });
 
     };
+
+
 
 
   });
