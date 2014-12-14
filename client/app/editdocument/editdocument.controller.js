@@ -10,7 +10,7 @@ angular.module('titannicCmsApp')
 
 
     /**
-     * 
+     *
      */
     $scope.$watch('document', function(){
       updateContent();
@@ -20,6 +20,8 @@ angular.module('titannicCmsApp')
      *
      */
     $scope.$on('$destroy', function(){
+      $log.debug('EditdocumentCtrl $destroy');
+
       Document.clearDocument();
     });
 

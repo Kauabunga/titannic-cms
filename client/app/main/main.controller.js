@@ -88,6 +88,9 @@ angular.module('titannicCmsApp')
      *
      */
     $scope.$on('$destroy', function () {
+
+      $log.debug('Main Ctrl $destroy');
+
       socket.unsyncUpdates('document');
       socket.unsyncUpdates('schema');
     });
