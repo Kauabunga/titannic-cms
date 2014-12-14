@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope) {
+  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location) {
 
     $scope.document = undefined;
     $scope.documentContent = undefined;
@@ -60,20 +60,22 @@ angular.module('titannicCmsApp')
           $scope.document = document;
 
         },
-        function error(data, statusCode){
+        function error(statusCode){
 
           if(statusCode === 423){
             //TODO Document is already in use
-            $log.error('Document already in use', data, statusCode);
+            $log.error('Document already in use', statusCode);
             Notification.error('Document already in use');
           }
           else if(statusCode === 404){
             //not found redirect home
             Notification.error('Document not found / ain\'t exist');
+
             $location.path('/');
+
           }
           else{
-            $log.error('Something went wrong getting document', data, statusCode);
+            $log.error('Something went wrong getting document', statusCode);
             Notification.error('Something went wrong getting document');
           }
 

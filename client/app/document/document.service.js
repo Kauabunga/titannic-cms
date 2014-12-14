@@ -99,7 +99,7 @@ angular.module('titannicCmsApp')
           //socket.syncUpdates('document', $scope.documentList);
 
         }).error(function(data, statusCode){
-          _deferredGetDocument[docId].reject(data, statusCode);
+          _deferredGetDocument[docId].reject(statusCode);
           Notification.error('Document service failed to get single document');
         });
 
