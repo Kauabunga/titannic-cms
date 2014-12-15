@@ -5,6 +5,52 @@ var mongoose = require('mongoose');
 var config = require('../config/environment');
 var User = require('../api/user/user.model');
 var https = require('follow-redirects').https;
+var Log = require('log');
+var log = new Log('googledrive.service');
+
+
+/**
+ *
+ * @param googleDocContentId
+ * @param content
+ * @param googleApiKey
+ */
+function updateDocument(googleDocContentId, content, googleApiKey){
+
+  function googleCallback(){
+    log.debug(arguments);
+  }
+
+  //TODO while we wait to get this hooked up from User roles
+  //googleApiKey = config.googleDrive.apiKey;
+
+  //log.debug('googleApiKey', googleApiKey);
+
+  var googleContentDeferred = q.defer();
+
+  //var drive = google.drive({ version: 'v2', auth: oauth2Client});
+  var drive = google.drive({ version: 'v2'});
+
+  //drive.files.get({
+  //  fileId: '0B84YdCmz0nrQWjc5SzdDVEYwWXM',
+  //  key: googleApiKey
+  //}, googleCallback);
+
+  drive.files.insert({
+    resource: {
+      title: 'Test',
+      mimeType: 'text/plain'
+    },
+    media: {
+      mimeType: 'text/plain',
+      body: 'Hello World'
+    }
+  }, googleCallback);
+
+
+
+  return q.when();
+}
 
 
 /**
@@ -12,6 +58,13 @@ var https = require('follow-redirects').https;
  * Otherwise returns 403
  */
 function fetchGoogleDoc(name, id) {
+
+  //TODO - should be using something like this with either the apiKey or OAuth
+  //drive.files.get({
+  //  fileId: '0B84YdCmz0nrQWjc5SzdDVEYwWXM',
+  //  key: googleApiKey
+  //}, googleCallback);
+
 
   var options = {
     name: name || '',
@@ -89,4 +142,5 @@ function fetchGoogleDoc(name, id) {
 
 }
 
+exports.updateDocument = updateDocument;
 exports.fetchGoogleDoc = fetchGoogleDoc;

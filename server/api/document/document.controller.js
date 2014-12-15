@@ -6,9 +6,15 @@ var Document = require('./document.model');
 var Schema = require('./../schema/schema.model');
 var googledrive = require('../../googledrive/googledrive.service');
 var https = require('follow-redirects').https;
+var Log = require('log');
+var log = new Log('document.controller');
 
 
-// Get list of documents
+/**
+ * Get list of documents
+ * @param req
+ * @param res
+ */
 exports.index = function(req, res) {
   Document.find(function (err, documents) {
     if(err) { return handleError(res, err); }
@@ -20,7 +26,12 @@ exports.index = function(req, res) {
 };
 
 
-// Get a single document
+/**
+ * Get a single document
+ *
+ * @param req
+ * @param res
+ */
 exports.show = function(req, res) {
 
   var schemaDeferred = q.defer();
@@ -35,13 +46,13 @@ exports.show = function(req, res) {
       return res.send(423);
     }
 
-    console.log('Document: ' + JSON.stringify(document));
-    console.log('Schema id: ' + document.schemaId);
+    log.debug('Document: ' + JSON.stringify(document));
+    log.debug('Schema id: ' + document.schemaId);
 
 
     //Get the documents schema
     Schema.findById(document.schemaId, function (err, schema){
-      console.log('Schema found: ' + JSON.stringify(schema));
+      log.debug('Schema found: ' + JSON.stringify(schema));
       schemaDeferred.resolve(schema);
     });
 
@@ -52,7 +63,7 @@ exports.show = function(req, res) {
         //TODO distinguish google errors from server errors
 
 
-        console.log('Fetching google doc and schema');
+        log.debug('Fetching google doc and schema');
         var googleContentDeferred = googledrive.fetchGoogleDoc(document.name, document.googleDocContentId);
         var googleSchemaDeferred = googledrive.fetchGoogleDoc(schema.name, schema.googleDocSchemaId);
 
@@ -61,7 +72,7 @@ exports.show = function(req, res) {
          */
         q.all([googleContentDeferred, googleSchemaDeferred]).then(
           function success(responseBodies){
-            console.log('          ---> Creating Response');
+            log.debug('          ---> Creating Response');
 
             try{
 
@@ -71,19 +82,19 @@ exports.show = function(req, res) {
               documentObject.content = deserialisedContent;
               documentObject.schema = deserialisedSchema;
 
-              console.log('          ---> 200 RESPONSE to client' + '\n');
+              log.debug('          ---> 200 RESPONSE to client' + '\n');
               res.status(200).json(documentObject);
 
             }
             catch(error){
-              console.log(error);
+              log.error(error);
               res.status(500);
             }
 
 
           },
           function error(error){
-            console.log(error);
+            log.error(error);
             res.status(500);
           });
 
@@ -98,7 +109,7 @@ exports.show = function(req, res) {
 
       },
       function error(error){
-        console.log(error);
+        log.error(error);
         res.status(500);
       }
     );
@@ -107,7 +118,12 @@ exports.show = function(req, res) {
   });
 };
 
-// Creates a new document in the DB.
+/**
+ * Creates a new document in the DB.
+ *
+ * @param req
+ * @param res
+ */
 exports.create = function(req, res) {
   Document.create(req.body, function(err, document) {
     if(err) { return handleError(res, err); }
@@ -115,25 +131,57 @@ exports.create = function(req, res) {
   });
 };
 
-// Updates an existing document in the DB.
+/**
+ * Updates an existing document in the DB.
+ */
 exports.update = function(req, res) {
   if(req.body._id) { delete req.body._id; }
 
   //TODO need to also update the document on google docs
+  log.debug('Updating document', req.body._id);
 
+  if(req.body && req.body.content){
 
-  Document.findById(req.params.id, function (err, document) {
-    if (err) { return handleError(res, err); }
-    if(!document) { return res.send(404); }
-    var updated = _.merge(document, req.body);
-    updated.save(function (err) {
-      if (err) { return handleError(res, err); }
-      return res.json(200, document);
+    //todo get user and pass api key or deny if unauthorized
+    var googleContentUpdateDeferred = googledrive.updateDocument(req.body.googleDocContentId, req.body.content, 'api key yo');
+
+    googleContentUpdateDeferred.then(
+      function success(){
+        //only want to save the document to the db if our google request is successful
+        Document.findById(req.params.id, function (err, document) {
+          if (err) { return handleError(res, err); }
+          if(!document) { return res.send(404); }
+          var updated = _.merge(document, req.body);
+          updated.save(function (err) {
+            if (err) { return handleError(res, err); }
+            return res.json(200, document);
+          });
+        });
+
+      },
+      function error(){
+        log.error('Failed to update google doc content');
+        res.status(500);
     });
-  });
+
+
+
+  }
+  else{
+    //TODO is it mandatory to update a document with content?
+    //      should separate documents meta data from content
+    log.error('Content not passed while updating document');
+    res.status(500);
+  }
+
 };
 
-// Deletes a document from the DB.
+/**
+ * Deletes a document from the DB.
+ *
+ * @param req
+ * @param res
+ */
 exports.destroy = function(req, res) {
   Document.findById(req.params.id, function (err, document) {
     if(err) { return handleError(res, err); }
