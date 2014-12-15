@@ -18,6 +18,9 @@ module.exports = {
   GOOGLE_ID:        'app-id',
   GOOGLE_SECRET:    'secret',
 
+  GOOGLE_DRIVE_API_KEY: 'api-key',
+
+
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''
 };
