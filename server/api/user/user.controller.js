@@ -34,7 +34,7 @@ exports.getUserFromRequest = function(req){
   }
   else{
     User.findById(req.user._id, function (err, user) {
-      log.debug('getting user from session success', user);
+      log.debug('getting user from session success', user.name);
 
       deferred.resolve(user);
     });

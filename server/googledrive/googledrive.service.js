@@ -25,7 +25,7 @@ function updateDocument(req, googleDocContentId, content){
   var currentUserDeferred = User.getUserFromRequest(req);
   var googleContentDeferred = q.defer();
 
-  log.debug('Updating document - current user:', req.user);
+  log.debug('Updating document - current user:', req.user.name);
 
   currentUserDeferred.then(
     function success(user){
