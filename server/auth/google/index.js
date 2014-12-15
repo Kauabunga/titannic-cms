@@ -17,6 +17,10 @@ router
       'https://www.googleapis.com/auth/userinfo.profile',
       'https://www.googleapis.com/auth/userinfo.email'
     ],
+
+    accessType: 'offline',
+    approvalPrompt: 'force',
+
     session: true
   }))
 

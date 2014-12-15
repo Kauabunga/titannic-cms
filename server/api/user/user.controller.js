@@ -1,12 +1,47 @@
 'use strict';
 
+var q = require('q');
 var User = require('./user.model');
 var passport = require('passport');
 var config = require('../../config/environment');
 var jwt = require('jsonwebtoken');
 
+var Log = require('log');
+var log = new Log('user.controller');
+
+
+/**
+ *
+ * @param res
+ * @param err
+ * @returns {*}
+ */
 var validationError = function(res, err) {
   return res.json(422, err);
+};
+
+/**
+ *
+ */
+exports.getUserFromRequest = function(req){
+
+  log.debug('getting user from session');
+  var deferred = q.defer();
+
+  if(!req || ! req.user || ! req.user._id){
+    deferred.reject();
+    log.error('getting user from session error on request');
+  }
+  else{
+    User.findById(req.user._id, function (err, user) {
+      log.debug('getting user from session success', user);
+
+      deferred.resolve(user);
+    });
+  }
+
+
+  return deferred.promise;
 };
 
 /**

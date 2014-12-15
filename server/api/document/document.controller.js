@@ -6,6 +6,7 @@ var Document = require('./document.model');
 var Schema = require('./../schema/schema.model');
 var googledrive = require('../../googledrive/googledrive.service');
 var https = require('follow-redirects').https;
+
 var Log = require('log');
 var log = new Log('document.controller');
 
@@ -135,10 +136,12 @@ exports.create = function(req, res) {
  * Updates an existing document in the DB.
  */
 exports.update = function(req, res) {
+
+  log.debug('Updating document', req.body._id);
+
   if(req.body._id) { delete req.body._id; }
 
-  //TODO need to also update the document on google docs
-  log.debug('Updating document', req.body._id);
+  //get user from the session -> helper in user
 
   if(req.body && req.body.content){
 
@@ -147,6 +150,7 @@ exports.update = function(req, res) {
     googleContentUpdateDeferred.then(
       function success(){
 
+        log.debug('succesfully updated google doc document -> updating local info');
         //only want to save the document to the db if our google request is successful
         Document.findById(req.params.id, function (err, document) {
           if (err) { return handleError(res, err); }

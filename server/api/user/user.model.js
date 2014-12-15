@@ -12,6 +12,11 @@ var UserSchema = new Schema({
     type: String,
     default: 'user'
   },
+
+  //google creds
+  accessToken: String,
+  refreshToken: String,
+
   hashedPassword: String,
   provider: String,
   salt: String,

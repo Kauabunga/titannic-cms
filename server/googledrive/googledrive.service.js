@@ -8,6 +8,8 @@ var https = require('follow-redirects').https;
 var Log = require('log');
 var log = new Log('googledrive.service');
 
+var User = require('../api/user/user.controller');
+
 var google = require('googleapis');
 var OAuth2 = google.auth.OAuth2;
 
@@ -20,36 +22,57 @@ var OAuth2 = google.auth.OAuth2;
  */
 function updateDocument(req, googleDocContentId, content){
 
-  var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
+  var currentUserDeferred = User.getUserFromRequest(req);
+  var googleContentDeferred = q.defer();
 
-// Retrieve tokens via token exchange explained above or set them:
-  oauth2Client.setCredentials({
-    access_token: req.cookies['google-access-token']
+  log.debug('Updating document - current user:', req.user);
+
+  currentUserDeferred.then(
+    function success(user){
+
+      log.debug('authing with accessToken', user.accessToken);
+
+
+      function googleCallback(error, body, googleResponse) {
+
+        if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
+          log.debug('successful response');
+          googleContentDeferred.resolve();
+        }
+        else {
+          googleContentDeferred.reject();
+        }
+      }
+
+      try {
+        var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
+
+        oauth2Client.setCredentials({
+          access_token: user.accessToken
+        });
+
+        var drive = google.drive({version: 'v2', auth: oauth2Client});
+
+        drive.files.update({
+          fileId: googleDocContentId,
+          media: {
+            mimeType: 'application/json',
+            body: JSON.stringify(content)
+          }
+        }, googleCallback);
+
+      }
+      catch(error){
+        log.error('Error updating google doc', error);
+        googleContentDeferred.reject();
+      }
+
+  }, function error(){
+
+      googleContentDeferred.reject();
   });
 
-  var googleContentDeferred = q.defer();
-  var drive = google.drive({ version: 'v2', auth: oauth2Client});
 
-  function googleCallback(googleResponse){
-    log.debug(googleResponse.errors);
-
-    log.debug(oauth2Client);
-    log.debug(req.cookies['google-access-token']);
-
-    if(googleResponse.code >= 200 && googleResponse.code < 300){
-      googleContentDeferred.resolve();
-    }
-    else{
-      googleContentDeferred.reject();
-    }
-  }
-
-  drive.files.patch({
-
-    fileId: googleDocContentId,
-    resource: content
-
-  }, googleCallback);
 
 
   return googleContentDeferred.promise;
@@ -127,7 +150,7 @@ function fetchGoogleDoc(name, id) {
   /**
    *
    */
-  googleContentRequest.setTimeout(20000, function(error){
+  googleContentRequest.setTimeout(10000, function(error){
     console.log('        ---> ' + options.name + '   Google doc timeout: ' + error);
     googleDeferred.reject(error);
   });

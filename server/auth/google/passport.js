@@ -20,6 +20,8 @@ exports.setup = function (User, config) {
     },
     function(accessToken, refreshToken, profile, done) {
 
+      log.debug('accessToken: ', accessToken);
+      log.debug('refreshToken: ', refreshToken);
 
       //TODO we want to be able to also connect a google account to a previously existing user account
 
@@ -30,6 +32,8 @@ exports.setup = function (User, config) {
           user = new User({
             name: profile.displayName,
             email: profile.emails[0].value,
+            accessToken: accessToken,
+            refreshToken: refreshToken,
             role: 'user',
             username: profile.username,
             provider: 'google',
