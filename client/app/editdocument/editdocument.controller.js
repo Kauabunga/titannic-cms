@@ -88,7 +88,16 @@ angular.module('titannicCmsApp')
      *
      */
     $scope.updateDocument = function updateDocument(){
-      Document.updateDocument($stateParams.documentId);
+      var updateDefered = Document.updateDocument($stateParams.documentId);
+
+      updateDefered.then(function success(){
+
+      },
+      function error(){
+
+      });
+
+
     };
 
 

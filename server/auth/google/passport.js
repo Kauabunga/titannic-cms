@@ -1,7 +1,17 @@
 var passport = require('passport');
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
 
+var Log = require('log');
+var log = new Log('auth.google.passport');
+
+
+var google = require('googleapis');
+
 exports.setup = function (User, config) {
+
+  passport.serializeUser(function(user, done) {
+     done(null, user.id);
+   });
 
   passport.use(new GoogleStrategy({
       clientID: config.google.clientID,
@@ -9,6 +19,10 @@ exports.setup = function (User, config) {
       callbackURL: config.google.callbackURL
     },
     function(accessToken, refreshToken, profile, done) {
+
+
+      //TODO we want to be able to also connect a google account to a previously existing user account
+
       User.findOne({
         'google.id': profile.id
       }, function(err, user) {
@@ -31,4 +45,6 @@ exports.setup = function (User, config) {
       });
     }
   ));
+
+
 };

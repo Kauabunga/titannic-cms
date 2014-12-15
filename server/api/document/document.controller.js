@@ -88,14 +88,14 @@ exports.show = function(req, res) {
             }
             catch(error){
               log.error(error);
-              res.status(500);
+              res.send(500);
             }
 
 
           },
           function error(error){
             log.error(error);
-            res.status(500);
+            res.send(500);
           });
 
 
@@ -110,7 +110,7 @@ exports.show = function(req, res) {
       },
       function error(error){
         log.error(error);
-        res.status(500);
+        res.send(500);
       }
     );
 
@@ -142,11 +142,11 @@ exports.update = function(req, res) {
 
   if(req.body && req.body.content){
 
-    //todo get user and pass api key or deny if unauthorized
-    var googleContentUpdateDeferred = googledrive.updateDocument(req.body.googleDocContentId, req.body.content, 'api key yo');
+    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.body.googleDocContentId, req.body.content);
 
     googleContentUpdateDeferred.then(
       function success(){
+
         //only want to save the document to the db if our google request is successful
         Document.findById(req.params.id, function (err, document) {
           if (err) { return handleError(res, err); }
@@ -161,7 +161,7 @@ exports.update = function(req, res) {
       },
       function error(){
         log.error('Failed to update google doc content');
-        res.status(500);
+        res.send(500);
     });
 
 
@@ -171,7 +171,7 @@ exports.update = function(req, res) {
     //TODO is it mandatory to update a document with content?
     //      should separate documents meta data from content
     log.error('Content not passed while updating document');
-    res.status(500);
+    res.send(500);
   }
 
 };

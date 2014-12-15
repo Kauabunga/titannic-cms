@@ -9,6 +9,10 @@ var compose = require('composable-middleware');
 var User = require('../api/user/user.model');
 var validateJwt = expressJwt({ secret: config.secrets.session });
 
+var Log = require('log');
+var log = new Log('auth.auth.service');
+
+
 /**
  * Attaches the user object to the request if authenticated
  * Otherwise returns 403
@@ -67,8 +71,20 @@ function setTokenCookie(req, res) {
   if (!req.user) return res.json(404, { message: 'Something went wrong, please try again.'});
   var token = signToken(req.user._id, req.user.role);
   res.cookie('token', JSON.stringify(token));
+
+
+  log.debug(req);
+
+  //check to see if the res contains a google cookie parameter
+  if(req.query.code){
+    log.debug('Google callback code found. Adding to user session');
+    res.cookie('google-access-token', req.query.code);
+  }
+
   res.redirect('/');
 }
+
+
 
 exports.isAuthenticated = isAuthenticated;
 exports.hasRole = hasRole;

@@ -8,6 +8,9 @@ var https = require('follow-redirects').https;
 var Log = require('log');
 var log = new Log('googledrive.service');
 
+var google = require('googleapis');
+var OAuth2 = google.auth.OAuth2;
+
 
 /**
  *
@@ -15,41 +18,41 @@ var log = new Log('googledrive.service');
  * @param content
  * @param googleApiKey
  */
-function updateDocument(googleDocContentId, content, googleApiKey){
+function updateDocument(req, googleDocContentId, content){
 
-  function googleCallback(){
-    log.debug(arguments);
-  }
+  var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
 
-  //TODO while we wait to get this hooked up from User roles
-  //googleApiKey = config.googleDrive.apiKey;
-
-  //log.debug('googleApiKey', googleApiKey);
+// Retrieve tokens via token exchange explained above or set them:
+  oauth2Client.setCredentials({
+    access_token: req.cookies['google-access-token']
+  });
 
   var googleContentDeferred = q.defer();
+  var drive = google.drive({ version: 'v2', auth: oauth2Client});
 
-  //var drive = google.drive({ version: 'v2', auth: oauth2Client});
-  var drive = google.drive({ version: 'v2'});
+  function googleCallback(googleResponse){
+    log.debug(googleResponse.errors);
 
-  //drive.files.get({
-  //  fileId: '0B84YdCmz0nrQWjc5SzdDVEYwWXM',
-  //  key: googleApiKey
-  //}, googleCallback);
+    log.debug(oauth2Client);
+    log.debug(req.cookies['google-access-token']);
 
-  drive.files.insert({
-    resource: {
-      title: 'Test',
-      mimeType: 'text/plain'
-    },
-    media: {
-      mimeType: 'text/plain',
-      body: 'Hello World'
+    if(googleResponse.code >= 200 && googleResponse.code < 300){
+      googleContentDeferred.resolve();
     }
+    else{
+      googleContentDeferred.reject();
+    }
+  }
+
+  drive.files.patch({
+
+    fileId: googleDocContentId,
+    resource: content
+
   }, googleCallback);
 
 
-
-  return q.when();
+  return googleContentDeferred.promise;
 }
 
 
