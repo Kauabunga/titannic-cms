@@ -3,28 +3,33 @@ div(ng-include='"components/navbar/navbar.html"')
 
 
 .container
-  form.document-form
-    label Document name
-    p.input-group
+  form.document-form.form
+    .form-group
+      label Document name
       input.form-control(type='text', placeholder='Name', ng-model='document.name')
-    label Document info
-    p.input-group
+    
+    .form-group
+      label Document info
       input.form-control(type='text', placeholder='Info', ng-model='document.info')
-    label Live Google doc id
-    p.input-group
-      input.form-control(type='text', placeholder='LIVE  :: Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.liveContentGoogleDocId')
-    label Dev Google doc id
-    p.input-group
-      input.form-control(type='text', placeholder='DEV   :: Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.devContentGoogleDocId')
-    label Document content
-    p.input-group
-      textarea.formcontrol(type='text', placeholder='Google doc content', ng-model='documentContent')
 
-  .row
-    span.input-group-btn
+    .form-group
+      label Live Google doc id
+      input.form-control(type='text', placeholder='LIVE  :: Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.liveContentGoogleDocId')
+    
+    .form-group
+      label Dev Google doc id
+      input.form-control(type='text', placeholder='DEV   :: Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.devContentGoogleDocId')
+    
+    .form-group
+      label Document content
+      textarea.formcontrol(type='text', placeholder='Google doc content',class="textarea-lg", ng-model='documentContent')
+
+    .form-group
+      span.input-group-btn
       button.btn.btn-primary(type='submit', ng-click='updateDocument()') Update
-  .row
-    span.input-group-btn
+    
+    .form-group
+      span.input-group-btn
       button.btn(type='button', ng-click='previewDocument()') Preview (Update first)
 
 
