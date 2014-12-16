@@ -18,8 +18,8 @@ module.exports = {
   GOOGLE_ID:        'app-id',
   GOOGLE_SECRET:    'secret',
 
-  GOOGLE_DRIVE_API_KEY: 'api-key',
-
+  //the local site that our cms content is targeting
+  LOCAL_SITE: 'http://localhost:80',
 
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''
