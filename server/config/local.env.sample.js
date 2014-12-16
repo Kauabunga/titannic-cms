@@ -19,7 +19,9 @@ module.exports = {
   GOOGLE_SECRET:    'secret',
 
   //the local site that our cms content is targeting
-  LOCAL_SITE: 'http://localhost:80',
+  LOCAL_SITE: 'localhost',
+  LOCAL_SITE_PORT: '80',
+  LOCAL_SITE_PROTOCOL: 'http',
 
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''

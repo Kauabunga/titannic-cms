@@ -141,5 +141,26 @@ angular.module('titannicCmsApp')
     };
 
 
+    /**
+     *
+     * @param docId
+     */
+    self.getPreviewUrl = function(docId){
+
+      var deferred = $q.defer();
+
+      $http.get('/api/documents/preview/' + docId)
+        .success(function(data){
+          deferred.resolve(data);
+        })
+        .error(function(error){
+          deferred.reject(error);
+        });
+
+      return deferred.promise;
+
+    };
+
+
   });
 

@@ -97,7 +97,14 @@ angular.module('titannicCmsApp')
 
       });
 
+    };
 
+
+    /**
+     *
+     */
+    $scope.previewDocument = function previewDocument(){
+      $location.path('/previewdocument/' + $stateParams.documentId);
     };
 
 

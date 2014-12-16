@@ -5,7 +5,12 @@ var q = require('q');
 var Document = require('./document.model');
 var Schema = require('./../schema/schema.model');
 var googledrive = require('../../googledrive/googledrive.service');
+
 var https = require('follow-redirects').https;
+var http = require('http');
+
+var config = require('../../config/environment');
+
 
 var Log = require('log');
 var log = new Log('document.controller');
@@ -24,6 +29,85 @@ exports.index = function(req, res) {
 
     return res.json(200, documents);
   });
+};
+
+/**
+ * Get a preview url for the document
+ *
+ * @param req
+ * @param res
+ */
+exports.getPreview = function(req, res){
+
+  //first we need to attempt to update the local sites content (force it to refetch from google)
+
+  var httpClient = (config.localSiteProtocol.indexOf('https') !== -1) ? https : http;
+  var refreshDeferred = q.defer();
+  var previewDeferred = q.defer();
+
+  var options = {
+    host: config.localSite,
+    port: config.localSitePort,
+    //TODO make this configurable
+    path: '/api/forcecontentupdate',
+    agent: false
+  };
+
+  log.debug('preview query with options:', options);
+
+  var request = httpClient.get(options, function(res){
+
+    log.debug('Response from force update', res.statusCode);
+
+    if(res.statusCode >= 200 && res.statusCode < 300){
+      refreshDeferred.resolve(res);
+    }
+    else{
+      refreshDeferred.reject(res);
+    }
+  });
+
+  /**
+   *
+   */
+  request.setTimeout(10000, function(error){
+    log.error('failed to get content refresh timeout', error);
+    refreshDeferred.reject(error);
+  });
+
+  /**
+   *
+   */
+  request.on('error', function(error){
+    log.error('failed to get content refresh', error);
+    refreshDeferred.reject(error);
+  });
+
+
+
+  /**
+   * With a successful refresh we now need to build the link that will point to the content
+   */
+  refreshDeferred.promise.then(
+    function success(){
+
+      previewDeferred.resolve();
+
+      var responseBody = {
+        //TODO generate this url correctly - based on Document attribute
+        url: 'http://localhost:80/'
+      };
+
+      res.status(200).json(responseBody);
+    },
+    function error(){
+      previewDeferred.reject();
+      res.send(500);
+    });
+
+
+  return previewDeferred.promise;
+
 };
 
 

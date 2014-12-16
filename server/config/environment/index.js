@@ -59,7 +59,9 @@ var all = {
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
   },
 
-  localSite: process.env.LOCAL_SITE || 'http://localhost:80'
+  localSite: process.env.LOCAL_SITE || 'localhost',
+  localSitePort: process.env.LOCAL_SITE_PORT || '80',
+  localSiteProtocol: process.env.LOCAL_SITE_PROTOCOL || 'http'
 
 };
 

@@ -11,12 +11,25 @@ angular.module('titannicCmsApp', [
  *
  * Config
  */
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider) {
+  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
     $urlRouterProvider
       .otherwise('/');
 
     $locationProvider.html5Mode(true);
     $httpProvider.interceptors.push('authInterceptor');
+
+    $sceDelegateProvider.resourceUrlWhitelist([
+      // Allow same origin resource loads.
+      'self',
+      // Allow loading from our assets domain.  Notice the difference between * and **.
+      'http://localhost/**'
+    ]);
+
+    // The blacklist overrides the whitelist so the open redirect here is blocked.
+    $sceDelegateProvider.resourceUrlBlacklist([
+      'http://blacklist.example.com'
+    ]);
+
   })
 
 /**
@@ -62,6 +75,16 @@ angular.module('titannicCmsApp', [
       });
     });
 
+    //add a class based upon the current route
+    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+      try{
+        $rootScope.currentRoute = toState.name;
+      }
+      catch(error){
+        $log.debug('Error trying to attach body class name', error);
+      }
+
+    });
 
     //bind to the global error handler so we can create notifications for unhandled exceptions
     var onErrorOriginal = $window.onerror || function(){};
