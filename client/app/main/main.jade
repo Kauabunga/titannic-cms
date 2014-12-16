@@ -11,7 +11,7 @@ header#banner.hero-unit
   .row
     .col-lg-12
       h1.page-header Documents:
-      ul.nav.nav-tabs.nav-stacked.col-md-6.col-lg-6.col-sm-6(ng-repeat='document in documentList')
+      ul.nav.nav-tabs.nav-stacked.col-md-12.col-lg-12.col-sm-12(ng-repeat='document in documentList')
         li
           a(ng-click='editDocument(document)', tooltip='{{document.info}}')
             | {{document.name}}
@@ -28,7 +28,7 @@ header#banner.hero-unit
   .row
     .col-lg-12
       h1.page-header Schemas:
-      ul.nav.nav-tabs.nav-stacked.col-md-6.col-lg-6.col-sm-6(ng-repeat='schema in schemaList')
+      ul.nav.nav-tabs.nav-stacked.col-md-12.col-lg-12.col-sm-12(ng-repeat='schema in schemaList')
         li
           a(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
             | {{schema.name}}

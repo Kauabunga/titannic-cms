@@ -22,14 +22,13 @@ var schemas = [
     },
     documents: [
       {
-        name : 'Nav dev content',
-        info : 'Nav dev json content',
-        googleDocContentId: '0B84YdCmz0nrQamtJTUJUVlpBOU0'
-      },
-      {
-        name : 'Nav live content',
-        info : 'Nav live json content',
-        googleDocContentId: '0B84YdCmz0nrQZUtVODBYNkJFTVE'
+        name : 'Nav content',
+        info : 'Nav content',
+
+        //TODO the amount of env's should be configurable
+        liveContentGoogleDocId: '0B84YdCmz0nrQZUtVODBYNkJFTVE',
+        devContentGoogleDocId: '0B84YdCmz0nrQamtJTUJUVlpBOU0',
+        previewPath: '#!/'
       }
     ]
   },
@@ -41,14 +40,11 @@ var schemas = [
     },
     documents: [
       {
-        name : 'Careers dev content',
-        info : 'Careers dev json content',
-        googleDocContentId: '0B84YdCmz0nrQcXlrQjQ2MlVqUVU'
-      },
-      {
-        name : 'Careers live content',
-        info : 'Careers live json content',
-        googleDocContentId: '0B84YdCmz0nrQYVBZcHVkTVNTQjg'
+        name : 'Careers content',
+        info : 'Careers content',
+        liveContentGoogleDocId: '0B84YdCmz0nrQYVBZcHVkTVNTQjg',
+        devContentGoogleDocId: '0B84YdCmz0nrQcXlrQjQ2MlVqUVU',
+        previewPath: '#!/careers'
       }
     ]
   },
@@ -60,14 +56,10 @@ var schemas = [
     },
     documents: [
       {
-        name : 'About us dev content',
-        info : 'About us dev json content',
-        googleDocContentId: '0B84YdCmz0nrQal9TRjhMMHZhTVk'
-      },
-      {
-        name : 'About us live content',
-        info : 'About us live json content',
-        googleDocContentId: '0B84YdCmz0nrQck5TWG9TZC1jTGs'
+        name : 'About us content',
+        info : 'About us content',
+        liveContentGoogleDocId: '0B84YdCmz0nrQal9TRjhMMHZhTVk',
+        devContentGoogleDocId: '0B84YdCmz0nrQck5TWG9TZC1jTGs'
       }
     ]
   },
@@ -79,14 +71,10 @@ var schemas = [
     },
     documents: [
       {
-        name : 'Capabilities dev content',
-        info : 'Capabilities dev json content',
-        googleDocContentId: '0B84YdCmz0nrQOHhnOEJsLWY1akE'
-      },
-      {
-        name : 'Capabilities live content',
-        info : 'Capabilities live json content',
-        googleDocContentId: '0B84YdCmz0nrQb093WGY3ZjZWbVk'
+        name : 'Capabilities content',
+        info : 'Capabilities json content',
+        liveContentGoogleDocId: '0B84YdCmz0nrQb093WGY3ZjZWbVk',
+        devContentGoogleDocId: '0B84YdCmz0nrQOHhnOEJsLWY1akE'
       }
     ]
   },
@@ -98,14 +86,10 @@ var schemas = [
     },
     documents: [
       {
-        name : 'Clients dev content',
-        info : 'Clients dev json content',
-        googleDocContentId: '0B84YdCmz0nrQOHhnOEJsLWY1akE'
-      },
-      {
-        name : 'Clients live content',
-        info : 'Clients live json content',
-        googleDocContentId: '0B84YdCmz0nrQaWQ3dzRWdjhkanc'
+        name : 'Clients content',
+        info : 'Clients content',
+        liveContentGoogleDocId: '0B84YdCmz0nrQaWQ3dzRWdjhkanc',
+        devContentGoogleDocId: '0B84YdCmz0nrQOHhnOEJsLWY1akE'
       }
     ]
   },
@@ -117,14 +101,11 @@ var schemas = [
     },
     documents: [
       {
-        name : 'Case studies dev content',
-        info : 'Case studies dev json content',
-        googleDocContentId: '0B84YdCmz0nrQbFExTXpXVjZlLW8'
-      },
-      {
-        name : 'Case studies live content',
-        info : 'Case studies live json content',
-        googleDocContentId: '0B84YdCmz0nrQbndockJGNDQ1WGM'
+        name : 'Case studies content',
+        info : 'Case studies content',
+
+        liveContentGoogleDocId: '0B84YdCmz0nrQbndockJGNDQ1WGM',
+        devContentGoogleDocId: '0B84YdCmz0nrQbFExTXpXVjZlLW8'
       }
     ]
   },
@@ -136,14 +117,10 @@ var schemas = [
     },
     documents: [
       {
-        name : 'Contact dev content',
-        info : 'Contact dev json content',
-        googleDocContentId: '0B84YdCmz0nrQZi1DSmdoYURWTms'
-      },
-      {
-        name : 'Contact live content',
-        info : 'Contact live json content',
-        googleDocContentId: '0B84YdCmz0nrQZTRMUkZJeXFXbHM'
+        name : 'Contact content',
+        info : 'Contact content',
+        liveContentGoogleDocId: '0B84YdCmz0nrQZTRMUkZJeXFXbHM',
+        devContentGoogleDocId: '0B84YdCmz0nrQZi1DSmdoYURWTms'
       }
     ]
   },
@@ -155,14 +132,10 @@ var schemas = [
     },
     documents: [
       {
-        name : 'Quotes dev content',
-        info : 'Quotes dev json content',
-        googleDocContentId: '0B84YdCmz0nrQYTNGN0MyOW9MM1E'
-      },
-      {
-        name : 'Quotes live content',
-        info : 'Quotes live json content',
-        googleDocContentId: '0B84YdCmz0nrQWExzV2VKemh1Um8'
+        name : 'Quotes content',
+        info : 'Quotes content',
+        liveContentGoogleDocId: '0B84YdCmz0nrQWExzV2VKemh1Um8',
+        devContentGoogleDocId: '0B84YdCmz0nrQYTNGN0MyOW9MM1E'
       }
     ]
   }

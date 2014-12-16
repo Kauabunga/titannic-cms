@@ -149,7 +149,7 @@ exports.show = function(req, res) {
 
 
         log.debug('Fetching google doc and schema');
-        var googleContentDeferred = googledrive.fetchGoogleDoc(document.name, document.googleDocContentId);
+        var googleContentDeferred = googledrive.fetchGoogleDoc(document.name, document.devContentGoogleDocId);
         var googleSchemaDeferred = googledrive.fetchGoogleDoc(schema.name, schema.googleDocSchemaId);
 
         /**
@@ -229,7 +229,7 @@ exports.update = function(req, res) {
 
   if(req.body && req.body.content){
 
-    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.body.googleDocContentId, req.body.content);
+    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.body.devContentGoogleDocId, req.body.content);
 
     googleContentUpdateDeferred.then(
       function success(){

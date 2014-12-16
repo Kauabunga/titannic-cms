@@ -8,8 +8,9 @@ var DocumentSchema = new Schema({
   info: String,
   active: Boolean,
 
-  //id of the google drive
-  googleDocContentId: String,
+  //id of the google drive live + dev
+  liveContentGoogleDocId: String,
+  devContentGoogleDocId: String,
 
   //local copy of the document before/after it is pushed to google docs
   localDocCopy: String,

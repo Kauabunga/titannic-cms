@@ -8,9 +8,10 @@ div(ng-include='"components/navbar/navbar.html"')
 
       input.form-control(type='text', placeholder='Name', ng-model='document.name')
       input.form-control(type='text', placeholder='Info', ng-model='document.info')
-      input.form-control(type='text', placeholder='Google Doc Content Id e.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.googleDocContentId')
+      input.form-control(type='text', placeholder='LIVE :: Google Doc Content Id e.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.liveContentGoogleDocId')
+      input.form-control(type='text', placeholder='DEV  :: Google Doc Content Id e.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.devContentGoogleDocId')
       select.form-control(type='text',
-            placeholder='Google Doc Schema Id e.g. 0B84YdCmz0nrQTl9tSHRYMXNmTFU',
+            placeholder='Google Doc Schema',
             ng-model='document.schemaId',
             ng-options="schema._id as schema.name for schema in schemaList")
 

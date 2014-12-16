@@ -13,6 +13,9 @@ exports.register = function(socket) {
   Document.schema.post('remove', function (doc) {
     onRemove(socket, doc);
   });
+
+  //TODO post updates to clients after registering watch with google drive
+
 }
 
 function onSave(socket, doc, cb) {

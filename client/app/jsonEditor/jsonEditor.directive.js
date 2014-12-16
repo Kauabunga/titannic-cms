@@ -114,6 +114,7 @@ angular.module('titannicCmsApp')
 
           if(editor){
             editor.off('change', changeHandle);
+            editor.destroy();
           }
           destroyHandle();
         });

@@ -8,7 +8,8 @@ angular.module('titannicCmsApp')
     $scope.document = {
       name: '',
       info: '',
-      googleDocContentId: '',
+      liveContentGoogleDocId: '',
+      devContentGoogleDocId: '',
       schemaId: ''
     };
 
@@ -84,7 +85,8 @@ angular.module('titannicCmsApp')
       var valid = true;
 
       if($scope.document.name === '' ||
-          $scope.document.googleDocContentId === '' ||
+          $scope.document.liveContentGoogleDocId === '' ||
+          $scope.document.devContentGoogleDocId === '' ||
           $scope.document.schemaId === ''){
 
         valid = false;
@@ -102,7 +104,8 @@ angular.module('titannicCmsApp')
       $scope.document = {
         name: '',
         info: '',
-        googleDocContentId: '',
+        liveContentGoogleDocId: '',
+        devContentGoogleDocId: '',
         schemaId: ''
       }
     }
