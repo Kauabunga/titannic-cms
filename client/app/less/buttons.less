@@ -1,0 +1,48 @@
+.movedown, .delete, .moveup {
+	text-indent: -9999px;
+	position: relative;
+	padding-left: 20px;
+	padding-right: 20px;
+	&:after {
+		font-family: "FontAwesome";
+		text-indent: 0;
+		display: block;
+		width: 20px;
+		height: 20px;
+		position: absolute;
+	}
+}
+
+.delete {
+	padding-left: 15px;
+	padding-right: 15px;
+	background: @gray-light !important;
+	border-color: @gray !important;
+	&:after {
+		content: "\f00d";
+		top: 5px;
+		left: 5px;
+	}
+	&:hover {
+		background: @btn-danger-bg !important;
+		border-color: @btn-danger-border !important;
+	}
+}
+
+.movedown {
+	&:after {
+		content: "\f149";
+		top: 5px;
+		left: 10px;
+	}
+}
+
+.moveup {
+	&:after {
+		content: "\f148";
+		top: 5px;
+		left: 10px;
+	}
+}
+
+
