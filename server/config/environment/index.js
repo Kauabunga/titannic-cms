@@ -56,9 +56,15 @@ var all = {
   google: {
     clientID:     process.env.GOOGLE_ID || 'id',
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
-    callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback'
+    callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback',
+    apiKey: process.env.GOOGLE_API_KEY || 'api-key',
+    watchCallbackUrl: process.env.GOOGLE_WATCH_CALLBACK || 'api/google/watchcallback'
   },
 
+  //address for this site
+  domain: (process.env.DOMAIN || 'http://localhost:9000/'),
+
+  //our targeted site using the cms documents
   localSite: process.env.LOCAL_SITE || 'localhost',
   localSitePort: process.env.LOCAL_SITE_PORT || '80',
   localSiteProtocol: process.env.LOCAL_SITE_PROTOCOL || 'http'

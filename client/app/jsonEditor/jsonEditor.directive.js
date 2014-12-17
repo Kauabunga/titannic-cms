@@ -52,7 +52,7 @@ angular.module('titannicCmsApp')
 
                 var jsonEditorOptions = {
                   schema: document.schema,
-                  theme: 'bootstrap3',
+                  theme: 'bootstrap2',
                   startval: document.content,
                   disable_properties: true,
                   disable_collapse: true,
@@ -64,8 +64,8 @@ angular.module('titannicCmsApp')
                 editor = newEditor(jsonEditorOptions);
 
               },
-              function error(){
-                Notification.error('Editor failed to get document');
+              function error(statusCode){
+                $log.error('Editor failed to get document', statusCode);
             });
           });
 
@@ -87,9 +87,12 @@ angular.module('titannicCmsApp')
               Notification.error('Json invalid');
 
               scope.editorValid = false;
+              Notification.error('Form invalid');
+              element.css('background-color', 'red');
             }
             else{
               scope.editorValid = true;
+              element.css('background-color', '');
             }
 
             Document.setDocumentContent($stateParams.documentId, editor.getValue());

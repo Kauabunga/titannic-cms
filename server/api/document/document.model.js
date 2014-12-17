@@ -12,6 +12,8 @@ var DocumentSchema = new Schema({
   liveContentGoogleDocId: String,
   devContentGoogleDocId: String,
 
+  previewPath: String,
+
   //local copy of the document before/after it is pushed to google docs
   localDocCopy: String,
 

@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .service('Document', function ($log, $q, $http, $rootScope, Notification) {
+  .service('Document', function ($log, $q, $http, $rootScope, Notification, socket) {
 
     var _documents = {};
     var _deferredGetDocument = {};
@@ -17,6 +17,7 @@ angular.module('titannicCmsApp')
       $log.debug('DocumentService setting document', content);
       _documents[docId].content = content;
       $rootScope.$emit('Document:' + docId + ':update', _documents[docId]);
+
     };
 
 
@@ -99,8 +100,10 @@ angular.module('titannicCmsApp')
           //socket.syncUpdates('document', $scope.documentList);
 
         }).error(function(data, statusCode){
+
+          $log.error('failed to get document', data);
           _deferredGetDocument[docId].reject(statusCode);
-          Notification.error('Document service failed to get single document');
+
         });
 
       }

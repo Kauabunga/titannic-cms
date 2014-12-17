@@ -91,14 +91,30 @@ exports.getPreview = function(req, res){
   refreshDeferred.promise.then(
     function success(){
 
-      previewDeferred.resolve();
 
-      var responseBody = {
-        //TODO generate this url correctly - based on Document attribute
-        url: 'http://localhost:80/'
-      };
+      Document.findById(req.params.id, function (err, document) {
 
-      res.status(200).json(responseBody);
+        if (err) {
+          previewDeferred.reject();
+          handleError(res, err);
+        }
+        else if (!document) {
+          previewDeferred.reject();
+          res.send(404);
+        }
+        else{
+          previewDeferred.resolve();
+
+          var responseBody = {
+            //TODO generate this url correctly - based on Document attribute
+            url: 'http://localhost:80/' + (document.previewPath || '')
+          };
+
+          res.status(200).json(responseBody);
+        }
+
+      });
+
     },
     function error(){
       previewDeferred.reject();
@@ -170,6 +186,8 @@ exports.show = function(req, res) {
               log.debug('          ---> 200 RESPONSE to client' + '\n');
               res.status(200).json(documentObject);
 
+
+
             }
             catch(error){
               log.error(error);
@@ -213,6 +231,31 @@ exports.create = function(req, res) {
   Document.create(req.body, function(err, document) {
     if(err) { return handleError(res, err); }
     return res.json(201, document);
+  });
+};
+
+
+/**
+ *
+ * @param docId
+ */
+exports.unlockById = function(docId){
+  Document.findById(docId, function (err, document) {
+    if (err) {
+      log.error('failed to find document to unlock', err);
+      return;
+    }
+    if(!document) {
+      log.error('failed to find document to unlock');
+      return;
+    }
+    document.active = false;
+    document.save(function (err) {
+      if (err) {
+        log.error('failed to update document ', err);
+      }
+      return;
+    });
   });
 };
 

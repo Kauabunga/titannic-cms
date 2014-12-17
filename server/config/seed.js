@@ -59,7 +59,8 @@ var schemas = [
         name : 'About us content',
         info : 'About us content',
         liveContentGoogleDocId: '0B84YdCmz0nrQal9TRjhMMHZhTVk',
-        devContentGoogleDocId: '0B84YdCmz0nrQck5TWG9TZC1jTGs'
+        devContentGoogleDocId: '0B84YdCmz0nrQck5TWG9TZC1jTGs',
+        previewPath: '#!/aboutus'
       }
     ]
   },
@@ -74,7 +75,8 @@ var schemas = [
         name : 'Capabilities content',
         info : 'Capabilities json content',
         liveContentGoogleDocId: '0B84YdCmz0nrQb093WGY3ZjZWbVk',
-        devContentGoogleDocId: '0B84YdCmz0nrQOHhnOEJsLWY1akE'
+        devContentGoogleDocId: '0B84YdCmz0nrQOHhnOEJsLWY1akE',
+        previewPath: '#!/services'
       }
     ]
   },
@@ -89,7 +91,8 @@ var schemas = [
         name : 'Clients content',
         info : 'Clients content',
         liveContentGoogleDocId: '0B84YdCmz0nrQaWQ3dzRWdjhkanc',
-        devContentGoogleDocId: '0B84YdCmz0nrQOHhnOEJsLWY1akE'
+        devContentGoogleDocId: '0B84YdCmz0nrQbFExTXpXVjZlLW8',
+        previewPath: '#!/'
       }
     ]
   },
@@ -103,9 +106,9 @@ var schemas = [
       {
         name : 'Case studies content',
         info : 'Case studies content',
-
         liveContentGoogleDocId: '0B84YdCmz0nrQbndockJGNDQ1WGM',
-        devContentGoogleDocId: '0B84YdCmz0nrQbFExTXpXVjZlLW8'
+        devContentGoogleDocId: '0B84YdCmz0nrQMG85NTIwQzZ0TUk',
+        previewPath: '#!/casestudies'
       }
     ]
   },
@@ -120,7 +123,8 @@ var schemas = [
         name : 'Contact content',
         info : 'Contact content',
         liveContentGoogleDocId: '0B84YdCmz0nrQZTRMUkZJeXFXbHM',
-        devContentGoogleDocId: '0B84YdCmz0nrQZi1DSmdoYURWTms'
+        devContentGoogleDocId: '0B84YdCmz0nrQZi1DSmdoYURWTms',
+        previewPath: '#!/contactus'
       }
     ]
   },
@@ -135,7 +139,8 @@ var schemas = [
         name : 'Quotes content',
         info : 'Quotes content',
         liveContentGoogleDocId: '0B84YdCmz0nrQWExzV2VKemh1Um8',
-        devContentGoogleDocId: '0B84YdCmz0nrQYTNGN0MyOW9MM1E'
+        devContentGoogleDocId: '0B84YdCmz0nrQYTNGN0MyOW9MM1E',
+        previewPath: '#!/'
       }
     ]
   }

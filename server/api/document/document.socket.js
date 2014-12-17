@@ -5,6 +5,7 @@
 'use strict';
 
 var Document = require('./document.model');
+var DocumentController = require('./document.controller');
 
 exports.register = function(socket) {
   Document.schema.post('save', function (doc) {
@@ -13,10 +14,7 @@ exports.register = function(socket) {
   Document.schema.post('remove', function (doc) {
     onRemove(socket, doc);
   });
-
-  //TODO post updates to clients after registering watch with google drive
-
-}
+};
 
 function onSave(socket, doc, cb) {
   socket.emit('document:save', doc);
