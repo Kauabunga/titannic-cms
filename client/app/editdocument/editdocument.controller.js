@@ -22,8 +22,6 @@ angular.module('titannicCmsApp')
     var destroyHandle = $scope.$on('$destroy', function(){
       $log.debug('EditdocumentCtrl $destroy', socket);
 
-      socket.socket.emit('document:unlock', $stateParams.documentId);
-
       destroyHandle();
     });
 
@@ -66,6 +64,7 @@ angular.module('titannicCmsApp')
 
           if(statusCode === 401){
             Notification.error('You need to login to access this document');
+            $location.path('/');
           }
           else if(statusCode === 423){
             //TODO Document is already in use

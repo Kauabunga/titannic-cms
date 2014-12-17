@@ -20,6 +20,7 @@ angular.module('titannicCmsApp')
         type: 'info',
         timeout: 2000,
         theme: 'relax',
+        layout: 'center',
         animation: {
           open: 'animated bounceInLeft', // Animate.css class names
           close: 'animated bounceOutRight', // Animate.css class names
@@ -59,6 +60,7 @@ angular.module('titannicCmsApp')
         type: 'success',
         timeout: 2000,
         theme: 'relax',
+        layout: 'topCenter',
         animation: {
           open: 'animated bounceInLeft', // Animate.css class names
           close: 'animated bounceOutRight', // Animate.css class names
@@ -78,6 +80,7 @@ angular.module('titannicCmsApp')
         type: 'error',
         timeout: 3000,
         theme: 'relax',
+        layout: 'topCenter',
         animation: {
           open: 'animated bounceInLeft', // Animate.css class names
           close: 'animated bounceOutRight', // Animate.css class names

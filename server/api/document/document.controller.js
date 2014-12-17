@@ -183,18 +183,8 @@ exports.show = function(req, res) {
               documentObject.content = deserialisedContent;
               documentObject.schema = deserialisedSchema;
 
-              document.active = true;
-              //make the document active
-              document.save(function (err) {
-                if (err) {
-                  //failed to update active state of documnet
-                  return handleError(res, err);
-                }
-                else{
-                  log.debug('          ---> 200 RESPONSE to client' + '\n');
-                  res.status(200).json(documentObject);
-                }
-              });
+              log.debug('          ---> 200 RESPONSE to client' + '\n');
+              res.status(200).json(documentObject);
 
 
 
