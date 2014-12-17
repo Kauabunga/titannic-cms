@@ -3,49 +3,43 @@ div(ng-include='"components/navbar/navbar.html"')
 header#banner.hero-unit
   .container
     h1 'Allo, 'Allo!
-    p.lead Kick-start your next web app with Angular Fullstack
-    img(src='assets/images/yeoman.png', alt='I\'m Yeoman')
 
 
 .container
   .row
-    .col-lg-12
-      h1.page-header Documents:
-      ul.nav.nav-tabs.nav-stacked.col-md-12.col-lg-12.col-sm-12(ng-repeat='document in documentList')
-        li
-          a(ng-click='editDocument(document)', tooltip='{{document.info}}')
-            | {{document.name}}
-            = ' | '
-            | {{document.googleDocContentId}}
-            button.close(type='button', ng-click='deleteDocument($event, document)') ×
+    .col-lg-6
+      .row
+        .col-sm-8
+          h1.page-header Documents:
+        .col-sm-4
+          button.btn.btn-primary.add-btn(type='button', ng-click='createDocument()') Create Document
+      .row
+        ul.item-list.document-item-list(ng-repeat='document in documentList')
+          li(ng-click='editDocument(document)', tooltip='{{document.info}}')
+            a
+              | {{document.name}}
+              button.close(type='button', ng-click='deleteDocument($event, document)') ×
 
-  .row
-    .col-lg-12
-      button.btn.btn-primary(type='button', ng-click='createDocument()') Add new Docuemnt
 
 
-.container
-  .row
-    .col-lg-12
-      h1.page-header Schemas:
-      ul.nav.nav-tabs.nav-stacked.col-md-12.col-lg-12.col-sm-12(ng-repeat='schema in schemaList')
-        li
-          a(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
-            | {{schema.name}}
-            = ' | '
-            | {{schema.googleDocSchemaId}}
-          button.close(type='button', ng-click='deleteSchema($event, schema)') ×
 
-  .row
-    .col-lg-12
-      button.btn(type='button', ng-click='createSchema()') Add new Schema
+    .col-lg-6
+      .row
+        .col-sm-8
+          h1.page-header Schemas:
+        .col-sm-4
+          button.btn.btn-primary.add-btn(type='button', ng-click='createSchema()') Create Schema
+      .row
+        ul.item-list.schema-item-list(ng-repeat='schema in schemaList')
+          li(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
+            a
+              | {{schema.name}}
+              button.close(type='button', ng-click='deleteSchema($event, schema)') ×
+
+
 
 
 footer.footer
   .container
     p
-      | Angular Fullstack v2.0.13
-      = ' | '
-      a(href='https://twitter.com/tyhenkel') @tyhenkel
-      = ' | '
-      a(href='https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open') Issues
+      | Titannic-cms

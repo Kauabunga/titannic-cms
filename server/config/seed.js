@@ -91,7 +91,7 @@ var schemas = [
         name : 'Clients content',
         info : 'Clients content',
         liveContentGoogleDocId: '0B84YdCmz0nrQaWQ3dzRWdjhkanc',
-        devContentGoogleDocId: '0B84YdCmz0nrQOHhnOEJsLWY1akE',
+        devContentGoogleDocId: '0B84YdCmz0nrQbFExTXpXVjZlLW8',
         previewPath: '#!/'
       }
     ]
@@ -107,7 +107,7 @@ var schemas = [
         name : 'Case studies content',
         info : 'Case studies content',
         liveContentGoogleDocId: '0B84YdCmz0nrQbndockJGNDQ1WGM',
-        devContentGoogleDocId: '0B84YdCmz0nrQbFExTXpXVjZlLW8',
+        devContentGoogleDocId: '0B84YdCmz0nrQMG85NTIwQzZ0TUk',
         previewPath: '#!/casestudies'
       }
     ]

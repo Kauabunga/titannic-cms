@@ -93,9 +93,12 @@ angular.module('titannicCmsApp')
               Notification.error('Json invalid');
 
               scope.editorValid = false;
+              Notification.error('Form invalid');
+              element.css('background-color', 'red');
             }
             else{
               scope.editorValid = true;
+              element.css('background-color', '');
             }
 
             Document.setDocumentContent($stateParams.documentId, editor.getValue());
