@@ -29,8 +29,8 @@ angular.module('titannicCmsApp')
         },
         buttons: [
           {
-            addClass: 'btn btn-primary',
-            text: 'Ok', onClick: function($noty) {
+            addClass: 'btn btn-danger',
+            text: 'Delete', onClick: function($noty) {
               $noty.close();
               // this = button element
               // $noty = $noty element
@@ -39,7 +39,7 @@ angular.module('titannicCmsApp')
             }
           },
           {
-            addClass: 'btn btn-danger',
+            addClass: 'btn btn-primary',
             text: 'Cancel', onClick: function ($noty) {
               $noty.close();
               noCallback();

@@ -105,7 +105,9 @@ angular.module('titannicCmsApp')
          */
         function newEditor(options){
 
-          var editor = new JSONEditor(element[0], options);
+          var $editorAnchor = element.find('.json-editor-anchor');
+
+          var editor = new JSONEditor($editorAnchor[0], options);
           editor.on('change', changeHandle);
           return editor;
         }
