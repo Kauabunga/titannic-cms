@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location) {
+  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket) {
 
     $scope.document = undefined;
     $scope.documentContent = undefined;
@@ -20,7 +20,9 @@ angular.module('titannicCmsApp')
      *
      */
     var destroyHandle = $scope.$on('$destroy', function(){
-      $log.debug('EditdocumentCtrl $destroy');
+      $log.debug('EditdocumentCtrl $destroy', socket);
+
+      socket.socket.emit('document:unlock', $stateParams.documentId);
 
       destroyHandle();
     });
@@ -69,6 +71,7 @@ angular.module('titannicCmsApp')
             //TODO Document is already in use
             $log.error('Document already in use', statusCode);
             Notification.error('Document already in use');
+            $location.path('/');
           }
           else if(statusCode === 404){
             //not found redirect home

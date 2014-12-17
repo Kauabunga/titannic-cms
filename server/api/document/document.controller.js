@@ -97,7 +97,6 @@ exports.getPreview = function(req, res){
         if (err) {
           previewDeferred.reject();
           handleError(res, err);
-
         }
         else if (!document) {
           previewDeferred.reject();
@@ -184,8 +183,20 @@ exports.show = function(req, res) {
               documentObject.content = deserialisedContent;
               documentObject.schema = deserialisedSchema;
 
-              log.debug('          ---> 200 RESPONSE to client' + '\n');
-              res.status(200).json(documentObject);
+              document.active = true;
+              //make the document active
+              document.save(function (err) {
+                if (err) {
+                  //failed to update active state of documnet
+                  return handleError(res, err);
+                }
+                else{
+                  log.debug('          ---> 200 RESPONSE to client' + '\n');
+                  res.status(200).json(documentObject);
+                }
+              });
+
+
 
             }
             catch(error){
@@ -230,6 +241,31 @@ exports.create = function(req, res) {
   Document.create(req.body, function(err, document) {
     if(err) { return handleError(res, err); }
     return res.json(201, document);
+  });
+};
+
+
+/**
+ *
+ * @param docId
+ */
+exports.unlockById = function(docId){
+  Document.findById(docId, function (err, document) {
+    if (err) {
+      log.error('failed to find document to unlock', err);
+      return;
+    }
+    if(!document) {
+      log.error('failed to find document to unlock');
+      return;
+    }
+    document.active = false;
+    document.save(function (err) {
+      if (err) {
+        log.error('failed to update document ', err);
+      }
+      return;
+    });
   });
 };
 

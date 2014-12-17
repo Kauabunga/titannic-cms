@@ -8,7 +8,7 @@ angular.module('titannicCmsApp')
 
 
     /**
-     * 
+     *
      * @param content
      * @param yesCallback
      * @param noCallback

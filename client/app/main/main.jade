@@ -15,7 +15,7 @@ header#banner.hero-unit
           button.btn.btn-primary.add-btn(type='button', ng-click='createDocument()') Create Document
       .row
         ul.item-list.document-item-list(ng-repeat='document in documentList')
-          li(ng-click='editDocument(document)', tooltip='{{document.info}}')
+          li(ng-click='editDocument(document)', tooltip='{{document.info}}', ng-class='{"active": document.active, "inactive": !document.active}')
             a
               | {{document.name}}
               button.close(type='button', ng-click='deleteDocument($event, document)') ×
