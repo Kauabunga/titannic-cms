@@ -74,7 +74,10 @@ angular.module('titannicCmsApp')
      *
      * @param content
      */
-    self.error = function(content){
+    self.error = function(content, options){
+
+      var onClickCallback = options.onClickCallback || function(){};
+
       var n = noty({
         text: content,
         type: 'error',
@@ -86,6 +89,9 @@ angular.module('titannicCmsApp')
           close: 'animated bounceOutRight', // Animate.css class names
           easing: 'swing', // unavailable - no need
           speed: 500 // unavailable - no need
+        },
+        callback: {
+          onCloseClick: onClickCallback
         }
       });
 
