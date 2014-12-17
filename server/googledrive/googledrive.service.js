@@ -299,7 +299,7 @@
             googleContentDeferred.resolve();
           }
           else {
-            googleContentDeferred.reject();
+            googleContentDeferred.reject(error);
           }
         }
 
@@ -323,12 +323,12 @@
         }
         catch (error) {
           log.error('Error updating google doc', error);
-          googleContentDeferred.reject();
+          googleContentDeferred.reject(error);
         }
 
-      }, function error() {
+      }, function error(error) {
 
-        googleContentDeferred.reject();
+        googleContentDeferred.reject(error);
       });
 
 
