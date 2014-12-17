@@ -1,3 +1,28 @@
+
+
+
+
+  .json-editor-btn-delete{
+    .button-variant(@btn-danger-color; @btn-danger-bg; @btn-danger-border);
+  }
+
+  
+
+  .json-editor-btn-add{
+    .button-variant(@btn-success-color; @btn-success-bg; @btn-success-border);
+  }
+
+
+  .json-editor-btn-movedown, .json-editor-btn-moveup{
+    .button-variant(@btn-info-color; @btn-info-bg; @btn-info-border);
+
+  }
+
+
+
+
+
+
 .movedown, .delete, .moveup {
 	text-indent: -9999px;
 	position: relative;
@@ -16,8 +41,8 @@
 .delete {
 	padding-left: 15px;
 	padding-right: 15px;
-	background: @gray-light !important;
-	border-color: @gray !important;
+	background: @muted-red !important;
+	border-color: @muted-red-dark !important;
 	&:after {
 		content: "\f00d";
 		top: 5px;
@@ -30,6 +55,7 @@
 }
 
 .movedown {
+	color: @gray-light;
 	&:after {
 		content: "\f149";
 		top: 5px;
@@ -38,6 +64,7 @@
 }
 
 .moveup {
+	color: @gray-light;
 	&:after {
 		content: "\f148";
 		top: 5px;
