@@ -52,7 +52,7 @@ angular.module('titannicCmsApp')
 
                 var jsonEditorOptions = {
                   schema: document.schema,
-                  theme: 'bootstrap3',
+                  theme: 'bootstrap2',
                   startval: document.content,
                   disable_properties: true,
                   disable_collapse: true,
