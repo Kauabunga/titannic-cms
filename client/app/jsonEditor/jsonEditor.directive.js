@@ -56,7 +56,7 @@ angular.module('titannicCmsApp')
                   startval: document.content,
                   disable_properties: true,
                   disable_collapse: true,
-                  disable_edit_json: true,
+                  //disable_edit_json: true,
                   show_errors: 'always'
 
                 };

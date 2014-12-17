@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document, Notification, $log) {
+  .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document, Notification, $log, Auth) {
 
     $scope.documentList = undefined;
     $scope.schemaList = undefined;
@@ -46,7 +46,13 @@ angular.module('titannicCmsApp')
      * @param document
      */
     $scope.editDocument = function editDocument(document){
-      $location.path('/editdocument/' + document._id);
+      if(Auth.isLoggedIn()){
+        $location.path('/editdocument/' + document._id);
+      }
+      else{
+        Notification.error('You need to be logged in to access this document');
+      }
+
     };
 
     /**
