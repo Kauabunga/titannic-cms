@@ -91,14 +91,31 @@ exports.getPreview = function(req, res){
   refreshDeferred.promise.then(
     function success(){
 
-      previewDeferred.resolve();
 
-      var responseBody = {
-        //TODO generate this url correctly - based on Document attribute
-        url: 'http://localhost:80/'
-      };
+      Document.findById(req.params.id, function (err, document) {
 
-      res.status(200).json(responseBody);
+        if (err) {
+          previewDeferred.reject();
+          handleError(res, err);
+
+        }
+        else if (!document) {
+          previewDeferred.reject();
+          res.send(404);
+        }
+        else{
+          previewDeferred.resolve();
+
+          var responseBody = {
+            //TODO generate this url correctly - based on Document attribute
+            url: 'http://localhost:80/' + (document.previewPath || '')
+          };
+
+          res.status(200).json(responseBody);
+        }
+
+      });
+
     },
     function error(){
       previewDeferred.reject();

@@ -62,7 +62,10 @@ angular.module('titannicCmsApp')
         },
         function error(statusCode){
 
-          if(statusCode === 423){
+          if(statusCode === 401){
+            Notification.error('You need to login to access this document');
+          }
+          else if(statusCode === 423){
             //TODO Document is already in use
             $log.error('Document already in use', statusCode);
             Notification.error('Document already in use');

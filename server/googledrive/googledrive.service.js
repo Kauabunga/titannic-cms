@@ -37,6 +37,7 @@
     //Also, once cached, register callback to google to get edit/update events -> Document socket + (store dev/live in database)
     var i;
 
+      //TODO we want to wrap this in a promise so that we can ensure this is completed before giving any google docs back to the client that wont get cached/watched
 
       //TODO how do we get these requests to work without setTieout - process.nextTick()?
       setTimeout(function(){
@@ -52,8 +53,8 @@
           for(i = 0; i < documents.length; i++){
             var currentDocument = documents[i];
 
-            cacheGoogleDoc('init fetch live doc -> ' + currentDocument.name, currentDocument.liveContentGoogleDocId);
-            cacheGoogleDoc('init fetch dev doc  -> ' + currentDocument.name, currentDocument.devContentGoogleDocId);
+            cacheGoogleDoc('init fetch live doc -> ' + currentDocument.name, currentDocument.liveContentGoogleDocId, currentDocument._id);
+            cacheGoogleDoc('init fetch dev doc  -> ' + currentDocument.name, currentDocument.devContentGoogleDocId, currentDocument._id);
           }
         });
 
@@ -67,7 +68,7 @@
           for(i = 0; i < schemas.length; i++){
             var currentSchema = schemas[i];
 
-            cacheGoogleDoc('init fetch schema -> ' + currentSchema.name, currentSchema.googleDocSchemaId);
+            cacheGoogleDoc('init fetch schema -> ' + currentSchema.name, currentSchema.googleDocSchemaId, currentSchema._id);
           }
         });
       }, 2000);
@@ -82,14 +83,14 @@
    * @param id
    * @param options
    */
-  function cacheGoogleDoc(name, id, options){
+  function cacheGoogleDoc(name, googleId, dbId, options){
 
     var deferred = q.defer();
-    var fetchDeferred = fetchGoogleDoc(name, id, options);
+    var fetchDeferred = fetchGoogleDoc(name, googleId, options);
 
     fetchDeferred.then(
       function success(){
-        var subscribeDeferred = subscribeGoogleDoc(name, id, options);
+        var subscribeDeferred = subscribeGoogleDoc(name, googleId, dbId, options);
 
         subscribeDeferred.then(
           function success(){
@@ -113,13 +114,58 @@
    * @param id
    * @param options
    */
-  function subscribeGoogleDoc(name, id, options) {
+  function subscribeGoogleDoc(name, googleId, dbId, options) {
+
+    var deferred = q.defer();
+
+
+    log.debug('subscribeGoogleDoc', name);
+
+
+    function googleCallback(error, body, googleResponse){
+
+      if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
+        log.debug('successful subscribe/watch response');
+        deferred.resolve();
+      }
+      else {
+        log.error('error subscribe/watch response', error);
+        deferred.reject();
+      }
+
+    }
+
+
+    try {
+
+
+      //var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
+      //
+      //oauth2Client.setCredentials({
+      //  access_token: user.accessToken
+      //});
+
+      var drive = google.drive({version: 'v2', apiKey: config.google.apiKey});
+
+
+      drive.files.watch({
+        fileId: googleId,
+        id: dbId,//string, A UUID or similar unique string that identifies this channel.
+        //expiration:  '', //long, Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds. Optional.
+        //token:  '', //string, An arbitrary string delivered to the target address with each notification delivered over this channel. Optional.
+        type: 'web_hook', //string, The type of delivery mechanism used for this channel. The only option is web_hook.
+        address: config.domain //string The address where notifications are delivered for this channel.
+      }, googleCallback);
+    }
+    catch(error){
+      log.error('failed to watch google doc', error);
+    }
+
 
     //TODO subscribe for updates
     //TODO create subscription service api
 
-    log.debug('subscribing to google doc', name);
-    return q.when();
+    return deferred.promise;
 
   }
 
@@ -127,6 +173,10 @@
    * TODO create endpoint for service api to call back
    */
   function subscribeChangeEvent(){
+
+
+
+
 
   }
 
@@ -286,7 +336,8 @@
   }
 
 
-  exports.subscribeChangeEvent = subscribeChangeEvent;
+  exports.cacheGoogleDoc = cacheGoogleDoc;
+  //exports.subscribeChangeEvent = subscribeChangeEvent;
   exports.updateDocument = updateDocument;
   exports.fetchGoogleDoc = fetchGoogleDoc;
 

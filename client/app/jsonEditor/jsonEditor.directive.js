@@ -64,8 +64,14 @@ angular.module('titannicCmsApp')
                 editor = newEditor(jsonEditorOptions);
 
               },
-              function error(){
-                Notification.error('Editor failed to get document');
+              function error(statusCode){
+                if(statusCode !== 401){
+                  Notification.error('Editor failed to get document', statusCode);
+                }
+                else{
+                  $log.error('Editor failed to get document', statusCode);
+                }
+
             });
           });
 

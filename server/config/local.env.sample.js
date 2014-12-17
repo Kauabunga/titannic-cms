@@ -23,6 +23,9 @@ module.exports = {
   LOCAL_SITE_PORT: '80',
   LOCAL_SITE_PROTOCOL: 'http',
 
+  GOOGLE_API_KEY: '',
+  GOOGLE_WATCH_CALLBACK: '/api/google/watchcallback',
+
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''
 };
