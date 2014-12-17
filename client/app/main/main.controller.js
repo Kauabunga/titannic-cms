@@ -46,11 +46,20 @@ angular.module('titannicCmsApp')
      * @param document
      */
     $scope.editDocument = function editDocument(document){
+
+      function onClickCallback(){
+        $scope.$apply(function(){
+          $location.path('/login')
+        });
+      }
+
       if(Auth.isLoggedIn()){
         $location.path('/editdocument/' + document._id);
       }
       else{
-        Notification.error('You need to be logged in to access this document');
+        Notification.error('You need to be logged in to access this document', {
+          onClickCallback: onClickCallback
+        });
       }
 
     };
