@@ -31,6 +31,7 @@ angular.module('titannicCmsApp')
 
         var editor;
         scope.editorValid = true;
+        scope.optionsEnabled = false;
 
 
         /**
@@ -38,8 +39,6 @@ angular.module('titannicCmsApp')
          */
         (function init(){
 
-          //dont block TODO sort out this getDocument -> getCurrentDocument which resolves when the next getDocument call is made
-          //                need a document factory
           $timeout(function(){
             var deferred = Document.getDocument($stateParams.documentId);
 
@@ -50,17 +49,9 @@ angular.module('titannicCmsApp')
             deferred.then(
               function success(document){
 
-                var jsonEditorOptions = {
-                  schema: document.schema,
-                  theme: 'bootstrap2',
-                  startval: document.content,
-                  disable_properties: true,
-                  disable_collapse: true,
-                  //disable_edit_json: true,
-                  show_errors: 'always'
+                scope.document = document;
 
-                };
-
+                var jsonEditorOptions = getEditorOptions();
                 editor = newEditor(jsonEditorOptions);
 
               },
@@ -75,6 +66,48 @@ angular.module('titannicCmsApp')
         /**
          *
          */
+        scope.resetJson = function(){
+          editor.setValue(scope.document.contentOriginal);
+        };
+
+
+        /**
+         *
+         */
+        scope.toggleOptions = function(){
+          scope.optionsEnabled = ! scope.optionsEnabled;
+
+          editor.destroy();
+
+          var jsonEditorOptions = getEditorOptions();
+          editor = newEditor(jsonEditorOptions);
+
+        };
+
+
+        /**
+         *
+         *
+         */
+        function getEditorOptions() {
+          return {
+            schema: scope.document.schema,
+            theme: 'bootstrap2',
+            startval: scope.document.content,
+            disable_properties: ! scope.optionsEnabled,
+            disable_collapse: ! scope.optionsEnabled,
+            disable_edit_json: ! scope.optionsEnabled,
+            disable_array_add: ! scope.optionsEnabled,
+            disable_array_delete: ! scope.optionsEnabled,
+            disable_array_reorder: ! scope.optionsEnabled,
+            no_additional_properties: true,
+            show_errors: 'always'
+          };
+        }
+
+        /**
+         *
+         */
         function changeHandle(){
           scope.$apply(function(){
 
@@ -84,7 +117,6 @@ angular.module('titannicCmsApp')
 
               $log.error('Invalid json');
               $log.error(errors);
-              Notification.error('Json invalid');
 
               scope.editorValid = false;
               Notification.error('Form invalid');
@@ -104,7 +136,6 @@ angular.module('titannicCmsApp')
          * @param editor
          */
         function newEditor(options){
-
           var $editorAnchor = element.find('.json-editor-anchor');
 
           var editor = new JSONEditor($editorAnchor[0], options);

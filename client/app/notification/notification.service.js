@@ -76,6 +76,8 @@ angular.module('titannicCmsApp')
      */
     self.error = function(content, options){
 
+      options = options || {};
+
       var onClickCallback = options.onClickCallback || function(){};
 
       var n = noty({

@@ -60,7 +60,7 @@ module.exports = function (grunt) {
           '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
           '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
           '!<%= yeoman.client %>/app/app.js'],
-        tasks: ['injector:scripts']
+        tasks: ['injector:scripts', 'notify:scripts']
       },
       injectCss: {
         files: [
@@ -87,13 +87,13 @@ module.exports = function (grunt) {
       less: {
         files: [
           '<%= yeoman.client %>/{app,components}/**/*.less'],
-        tasks: ['less', 'autoprefixer']
+        tasks: ['less', 'autoprefixer', 'notify:less']
       },
       jade: {
         files: [
           '<%= yeoman.client %>/{app,components}/*',
           '<%= yeoman.client %>/{app,components}/**/*.jade'],
-        tasks: ['jade']
+        tasks: ['jade', 'notify:jade']
       },
       gruntfile: {
         files: ['Gruntfile.js']
@@ -115,7 +115,7 @@ module.exports = function (grunt) {
         files: [
           'server/**/*.{js,json}'
         ],
-        tasks: ['express:dev', 'wait'],
+        tasks: ['express:dev', 'wait', 'notify:server'],
         options: {
           livereload: true,
           nospawn: true //Without this option specified express won't be reloaded
@@ -425,6 +425,34 @@ module.exports = function (grunt) {
         'svgmin'
       ]
     },
+
+    notify: {
+      options: {
+        enabled: true,
+        duration: 1
+      },
+      scripts: {
+        options: {
+          message: 'Scripts updated'//required
+        }
+      },
+      less: {
+        options: {
+          message: 'Less updated'//required
+        }
+      },
+      jade: {
+        options: {
+          message: 'Jade updated'//required
+        }
+      },
+      server: {
+        options: {
+          message: 'Server updated'
+        }
+      }
+    },
+
 
     // Test settings
     karma: {

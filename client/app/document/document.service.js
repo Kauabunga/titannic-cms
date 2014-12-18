@@ -92,7 +92,8 @@ angular.module('titannicCmsApp')
         _deferredGetDocument[docId] = $q.defer();
 
         $http.get('/api/documents/' + docId).success(function(document) {
-
+          //make a copy of the content as we see from the server so we are able to reset
+          document.contentOriginal = angular.copy(document.content);
           _documents[docId] = document;
           _deferredGetDocument[docId].resolve(document);
 

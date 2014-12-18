@@ -72,13 +72,6 @@ function setTokenCookie(req, res) {
   var token = signToken(req.user._id, req.user.role);
   res.cookie('token', JSON.stringify(token));
 
-  //TODO dont need to do this?
-  //check to see if the res contains a google cookie parameter
-  if(req.query.code){
-    log.debug('Google callback code found. Adding to user session');
-    res.cookie('google-access-token', req.query.code);
-  }
-
   res.redirect('/');
 }
 
