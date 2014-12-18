@@ -13,7 +13,8 @@ div(ng-include='"components/navbar/navbar.html"')
         button.btn.btn-primary(type='submit', ng-click='updateDocument()') Update
     .col-sm-6
       span.input-group-btn
-        button.btn.btn-success(type='button', ng-click='previewDocument()') Preview (Update first)
+        a(ng-href='/previewdocument/{{document._id}}', target="_blank")
+          button.btn.btn-success(type='button') Preview (Update first)
 
   .row
     p.input-group
