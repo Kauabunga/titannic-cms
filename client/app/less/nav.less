@@ -2,6 +2,39 @@
 	border: 0 transparent;
 	a {
 		background-color: @gray-lighter;
-		margin-bottom: 3px;
+		margin-top: 5px;
 	}
+}
+
+.navbar {
+	background-color: @gray-darker;
+	border-color: @gray-light;
+	font-family: Museo;
+	font-weight: 500;
+
+
+}
+
+img.solnet-logo{
+	width: 140px;
+	margin-top: -4px;
+}
+
+.navbar-default .navbar-nav > .active > a,
+.navbar-default .navbar-nav > .active > a:hover,
+.navbar-default .navbar-nav > .active > a:focus {
+	background-color: @gray-dark-2;
+	color: @grey-light-2;
+	cursor: default;
+
+}
+
+.navbar-default .navbar-nav > li > a {
+	.transition(color 0.2s ease);
+}
+.navbar-default .navbar-nav > li > a:hover,
+.navbar-default .navbar-nav > li > a:focus {
+
+	color: @grey-light-2;
+
 }
