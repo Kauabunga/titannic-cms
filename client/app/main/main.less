@@ -18,6 +18,8 @@ body.main{
   h1 {
     color: @grey-light-2;
     border: 0;
+    cursor: default;
+    margin-left: 3px;
   }
 
   .blur-container {
@@ -43,7 +45,7 @@ body.main{
 
       font-weight: 600;
       font-size: 2em;
-      padding: 10px 20px;
+      padding: 10px 30px;
 
       margin: 0px 20px;
       background-color: @gray-2;
@@ -65,9 +67,22 @@ body.main{
 
   .add-btn{
     float: right;
-    margin: 40px 0 20px;
+    margin: 45px 5px 20px;
 
     border-radius: 0;
+
+    box-shadow: none;
+
+    &:focus {outline:0;}
+
+    min-width: 100px;
+    
+
+    .transition(all 0.2s ease);
+
+    .button-variant(@grey-light-2; @gray-darker; @btnFacebookBackgroundHighlight);
+
+    border: 0;
 
   }
 

@@ -18,7 +18,7 @@ div.blur-container(ng-class='{"blur": blur}')
           .col-sm-8
             h1.page-header Documents
           .col-sm-4
-            button.btn.btn-primary.add-btn(type='button', ng-click='createDocument()') Create Document
+            button.btn.btn-primary.add-btn(type='button', ng-click='createDocument()') + Document
         .row
           ul.item-list.document-item-list(ng-repeat='document in documentList')
             li(ng-click='editDocument(document)', tooltip='{{document.info}}')
@@ -32,7 +32,7 @@ div.blur-container(ng-class='{"blur": blur}')
           .col-sm-8
             h1.page-header Schemas
           .col-sm-4
-            button.btn.btn-primary.add-btn(type='button', ng-click='createSchema()') Create Schema
+            button.btn.btn-primary.add-btn(type='button', ng-click='createSchema()') + Schema
         .row
           ul.item-list.schema-item-list(ng-repeat='schema in schemaList')
             li(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
