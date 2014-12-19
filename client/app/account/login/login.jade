@@ -1,6 +1,6 @@
 div(ng-include='"components/navbar/navbar.html"')
 .container
-  .row
+  .row(class='login-area')
     //.col-sm-12
       h1 Login
       p
@@ -15,7 +15,10 @@ div(ng-include='"components/navbar/navbar.html"')
         code admin@admin.com
         | /
         code admin
-
+        
+        
+    .col-sm-12
+      h1(class='login-help-text') Login to Solnet CMS
     .col-sm-12
       a.btn.btn-google-plus(href='', ng-click='loginOauth("google")')
         i.fa.fa-google-plus
