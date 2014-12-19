@@ -7,7 +7,13 @@
   ul.item-list {
     li:hover {
       cursor: pointer;
-      background-color: lighten(@gray-2, 20%);
+//      background-color: lighten(@gray-2, 20%);
+      background-color: darken(@gray-2, 20%);
+
+      a {
+
+        color: #2daddc !important;
+      }
     }
   }
 }
@@ -46,6 +52,8 @@ body.main{
 
       a {
         color: @gray-darker;
+
+
         text-decoration: none;
       }
 
@@ -62,6 +70,9 @@ body.main{
 
       .transition(all 0.2s ease);
 
+      &:hover {
+        color: @gray-lighter;
+      }
 
       font-size: 1.3em;
       text-shadow: none;
@@ -71,9 +82,19 @@ body.main{
   }
 
 
+
+
   .add-btn{
     float: right;
     margin: 45px 5px 20px;
+
+
+    color: @gray !important;
+
+    &:hover {
+      color: @gray-light !important;
+    }
+
 
     border-radius: 0;
 
