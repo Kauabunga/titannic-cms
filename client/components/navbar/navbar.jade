@@ -6,7 +6,7 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand(ng-click='goHome()', ng-class='{"active": isLoggedIn() && ! isActive("/")}')
+      a.navbar-brand(ng-click='goHome()', ng-show='! isLoggedIn()', ng-class='{"active": isLoggedIn() && ! isActive("/")}')
         img.solnet-logo(src="../assets/images/solnet.svg")
 
 
