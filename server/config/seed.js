@@ -16,13 +16,13 @@ var Schema = require('../api/schema/schema.model');
 var schemas = [
   {
     schema: {
-      name : 'Nav schema',
+      name : 'Nav',
       info : 'Nav schema',
       googleDocSchemaId: '0B84YdCmz0nrQWjc5SzdDVEYwWXM'
     },
     documents: [
       {
-        name : 'Nav content',
+        name : 'Nav',
         info : 'Nav content',
 
         //TODO the amount of env's should be configurable
@@ -34,13 +34,13 @@ var schemas = [
   },
   {
     schema: {
-      name : 'Careers schema',
+      name : 'Careers',
       info : 'Careers schema',
       googleDocSchemaId: '0B84YdCmz0nrQWjBrWERhVlhJNDg'
     },
     documents: [
       {
-        name : 'Careers content',
+        name : 'Careers',
         info : 'Careers content',
         liveContentGoogleDocId: '0B84YdCmz0nrQYVBZcHVkTVNTQjg',
         devContentGoogleDocId: '0B84YdCmz0nrQcXlrQjQ2MlVqUVU',
@@ -50,13 +50,13 @@ var schemas = [
   },
   {
     schema: {
-      name : 'About us schema',
+      name : 'About us',
       info : 'About us schema',
       googleDocSchemaId: '0B84YdCmz0nrQSEdrdXMzbDhhMm8'
     },
     documents: [
       {
-        name : 'About us content',
+        name : 'About us',
         info : 'About us content',
         liveContentGoogleDocId: '0B84YdCmz0nrQal9TRjhMMHZhTVk',
         devContentGoogleDocId: '0B84YdCmz0nrQck5TWG9TZC1jTGs',
@@ -66,13 +66,13 @@ var schemas = [
   },
   {
     schema: {
-      name : 'Capabilities schema',
+      name : 'Capabilities',
       info : 'Capabilities schema',
       googleDocSchemaId: '0B84YdCmz0nrQRFMzQjhjMy01YVU'
     },
     documents: [
       {
-        name : 'Capabilities content',
+        name : 'Capabilities',
         info : 'Capabilities json content',
         liveContentGoogleDocId: '0B84YdCmz0nrQb093WGY3ZjZWbVk',
         devContentGoogleDocId: '0B84YdCmz0nrQOHhnOEJsLWY1akE',
@@ -82,13 +82,13 @@ var schemas = [
   },
   {
     schema: {
-      name : 'Clients schema',
+      name : 'Clients',
       info : 'Clients schema',
       googleDocSchemaId: '0B84YdCmz0nrQR0tuaVNFX1NDVUU'
     },
     documents: [
       {
-        name : 'Clients content',
+        name : 'Clients',
         info : 'Clients content',
         liveContentGoogleDocId: '0B84YdCmz0nrQaWQ3dzRWdjhkanc',
         devContentGoogleDocId: '0B84YdCmz0nrQbFExTXpXVjZlLW8',
@@ -98,13 +98,13 @@ var schemas = [
   },
   {
     schema: {
-      name : 'Case studies schema',
+      name : 'Case studies',
       info : 'Case studies schema',
       googleDocSchemaId: '0B84YdCmz0nrQcmI1cXl3eFZ3SGs'
     },
     documents: [
       {
-        name : 'Case studies content',
+        name : 'Case studies',
         info : 'Case studies content',
         liveContentGoogleDocId: '0B84YdCmz0nrQbndockJGNDQ1WGM',
         devContentGoogleDocId: '0B84YdCmz0nrQMG85NTIwQzZ0TUk',
@@ -114,13 +114,13 @@ var schemas = [
   },
   {
     schema: {
-      name : 'Contact schema',
+      name : 'Contact',
       info : 'Contact schema',
       googleDocSchemaId: '0B84YdCmz0nrQTnV1dTNVMGhmaWs'
     },
     documents: [
       {
-        name : 'Contact content',
+        name : 'Contact',
         info : 'Contact content',
         liveContentGoogleDocId: '0B84YdCmz0nrQZTRMUkZJeXFXbHM',
         devContentGoogleDocId: '0B84YdCmz0nrQZi1DSmdoYURWTms',
@@ -130,13 +130,13 @@ var schemas = [
   },
   {
     schema: {
-      name : 'Quotes schema',
+      name : 'Quotes',
       info : 'Quotes schema',
       googleDocSchemaId: '0B84YdCmz0nrQY2lOcDNkVjYwN00'
     },
     documents: [
       {
-        name : 'Quotes content',
+        name : 'Quotes',
         info : 'Quotes content',
         liveContentGoogleDocId: '0B84YdCmz0nrQWExzV2VKemh1Um8',
         devContentGoogleDocId: '0B84YdCmz0nrQYTNGN0MyOW9MM1E',

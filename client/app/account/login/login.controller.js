@@ -32,7 +32,22 @@ angular.module('titannicCmsApp')
       }
     };
 
+
+
+    //This is always going to take us to a new page
     $scope.loginOauth = function(provider) {
+
+
+      var $body = $('body');
+      $body.css('transition', 'opacity 3s ease');
+
+      $body.toggleClass('logging-in', true);
+      $body.toggleClass('logging-in-google', true);
+
+      setTimeout(function(){
+        $body.css('opacity', 0.4);
+      }, 0);
+
       $window.location.href = '/auth/' + provider;
     };
   });
