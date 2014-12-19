@@ -1,13 +1,13 @@
 
-div(ng-class='{"blur": blur}')
+div.blur-container(ng-class='{"blur": blur}')
 
   div(ng-include='"components/navbar/navbar.html"')
 
   header#banner.hero-unit
     .container
       h3 What you can edit
-      p Inside our CMS we have a range of parts you can edit in our public facing website 
-        br 
+      p Inside our CMS we have a range of parts you can edit in our public facing website
+        br
         | If you get stuck or cant find something call Solnet Support
 
 
@@ -16,7 +16,7 @@ div(ng-class='{"blur": blur}')
       .col-lg-12
         .row
           .col-sm-8
-            h1.page-header Documents:
+            h1.page-header Documents
           .col-sm-4
             button.btn.btn-primary.add-btn(type='button', ng-click='createDocument()') Create Document
         .row
@@ -30,7 +30,7 @@ div(ng-class='{"blur": blur}')
       .col-lg-12
         .row
           .col-sm-8
-            h1.page-header Schemas:
+            h1.page-header Schemas
           .col-sm-4
             button.btn.btn-primary.add-btn(type='button', ng-click='createSchema()') Create Schema
         .row

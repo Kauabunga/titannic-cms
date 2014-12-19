@@ -6,9 +6,9 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
         span.icon-bar
         span.icon-bar
         span.icon-bar
-      a.navbar-brand(href='/')
+      a.navbar-brand(ng-click='goHome()', ng-class='{"active": isLoggedIn() && ! isActive("/")}')
         img.solnet-logo(src="../assets/images/solnet.svg")
-        
+
 
     div#navbar-main.navbar-collapse.collapse(collapse='isCollapsed')
       ul.nav.navbar-nav
@@ -26,7 +26,7 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
           a(href='/login') Login
 
         li(ng-show='isLoggedIn()')
-          p.navbar-text.username Hello 
+          p.navbar-text.username Hello
             span {{ getCurrentUser().name }}
 
         li(ng-show='isLoggedIn()', ng-class='{active: isActive("/settings")}')

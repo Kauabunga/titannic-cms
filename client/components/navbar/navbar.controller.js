@@ -12,6 +12,12 @@ angular.module('titannicCmsApp')
     $scope.isAdmin = Auth.isAdmin;
     $scope.getCurrentUser = Auth.getCurrentUser;
 
+    $scope.goHome = function(){
+      if(Auth.isLoggedIn()){
+        $location.path('/');
+      }
+    };
+
     $scope.logout = function() {
       Auth.logout();
       $location.path('/login');

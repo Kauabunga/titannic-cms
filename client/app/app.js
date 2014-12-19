@@ -12,6 +12,7 @@ angular.module('titannicCmsApp', [
  * Config
  */
   .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+
     $urlRouterProvider
       .otherwise('/');
 
