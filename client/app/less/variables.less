@@ -96,14 +96,16 @@
 @solnetFont:        	  "solnet";
 @museo:					  "museo";
 @museo-100:               "museo-100";
+@museo-100:               "museo-300";
 @museo-b:				  "museo-b";
 @museo-b-i:				  "museo-b-i";
 
 
 
 
-.font-face("solnet", "../../assets/fonts/solnet-webfont", normal); 
+.font-face("solnet", "../../assets/fonts/solnet-webfont", normal);
 
+.font-face("museo", "../../assets/fonts/MuseoSans_300Web", 300);
 .font-face("museo", "../../assets/fonts/MuseoSans_500Web", 500);
 .font-face("museo-100", "../../assets/fonts/MuseoSans_100Web", 100);
 .font-face("museo-b", "../../assets/fonts/MuseoSans_700Web", 700);
@@ -136,6 +138,11 @@
     font-family: 'museo-100';
     font-weight: 100;
     src: url('../../assets/fonts/MuseoSans_100-webfont.svg') format('svg');
+  }
+  @font-face {
+    font-family: 'museo-300';
+    font-weight: 300;
+    src: url('../../assets/fonts/MuseoSans_300-webfont.svg') format('svg');
   }
   @font-face {
     font-family: 'museo-b';
