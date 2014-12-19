@@ -97,13 +97,20 @@ angular.module('titannicCmsApp')
       $event.preventDefault();
       $event.stopPropagation();
 
+      $scope.blur = true;
+
       function yesCallback(){
         $log.debug('yes callback for delete');
         Document.deleteDocument(document._id);
-
+        $scope.$apply(function(){
+          $scope.blur = false;
+        });
       }
       function noCallback(){
         $log.debug('no callback for delete');
+        $scope.$apply(function(){
+          $scope.blur = false;
+        });
       }
       Notification.confirmation('Are you sure you want to delete the document?', yesCallback, noCallback);
 

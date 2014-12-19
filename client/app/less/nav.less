@@ -11,8 +11,17 @@
 	border-bottom: 1px solid @gray-dark-2;
 	font-family: Museo;
 	font-weight: 500;
+	letter-spacing: -0.5px;
+	user-select: none;
 
-
+	.username {
+		cursor: default;
+		span {
+			font-weight: 700;
+			margin-left: 4px;
+			letter-spacing: -1px;
+		}
+	}
 }
 
 img.solnet-logo{
@@ -36,5 +45,4 @@ img.solnet-logo{
 .navbar-default .navbar-nav > li > a:focus {
 
 	color: @grey-light-2;
-
 }

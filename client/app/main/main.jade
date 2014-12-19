@@ -1,43 +1,49 @@
-div(ng-include='"components/navbar/navbar.html"')
 
-header#banner.hero-unit
+div(ng-class='{"blur": blur}')
+
+  div(ng-include='"components/navbar/navbar.html"')
+
+  header#banner.hero-unit
+    .container
+      h3 What you can edit
+      p Inside our CMS we have a range of parts you can edit in our public facing website 
+        br 
+        | If you get stuck or cant find something call Solnet Support
+
+
   .container
-    h1 'Allo, 'Allo!
+    .row
+      .col-lg-12
+        .row
+          .col-sm-8
+            h1.page-header Documents:
+          .col-sm-4
+            button.btn.btn-primary.add-btn(type='button', ng-click='createDocument()') Create Document
+        .row
+          ul.item-list.document-item-list(ng-repeat='document in documentList')
+            li(ng-click='editDocument(document)', tooltip='{{document.info}}')
+              a
+                | {{document.name}}
+                button.close(type='button', ng-click='deleteDocument($event, document)') ×
 
 
-.container
-  .row
-    .col-lg-6
-      .row
-        .col-sm-8
-          h1.page-header Documents:
-        .col-sm-4
-          button.btn.btn-primary.add-btn(type='button', ng-click='createDocument()') Create Document
-      .row
-        ul.item-list.document-item-list(ng-repeat='document in documentList')
-          li(ng-click='editDocument(document)', tooltip='{{document.info}}')
-            a
-              | {{document.name}}
-              button.close(type='button', ng-click='deleteDocument($event, document)') ×
-
-
-    .col-lg-6
-      .row
-        .col-sm-8
-          h1.page-header Schemas:
-        .col-sm-4
-          button.btn.btn-primary.add-btn(type='button', ng-click='createSchema()') Create Schema
-      .row
-        ul.item-list.schema-item-list(ng-repeat='schema in schemaList')
-          li(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
-            a
-              | {{schema.name}}
-              button.close(type='button', ng-click='deleteSchema($event, schema)') ×
+      .col-lg-12
+        .row
+          .col-sm-8
+            h1.page-header Schemas:
+          .col-sm-4
+            button.btn.btn-primary.add-btn(type='button', ng-click='createSchema()') Create Schema
+        .row
+          ul.item-list.schema-item-list(ng-repeat='schema in schemaList')
+            li(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
+              a
+                | {{schema.name}}
+                button.close(type='button', ng-click='deleteSchema($event, schema)') ×
 
 
 
 
-footer.footer
-  .container
-    p
-      | Titannic-cms
+  footer.footer
+    .container
+      p
+        | Titannic-cms

@@ -1,5 +1,7 @@
 
 
+
+
 .no-touch {
 
   ul.item-list {
@@ -12,6 +14,11 @@
 
 body.main{
 
+  .transition(all 0.5s ease);
+
+  .blur {
+    filter: blur(10px);
+  }
 
   ul.item-list {
     list-style: none;
@@ -65,8 +72,8 @@ body.main{
     padding: 30px 15px;
     color: #F5F5F5;
     text-align: center;
-    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.1);
-    background: #4393B9;
+    text-shadow: none;
+    background: @gray-dark-2;
   }
 
   .footer {
