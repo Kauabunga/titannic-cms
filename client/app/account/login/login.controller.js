@@ -38,6 +38,8 @@ angular.module('titannicCmsApp')
     $scope.loginOauth = function(provider) {
 
 
+      //TODO if we reach 5000ms then we should display a message - logging into Google....
+
       var $body = $('body');
       $body.css('transition', 'opacity 3s ease');
 

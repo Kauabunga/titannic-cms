@@ -19,6 +19,10 @@
 
     <style>
 
+      html {
+        background-color: #333333;
+      }
+
       #index-loader-screen {
         width: 100%;
         height: 100%;
@@ -49,13 +53,11 @@
         //TODO would be nicer with promises in app run
         //   on route load/ready/rendered...
         setTimeout(function(){
-          $elLoaderScreen = $("#index-loader-screen");
           $elLoaderScreen.toggleClass('fade-out', true);
         }, 200);
 
 
         setTimeout(function(){
-          $elLoaderScreen = $("#index-loader-screen");
           if($elLoaderScreen){
             elLoaderScreen.remove();
           }
@@ -71,7 +73,7 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body ng-app="titannicCmsApp" class="{{currentRoute}}">
+  <body ng-app="titannicCmsApp" class="{{currentRoute}}" ng-cloak>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -79,7 +81,7 @@
     <div id="index-loader-screen"></div>
 
     <!-- Add your site or application content here -->
-    <div class="main-ui-view" ui-view=""></div>
+    <div class="main-ui-view" ui-view="" ng-animate="'animate'"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
@@ -130,6 +132,8 @@
           <script src="app/editdocument/editdocument.js"></script>
           <script src="app/editschema/editschema.controller.js"></script>
           <script src="app/editschema/editschema.js"></script>
+          <script src="app/info/info.controller.js"></script>
+          <script src="app/info/info.js"></script>
           <script src="app/jsonEditor/jsonEditor.directive.js"></script>
           <script src="app/main/main.controller.js"></script>
           <script src="app/main/main.js"></script>

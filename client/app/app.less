@@ -28,6 +28,11 @@ html {
 body {
   height: 100%;
   width: 100%;
+
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 
@@ -38,6 +43,7 @@ body {
 @import 'createschema/createschema.less';
 @import 'editdocument/editdocument.less';
 @import 'editschema/editschema.less';
+@import 'info/info.less';
 @import 'jsonEditor/jsonEditor.less';
 @import 'less/base.less';
 @import 'less/buttons.less';

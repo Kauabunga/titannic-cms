@@ -35,15 +35,21 @@ a.navbar-brand{
 }
 
 
+.login-btn{
 
+  min-width: 70px;
 
-.login-btn-active{
+  .login-btn-active{
 
-  span {
-    position: relative;
-    top: 2px;
+    span {
+      position: relative;
+      top: 2px;
+    }
   }
 }
+
+
+
 
 .navbar-default .navbar-nav > .active > a,
 .navbar-default .navbar-nav > .active > a:hover,
@@ -53,11 +59,20 @@ a.navbar-brand{
 	cursor: default;
   font-weight: 700;
 
+
 }
+
 
 .navbar-default .navbar-nav > li > a {
 	.transition(color 0.2s ease);
 
+  &.logged-out {
+    i{
+//      margin-right: 10px;
+      position: relative;
+      top: 2px;
+    }
+  }
 
 }
 .navbar-default .navbar-nav > li > a:hover,
