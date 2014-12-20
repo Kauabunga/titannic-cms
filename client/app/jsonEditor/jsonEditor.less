@@ -8,7 +8,46 @@ body.editdocument {
 
 
   .json-editor-root {
+    .transition(all 0.2s ease);
+
+    &.loaded {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    transform: translateY(10px);
+
+    opacity: 0;
     margin-bottom: 100px;
+    top: -20px;
+    position: relative;
+  }
+
+  .json-editor-btn{
+
+    .transition(color 0.2s ease);
+
+    &:hover,
+    &:active {
+      color: @grey-light-2;
+    }
+
+    float: right;
+    position: relative;
+    top: -40px;
+
+    color: @gray-light;
+    font-size: 150%;
+
+    &:focus {
+      outline: none;
+    }
+
+    margin-left: 5px;
+
+
+    border: 0;
+    background-color: transparent;
   }
 
 }

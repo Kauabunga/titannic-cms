@@ -49,7 +49,7 @@ angular.module('titannicCmsApp')
     (function init(){
 
 
-      var getDocumentDeferred = Document.getDocument($stateParams.documentId);
+      var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
       getDocumentDeferred.finally(function(){
 
       });

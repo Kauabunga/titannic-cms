@@ -33,6 +33,8 @@ angular.module('titannicCmsApp')
         scope.editorValid = true;
         scope.optionsEnabled = false;
 
+        scope.editorLoaded = false;
+
 
         /**
          *
@@ -43,7 +45,7 @@ angular.module('titannicCmsApp')
             var deferred = Document.getDocument($stateParams.documentId);
 
             deferred.finally(function(){
-
+              scope.editorLoaded = true;
             });
 
             deferred.then(

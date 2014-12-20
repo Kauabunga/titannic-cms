@@ -1,12 +1,14 @@
 
 
 span.fade
-  button.btn.btn-warning(ng-click='toggleOptions()') Options
+  button.json-editor-btn(ng-click='resetJson()')
+    i.fa.fa-ban
 span.fade
-  button.btn.btn-danger(ng-click='resetJson()') Reset
+  button.json-editor-btn(ng-click='toggleOptions()')
+    i.fa.fa-cog
 
 .row
   .col-lg-12
-    .json-editor-root()
+    .json-editor-root(ng-class='{"loaded": editorLoaded}')
         .json-editor-anchor
 

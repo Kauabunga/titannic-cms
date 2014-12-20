@@ -10,11 +10,17 @@ div(ng-include='"components/navbar/navbar.html"')
   .row.actions
     .col-sm-12
       span
-        button.btn.btn-info(type='submit', ng-click='updateDocument()') Update
+        button.btn.btn-info(type='submit', ng-click='updateDocument()')
+          i.fa.fa-cloud-upload
+          | Update
       span
         a(ng-href='/previewdocument/{{document._id}}', target="_blank")
-          button.btn.btn-success(type='button') Preview
+          button.btn.btn-success(type='button')
+            i.fa.fa-search
+            | Preview
 
+  .row
+    .col-sm-12
       span.json-editor
 
 
