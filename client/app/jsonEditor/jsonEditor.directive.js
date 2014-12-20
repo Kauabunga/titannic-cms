@@ -67,7 +67,21 @@ angular.module('titannicCmsApp')
          *
          */
         scope.resetJson = function(){
-          editor.setValue(scope.document.contentOriginal);
+
+          function yesCallback(){
+            $log.debug('yes callback for reset');
+
+            $scope.$apply(function(){
+              editor.setValue(scope.document.contentOriginal);
+            });
+          }
+          function noCallback(){
+            $log.debug('no callback for reset');
+          }
+          Notification.confirmation('Ready to reset your document?', yesCallback, noCallback);
+
+
+
         };
 
 

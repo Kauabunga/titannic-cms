@@ -8,29 +8,19 @@ div(ng-include='"components/navbar/navbar.html"')
 
 
   .row.actions
-    .col-sm-6
-      span.input-group-btn
-        button.btn.btn-primary(type='submit', ng-click='updateDocument()') Update
-    .col-sm-6
-      span.input-group-btn
+    .col-sm-12
+      span
+        button.btn.btn-info(type='submit', ng-click='updateDocument()') Update
+      span
         a(ng-href='/previewdocument/{{document._id}}', target="_blank")
-          button.btn.btn-success(type='button') Preview (Update first)
+          button.btn.btn-success(type='button') Preview
 
-  .row
-    p.input-group
-     div.json-editor
+      span.json-editor
 
 
-  .row.actions
-    .col-sm-6
-      span.input-group-btn
-        button.btn.btn-primary(type='submit', ng-click='updateDocument()') Update
-    .col-sm-6
-      span.input-group-btn
-        button.btn.btn-success(type='button', ng-click='previewDocument()') Preview (Update first)
 
 
-  form.document-form.form
+  form.document-form.form(ng-show='isAdmin()')
     .form-group
       label Document name
       input.form-control(type='text', placeholder='Name', ng-model='document.name')

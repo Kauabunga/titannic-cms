@@ -29,8 +29,20 @@ body.editdocument {
     .nav.nav-tabs {
 
       > li {
-        width: 25%;
+        width: 20%;
         white-space: nowrap;
+        overflow: hidden;
+
+        &:after {
+          content: '';
+          display: block;
+          position: absolute;
+          right: 5px;
+          top: 5px;
+          width: 10px;
+          height: 45px;
+
+        }
 
       }
 
@@ -47,21 +59,20 @@ body.editdocument {
         color: @gray-dark;
         background-color: @gray-2;
 
-        min-width: 150px;
-        text-align: center;
       }
 
       > li.active > a {
 
-        color: @gray-darker;
         font-weight: 700;
+        color: @gray-darker;
         background-color: lighten(@gray-light, 10%);
 
       }
 
       > li.active > a:hover,
       > li.active > a:focus {
-
+        color: @gray-darker;
+        background-color: lighten(@gray-light, 10%);
       }
 
       > li > a:hover,
@@ -81,6 +92,7 @@ body.editdocument {
     }
     input {
 
+      border: 0;
       padding: 5px 10px;
 
       margin-bottom: 12px;

@@ -1,16 +1,12 @@
 
-.row.actions
-  .col-md-6
-    span.input-group-btn
-      button.btn.btn-danger(ng-click='resetJson()') Reset
-  .col-md-6(ng-show=' ! optionsEnabled')
-    span.input-group-btn
-      button.btn.btn-warning(ng-click='toggleOptions()') Enable Options
-  .col-md-6(ng-show='optionsEnabled')
-    span.input-group-btn
-      button.btn.btn-primary(ng-click='toggleOptions()') Disable Options
+
+span.fade
+  button.btn.btn-warning(ng-click='toggleOptions()') Options
+span.fade
+  button.btn.btn-danger(ng-click='resetJson()') Reset
 
 .row
   .col-lg-12
     .json-editor-root()
         .json-editor-anchor
+
