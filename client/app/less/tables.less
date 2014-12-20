@@ -12,3 +12,82 @@
 		width: 20%;
 	}
 }
+
+
+
+
+body.editdocument {
+
+  .well {
+
+
+    background-color: @gray-dark;
+    border-color: @gray-2;
+
+    border-radius: 0;
+
+    .nav.nav-tabs {
+
+      > li {
+        width: 25%;
+        white-space: nowrap;
+
+      }
+
+      > li > a {
+        .transition(all 0.2s ease);
+
+        border-radius: 0;
+        border: 0;
+        margin-right: 5px;
+
+        font-size: 120%;
+
+
+        color: @gray-dark;
+        background-color: @gray-2;
+
+        min-width: 150px;
+        text-align: center;
+      }
+
+      > li.active > a {
+
+        color: @gray-darker;
+        font-weight: 700;
+        background-color: lighten(@gray-light, 10%);
+
+      }
+
+      > li.active > a:hover,
+      > li.active > a:focus {
+
+      }
+
+      > li > a:hover,
+      > li > a:focus {
+        background-color: @gray-light;
+      }
+
+
+    }
+
+
+    th {
+      color: @grey-light-2;
+    }
+    label {
+      color: @grey-light-2;
+    }
+    input {
+
+      padding: 5px 10px;
+
+      margin-bottom: 12px;
+    }
+
+
+  }
+
+
+}
