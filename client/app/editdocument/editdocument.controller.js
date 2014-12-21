@@ -1,126 +1,130 @@
-'use strict';
+(function() {
 
-angular.module('titannicCmsApp')
-  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
+  'use strict';
 
-    $scope.document = undefined;
-    $scope.documentContent = undefined;
+  angular.module('titannicCmsApp')
+    .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
 
-    $log.debug('Editing document', $stateParams.documentId);
+      $scope.document = undefined;
+      $scope.documentContent = undefined;
 
-    $scope.fadeIn = undefined;
-    $scope.blur = undefined;
+      $log.debug('Editing document', $stateParams.documentId);
 
-    /**
-     * TODO this is nasty having to watch the entire document should subscribe to the $emit event
-     */
-    $scope.$watch('document', function(){
-      updateContent();
-    }, true);
+      $scope.fadeIn = undefined;
+      $scope.blur = undefined;
 
-    /**
-     *
-     */
-    var destroyHandle = $scope.$on('$destroy', function(){
-      $log.debug('EditdocumentCtrl $destroy', socket);
+      /**
+       * TODO this is nasty having to watch the entire document should subscribe to the $emit event
+       */
+      $scope.$watch('document', function () {
+        updateContent();
+      }, true);
 
-      destroyHandle();
-    });
+      /**
+       *
+       */
+      var destroyHandle = $scope.$on('$destroy', function () {
+        $log.debug('EditdocumentCtrl $destroy', socket);
+
+        destroyHandle();
+      });
 
 
-    /**
-     *
-     */
-    function updateContent(){
+      /**
+       *
+       */
+      function updateContent() {
 
-      if($scope.document !== undefined){
-        $scope.documentContent = JSON.stringify($scope.document.content);
-        $log.debug($scope.documentContent);
+        if ($scope.document !== undefined) {
+          $scope.documentContent = JSON.stringify($scope.document.content);
+          $log.debug($scope.documentContent);
+        }
+        else if (typeof $scope.document !== 'undefined') {
+          $log.error('Content not a json object', $scope.document);
+
+          Notification.error('Updating. Content not a json object');
+        }
+
       }
-      else if(typeof $scope.document !== 'undefined'){
-        $log.error('Content not a json object', $scope.document);
 
-        Notification.error('Updating. Content not a json object');
-      }
-
-    }
-
-    /**
-     *
-     */
-    (function init(){
+      /**
+       *
+       */
+      (function init() {
 
 
-      setTimeout(function(){
-        $scope.$apply(function(){
+        setTimeout(function () {
+          $scope.$apply(function () {
+            $scope.fadeIn = true;
+          });
+        }, 0);
+
+        var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
+
+        getDocumentDeferred.finally(function () {
           $scope.fadeIn = true;
         });
-      }, 0);
-
-      var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
-
-      getDocumentDeferred.finally(function(){
-        $scope.fadeIn = true;
-      });
 
 
-      getDocumentDeferred.then(
-        function success(document){
-          $log.debug('Successful Edit get document', $stateParams.documentId);
-          $scope.document = document;
+        getDocumentDeferred.then(
+          function success(document) {
+            $log.debug('Successful Edit get document', $stateParams.documentId);
+            $scope.document = document;
 
-        },
-        function error(statusCode){
+          },
+          function error(statusCode) {
 
-          if(statusCode === 401){
-            Notification.error('You need to login to access this document');
-            $location.path('/');
-          }
-          else if(statusCode === 423){
-            //TODO Document is already in use
-            $log.error('Document already in use', statusCode);
-            Notification.error('Document already in use');
-            $location.path('/');
-          }
-          else if(statusCode === 404){
-            //not found redirect home
-            Notification.error('Document not found / ain\'t exist');
+            if (statusCode === 401) {
+              Notification.error('You need to login to access this document');
+              $location.path('/');
+            }
+            else if (statusCode === 423) {
+              //TODO Document is already in use
+              $log.error('Document already in use', statusCode);
+              Notification.error('Document already in use');
+              $location.path('/');
+            }
+            else if (statusCode === 404) {
+              //not found redirect home
+              Notification.error('Document not found / ain\'t exist');
 
-            $location.path('/');
+              $location.path('/');
 
-          }
-          else{
-            $log.error('Something went wrong getting document', statusCode);
-            Notification.error('Something went wrong getting document');
-          }
+            }
+            else {
+              $log.error('Something went wrong getting document', statusCode);
+              Notification.error('Something went wrong getting document');
+            }
 
-        });
+          });
 
-    })();
-
-
-    /**
-     *
-     */
-    $scope.updateDocument = function updateDocument(){
-      var updateDefered = Document.updateDocument($stateParams.documentId);
-
-      updateDefered.then(function success(){
-
-      },
-      function error(){
-
-      });
-
-    };
+      })();
 
 
-    /**
-     *
-     */
-    $scope.previewDocument = function previewDocument(){
-      $location.path('/previewdocument/' + $stateParams.documentId);
-    };
+      /**
+       *
+       */
+      $scope.updateDocument = function updateDocument() {
+        var updateDefered = Document.updateDocument($stateParams.documentId);
+
+        updateDefered.then(function success() {
+
+          },
+          function error() {
+
+          });
+
+      };
 
 
-  });
+      /**
+       *
+       */
+      $scope.previewDocument = function previewDocument() {
+        $location.path('/previewdocument/' + $stateParams.documentId);
+      };
+
+
+    });
+
+})();

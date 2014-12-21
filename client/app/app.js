@@ -1,122 +1,127 @@
-'use strict';
+(function() {
 
-angular.module('titannicCmsApp', [
-  'ngCookies',
-  'ngResource',
-  'ngSanitize',
-  'btford.socket-io',
-  'ui.router'
-])
-/**
- *
- * Config
- */
-  .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+  'use strict';
 
-    $urlRouterProvider
-      .otherwise('/');
+  angular.module('titannicCmsApp', [
+    'ngCookies',
+    'ngResource',
+    'ngSanitize',
+    'btford.socket-io',
+    'ui.router'
+  ])
+  /**
+   *
+   * Config
+   */
+    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
 
-    $locationProvider.html5Mode(true);
-    $httpProvider.interceptors.push('authInterceptor');
+      $urlRouterProvider
+        .otherwise('/');
 
-    $sceDelegateProvider.resourceUrlWhitelist([
-      // Allow same origin resource loads.
-      'self',
-      // Allow loading from our assets domain.  Notice the difference between * and **.
-      'http://localhost/**'
-    ]);
+      $locationProvider.html5Mode(true);
+      $httpProvider.interceptors.push('authInterceptor');
 
-    // The blacklist overrides the whitelist so the open redirect here is blocked.
-    $sceDelegateProvider.resourceUrlBlacklist([
-      'http://blacklist.example.com'
-    ]);
+      $sceDelegateProvider.resourceUrlWhitelist([
+        // Allow same origin resource loads.
+        'self',
+        // Allow loading from our assets domain.  Notice the difference between * and **.
+        'http://localhost/**'
+      ]);
 
-  })
+      // The blacklist overrides the whitelist so the open redirect here is blocked.
+      $sceDelegateProvider.resourceUrlBlacklist([
+        'http://blacklist.example.com'
+      ]);
 
-/**
- * Interceptor
- *
- */
-  .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
-    return {
-      // Add authorization token to headers
-      request: function (config) {
-        config.headers = config.headers || {};
-        if ($cookieStore.get('token')) {
-          config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+    })
+
+  /**
+   * Interceptor
+   *
+   */
+    .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
+      return {
+        // Add authorization token to headers
+        request: function (config) {
+          config.headers = config.headers || {};
+          if ($cookieStore.get('token')) {
+            config.headers.Authorization = 'Bearer ' + $cookieStore.get('token');
+          }
+          return config;
+        },
+
+        // Intercept 401s and redirect you to login
+        responseError: function (response) {
+          if (response.status === 401) {
+            $location.path('/login');
+            // remove any stale tokens
+            $cookieStore.remove('token');
+            return $q.reject(response);
+          }
+          else {
+            return $q.reject(response);
+          }
         }
-        return config;
-      },
+      };
+    })
+  /**
+   * App run
+   *
+   */
+    .run(function ($rootScope, $location, Auth, $window, Notification, $log) {
+      // Redirect to login if route requires auth and you're not logged in
+      $rootScope.$on('$stateChangeStart', function (event, next) {
+        Auth.isLoggedInAsync(function (loggedIn) {
+          if (next.authenticate && !loggedIn) {
+            $location.path('/login');
+          }
+        });
+      });
 
-      // Intercept 401s and redirect you to login
-      responseError: function(response) {
-        if(response.status === 401) {
-          $location.path('/login');
-          // remove any stale tokens
-          $cookieStore.remove('token');
-          return $q.reject(response);
+      //add a class based upon the current route
+      $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
+        try {
+          $rootScope.currentRoute = toState.name;
         }
-        else {
-          return $q.reject(response);
-        }
-      }
-    };
-  })
-/**
- * App run
- *
- */
-  .run(function ($rootScope, $location, Auth, $window, Notification, $log) {
-    // Redirect to login if route requires auth and you're not logged in
-    $rootScope.$on('$stateChangeStart', function (event, next) {
-      Auth.isLoggedInAsync(function(loggedIn) {
-        if (next.authenticate && !loggedIn) {
-          $location.path('/login');
+        catch (error) {
+          $log.debug('Error trying to attach body class name', error);
         }
       });
+
+
+      $rootScope.$on('$viewContentLoaded', function (event) {
+
+        var $elLoaderScreen = $('#index-loader-screen');
+
+        //TODO would be nicer with promises in app run
+        //   on route load/ready/rendered...
+        setTimeout(function () {
+          $elLoaderScreen.toggleClass('fade-out', true);
+        }, 200);
+
+
+        setTimeout(function () {
+          if ($elLoaderScreen) {
+            $elLoaderScreen.remove();
+          }
+        }, 1000);
+
+      });
+
+
+      //bind to the global error handler so we can create notifications for unhandled exceptions
+      var onErrorOriginal = $window.onerror || function () {
+        };
+      $window.onerror = function (errorMsg, url, lineNumber) {
+
+        onErrorOriginal();
+
+        Notification.error('Uncaught explosions!!! ' + errorMsg);
+        $log.error(errorMsg);
+        $log.error(url + ' ' + lineNumber);
+
+      };
+
     });
 
-    //add a class based upon the current route
-    $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
-      try{
-        $rootScope.currentRoute = toState.name;
-      }
-      catch(error){
-        $log.debug('Error trying to attach body class name', error);
-      }
-    });
-
-
-    $rootScope.$on('$viewContentLoaded', function(event){
-
-      var $elLoaderScreen = $('#index-loader-screen');
-
-      //TODO would be nicer with promises in app run
-      //   on route load/ready/rendered...
-      setTimeout(function(){
-        $elLoaderScreen.toggleClass('fade-out', true);
-      }, 200);
-
-
-      setTimeout(function(){
-        if($elLoaderScreen){
-          $elLoaderScreen.remove();
-        }
-      },1000);
-
-    });
-
-
-    //bind to the global error handler so we can create notifications for unhandled exceptions
-    var onErrorOriginal = $window.onerror || function(){};
-    $window.onerror = function(errorMsg, url, lineNumber) {
-
-      onErrorOriginal();
-
-      Notification.error('Uncaught explosions!!! ' + errorMsg);
-      $log.error(errorMsg);
-      $log.error(url + ' ' + lineNumber);
-
-    };
-
-  });
+})();

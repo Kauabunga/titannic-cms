@@ -1,29 +1,33 @@
-'use strict';
+(function() {
 
-angular.module('titannicCmsApp')
-  .controller('NavbarCtrl', function ($scope, $location, Auth) {
-    $scope.menu = [{
-      'title': 'Home',
-      'link': '/'
-    }];
+  'use strict';
 
-    $scope.isCollapsed = true;
-    $scope.isLoggedIn = Auth.isLoggedIn;
-    $scope.isAdmin = Auth.isAdmin;
-    $scope.getCurrentUser = Auth.getCurrentUser;
+  angular.module('titannicCmsApp')
+    .controller('NavbarCtrl', function ($scope, $location, Auth) {
+      $scope.menu = [{
+        'title': 'Home',
+        'link': '/'
+      }];
 
-    $scope.goHome = function(){
-      if(Auth.isLoggedIn()){
-        $location.path('/');
-      }
-    };
+      $scope.isCollapsed = true;
+      $scope.isLoggedIn = Auth.isLoggedIn;
+      $scope.isAdmin = Auth.isAdmin;
+      $scope.getCurrentUser = Auth.getCurrentUser;
 
-    $scope.logout = function() {
-      Auth.logout();
-      $location.path('/login');
-    };
+      $scope.goHome = function () {
+        if (Auth.isLoggedIn()) {
+          $location.path('/');
+        }
+      };
 
-    $scope.isActive = function(route) {
-      return route === $location.path();
-    };
-  });
+      $scope.logout = function () {
+        Auth.logout();
+        $location.path('/login');
+      };
+
+      $scope.isActive = function (route) {
+        return route === $location.path();
+      };
+    });
+
+})();

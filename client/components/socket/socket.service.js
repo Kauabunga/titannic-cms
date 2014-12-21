@@ -1,74 +1,79 @@
 /* global io */
-'use strict';
 
-angular.module('titannicCmsApp')
-  .factory('socket', function(socketFactory, Auth) {
+(function() {
 
-    // socket.io now auto-configures its connection when we ommit a connection url
-    var ioSocket = io('', {
-      // Send auth token on connection, you will need to DI the Auth service above
-      'query': 'token=' + Auth.getToken(),
-      path: '/socket.io-client'
-    });
+  'use strict';
 
-    var socket = socketFactory({
-      ioSocket: ioSocket
-    });
+  angular.module('titannicCmsApp')
+    .factory('socket', function (socketFactory, Auth) {
 
-    return {
-      socket: socket,
+      // socket.io now auto-configures its connection when we ommit a connection url
+      var ioSocket = io('', {
+        // Send auth token on connection, you will need to DI the Auth service above
+        'query': 'token=' + Auth.getToken(),
+        path: '/socket.io-client'
+      });
 
-      /**
-       * Register listeners to sync an array with updates on a model
-       *
-       * Takes the array we want to sync, the model name that socket updates are sent from,
-       * and an optional callback function after new items are updated.
-       *
-       * @param {String} modelName
-       * @param {Array} array
-       * @param {Function} cb
-       */
-      syncUpdates: function (modelName, array, cb) {
-        cb = cb || angular.noop;
+      var socket = socketFactory({
+        ioSocket: ioSocket
+      });
+
+      return {
+        socket: socket,
 
         /**
-         * Syncs item creation/updates on 'model:save'
+         * Register listeners to sync an array with updates on a model
+         *
+         * Takes the array we want to sync, the model name that socket updates are sent from,
+         * and an optional callback function after new items are updated.
+         *
+         * @param {String} modelName
+         * @param {Array} array
+         * @param {Function} cb
          */
-        socket.on(modelName + ':save', function (item) {
-          var oldItem = _.find(array, {_id: item._id});
-          var index = array.indexOf(oldItem);
-          var event = 'created';
+        syncUpdates: function (modelName, array, cb) {
+          cb = cb || angular.noop;
 
-          // replace oldItem if it exists
-          // otherwise just add item to the collection
-          if (oldItem) {
-            array.splice(index, 1, item);
-            event = 'updated';
-          } else {
-            array.push(item);
-          }
+          /**
+           * Syncs item creation/updates on 'model:save'
+           */
+          socket.on(modelName + ':save', function (item) {
+            var oldItem = _.find(array, {_id: item._id});
+            var index = array.indexOf(oldItem);
+            var event = 'created';
 
-          cb(event, item, array);
-        });
+            // replace oldItem if it exists
+            // otherwise just add item to the collection
+            if (oldItem) {
+              array.splice(index, 1, item);
+              event = 'updated';
+            } else {
+              array.push(item);
+            }
+
+            cb(event, item, array);
+          });
+
+          /**
+           * Syncs removed items on 'model:remove'
+           */
+          socket.on(modelName + ':remove', function (item) {
+            var event = 'deleted';
+            _.remove(array, {_id: item._id});
+            cb(event, item, array);
+          });
+        },
 
         /**
-         * Syncs removed items on 'model:remove'
+         * Removes listeners for a models updates on the socket
+         *
+         * @param modelName
          */
-        socket.on(modelName + ':remove', function (item) {
-          var event = 'deleted';
-          _.remove(array, {_id: item._id});
-          cb(event, item, array);
-        });
-      },
+        unsyncUpdates: function (modelName) {
+          socket.removeAllListeners(modelName + ':save');
+          socket.removeAllListeners(modelName + ':remove');
+        }
+      };
+    });
 
-      /**
-       * Removes listeners for a models updates on the socket
-       *
-       * @param modelName
-       */
-      unsyncUpdates: function (modelName) {
-        socket.removeAllListeners(modelName + ':save');
-        socket.removeAllListeners(modelName + ':remove');
-      }
-    };
-  });
+})();
