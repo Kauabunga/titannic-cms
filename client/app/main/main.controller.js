@@ -1,18 +1,34 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document, Notification, $log, Auth) {
+  .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document, Notification, $log, Auth, $timeout, $q) {
 
     $scope.documentList = undefined;
     $scope.schemaList = undefined;
 
+    $scope.blur = undefined;
+    $scope.fadeIn = false;
 
     /**
      *
      */
     (function init(){
 
+
+
       var documentDeferred = Document.getAll();
+      var schemaDeferred = Schema.getAll();
+
+
+      $timeout(function(){
+        $scope.fadeIn = true;
+      }, 200);
+
+      $q.all([documentDeferred, schemaDeferred]).finally(function(){
+        $timeout(function(){
+          $scope.fadeIn = true;
+        });
+      });
 
       documentDeferred.then(
         function success(documents){
@@ -24,8 +40,6 @@ angular.module('titannicCmsApp')
           $log.error('Error loading document list', error);
         });
 
-
-      var schemaDeferred = Schema.getAll();
 
       schemaDeferred.then(
         function success(schemas){

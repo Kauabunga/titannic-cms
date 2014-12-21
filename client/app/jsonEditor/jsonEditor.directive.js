@@ -41,12 +41,10 @@ angular.module('titannicCmsApp')
          */
         (function init(){
 
+
+          //need to wait for our fadeIn animation on the main editcontroller
           $timeout(function(){
             var deferred = Document.getDocument($stateParams.documentId);
-
-            deferred.finally(function(){
-              scope.editorLoaded = true;
-            });
 
             deferred.then(
               function success(document){
@@ -54,13 +52,21 @@ angular.module('titannicCmsApp')
                 scope.document = document;
 
                 var jsonEditorOptions = getEditorOptions();
-                editor = newEditor(jsonEditorOptions);
+
+                $timeout(function(){
+                  editor = newEditor(jsonEditorOptions);
+                  scope.editorLoaded = true;
+
+                }, 50);
+
 
               },
               function error(statusCode){
+                scope.editorLoaded = true;
+
                 $log.error('Editor failed to get document', statusCode);
             });
-          });
+          }, 50);
 
         })();
 

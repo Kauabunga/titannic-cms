@@ -1,5 +1,5 @@
 
-div.blur-container(ng-class='{"blur": blur}', ng-cloak='')
+div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}', ng-cloak='')
 
   div(ng-include='"components/navbar/navbar.html"')
 
@@ -13,7 +13,7 @@ div.blur-container(ng-class='{"blur": blur}', ng-cloak='')
 
   .container.height-100
     .row
-      .col-md-10.col-md-offset-1
+      .documents.col-md-10.col-md-offset-1
         .row.list-title
           .col-sm-8
             h1.page-header Documents
@@ -30,7 +30,7 @@ div.blur-container(ng-class='{"blur": blur}', ng-cloak='')
                 button.close(type='button', ng-click='deleteDocument($event, document)') ×
 
 
-      .col-md-10.col-md-offset-1
+      .schemas.col-md-10.col-md-offset-1
         .row.list-title
           .col-sm-8
             h1.page-header Schemas

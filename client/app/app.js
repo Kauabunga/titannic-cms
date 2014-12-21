@@ -84,8 +84,28 @@ angular.module('titannicCmsApp', [
       catch(error){
         $log.debug('Error trying to attach body class name', error);
       }
+    });
+
+
+    $rootScope.$on('$viewContentLoaded', function(event){
+
+      var $elLoaderScreen = $("#index-loader-screen");
+
+      //TODO would be nicer with promises in app run
+      //   on route load/ready/rendered...
+      setTimeout(function(){
+        $elLoaderScreen.toggleClass('fade-out', true);
+      }, 200);
+
+
+      setTimeout(function(){
+        if($elLoaderScreen){
+          $elLoaderScreen.remove();
+        }
+      },1000);
 
     });
+
 
     //bind to the global error handler so we can create notifications for unhandled exceptions
     var onErrorOriginal = $window.onerror || function(){};

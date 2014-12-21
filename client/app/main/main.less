@@ -16,10 +16,43 @@
 
 
 
+
 body.main{
 
-  .height-100 {
+  .fadeIn {
+    .hero-unit{
+      .container {
+        opacity: 1;
+      }
+    }
 
+    .documents,
+    .schemas {
+      opacity: 1;
+    }
+
+  }
+
+  .page-header {
+    font-family: museo;
+    font-weight: 400;
+    border: 0;
+  }
+
+  .hero-unit{
+    .container {
+      .transition(opacity 0.4s ease);
+      opacity: 0;
+    }
+  }
+
+  .documents,
+  .schemas {
+    .transition(all 0.2s ease);
+    opacity: 0;
+  }
+
+  .height-100 {
     //get rid of footer flash
     min-height: 800px;
   }
@@ -28,15 +61,6 @@ body.main{
     margin-top: 40px;
   }
 
-  h1 {
-    color: @grey-light-2;
-    border: 0;
-    font-family: museo;
-
-    cursor: default;
-    margin-left: 3px;
-
-  }
 
   .blur-container {
     .transition(all 1s ease);
@@ -46,7 +70,14 @@ body.main{
 
   }
 
+
+  .documents,
+  .schemas{
+    min-height: 600px;
+  }
+
   ul.item-list {
+
     list-style: none;
     padding: 0;
 
@@ -123,29 +154,6 @@ body.main{
 
 
 
-  #banner {
-    border-bottom: none;
-    margin-top: -20px;
-  }
-
-  #banner h1 {
-    font-size: 60px;
-    line-height: 1;
-    letter-spacing: -1px;
-  }
-
-  .hero-unit {
-
-    user-select: none;
-    cursor: default;
-
-    position: relative;
-    padding: 30px 15px;
-    color: #F5F5F5;
-    text-align: center;
-    text-shadow: none;
-    background: @gray-dark-2;
-  }
 
   .footer {
     text-align: center;

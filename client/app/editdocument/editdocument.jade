@@ -1,48 +1,53 @@
-div(ng-include='"components/navbar/navbar.html"')
+div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}')
+
+  div(ng-include='"components/navbar/navbar.html"')
+
+
+  header#banner.hero-unit
+    .container
+      h3 Editing
+      p Change -> Update -> Preview -> Publish
+        br
+        | &nbsp;
+
+
+  .container
+    .row.actions
+      .col-sm-12
+        span
+          button.btn.btn-info(type='submit', ng-click='updateDocument()')
+            i.fa.fa-cloud-upload
+            | Update
+        span
+          a(ng-href='/previewdocument/{{document._id}}', target="_blank")
+            button.btn.btn-success(type='button')
+              i.fa.fa-search
+              | Preview
+
+    .row
+      .col-sm-12
+        span.json-editor
 
 
 
-.container
 
+    form.document-form.form(ng-show='isAdmin()')
+      .form-group
+        label Document name
+        input.form-control(type='text', placeholder='Name', ng-model='document.name')
 
+      .form-group
+        label Document info
+        input.form-control(type='text', placeholder='Info', ng-model='document.info')
 
+      .form-group
+        label Live Google doc id
+        input.form-control(type='text', placeholder='LIVE  :: Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.liveContentGoogleDocId')
 
-  .row.actions
-    .col-sm-12
-      span
-        button.btn.btn-info(type='submit', ng-click='updateDocument()')
-          i.fa.fa-cloud-upload
-          | Update
-      span
-        a(ng-href='/previewdocument/{{document._id}}', target="_blank")
-          button.btn.btn-success(type='button')
-            i.fa.fa-search
-            | Preview
+      .form-group
+        label Dev Google doc id
+        input.form-control(type='text', placeholder='DEV   :: Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.devContentGoogleDocId')
 
-  .row
-    .col-sm-12
-      span.json-editor
-
-
-
-
-  form.document-form.form(ng-show='isAdmin()')
-    .form-group
-      label Document name
-      input.form-control(type='text', placeholder='Name', ng-model='document.name')
-
-    .form-group
-      label Document info
-      input.form-control(type='text', placeholder='Info', ng-model='document.info')
-
-    .form-group
-      label Live Google doc id
-      input.form-control(type='text', placeholder='LIVE  :: Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.liveContentGoogleDocId')
-
-    .form-group
-      label Dev Google doc id
-      input.form-control(type='text', placeholder='DEV   :: Google Id e.g. 0B84YdCmz0nrQYVBZcHVkTVNTQjg', ng-model='document.devContentGoogleDocId')
-
-    //.form-group
-      label Document content
-      textarea.form-control(type='text', placeholder='Google doc content',class="textarea-lg", ng-model='documentContent')
+      //.form-group
+        label Document content
+        textarea.form-control(type='text', placeholder='Google doc content',class="textarea-lg", ng-model='documentContent')

@@ -20,6 +20,9 @@ body.editdocument {
 
   .well {
 
+    input {
+      width: 100% !important;
+    }
 
     background-color: @gray-dark;
     border-color: @gray-2;
@@ -33,17 +36,33 @@ body.editdocument {
         white-space: nowrap;
         overflow: hidden;
 
-        &:after {
-          content: '';
-          display: block;
-          position: absolute;
-          right: 5px;
-          top: 5px;
-          width: 10px;
-          height: 45px;
-
+        &.active a{
+          &:after,
+          &:hover:after {
+            background-color: lighten(@gray-light, 10%);
+          }
         }
 
+        a {
+          &:after {
+
+            .transition(background-color 0.2s ease);
+
+            content: '';
+            display: block;
+            position: absolute;
+            right: 0px;
+            top: 0px;
+            width: 12px;
+            height: 45px;
+
+            background-color: @gray-2;
+          }
+
+          &:hover:after {
+            background-color: @gray-light;
+          }
+        }
       }
 
       > li > a {

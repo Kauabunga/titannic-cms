@@ -1,13 +1,15 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket) {
+  .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
 
     $scope.document = undefined;
     $scope.documentContent = undefined;
 
     $log.debug('Editing document', $stateParams.documentId);
 
+    $scope.fadeIn = undefined;
+    $scope.blur = undefined;
 
     /**
      * TODO this is nasty having to watch the entire document should subscribe to the $emit event
@@ -49,10 +51,18 @@ angular.module('titannicCmsApp')
     (function init(){
 
 
-      var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
-      getDocumentDeferred.finally(function(){
+      setTimeout(function(){
+        $scope.$apply(function(){
+          $scope.fadeIn = true;
+        });
+      }, 0);
 
+      var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
+
+      getDocumentDeferred.finally(function(){
+        $scope.fadeIn = true;
       });
+
 
       getDocumentDeferred.then(
         function success(document){
