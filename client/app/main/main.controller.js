@@ -35,9 +35,9 @@ angular.module('titannicCmsApp')
           $scope.documentList = documents;
           socket.syncUpdates('document', $scope.documentList);
         },
-        function error(error){
+        function error(documentError){
           Notification.error('Error loading document list');
-          $log.error('Error loading document list', error);
+          $log.error('Error loading document list', documentError);
         });
 
 
@@ -47,9 +47,9 @@ angular.module('titannicCmsApp')
           socket.syncUpdates('schema', $scope.schemaList);
 
         },
-        function error(error){
+        function error(schemaError){
           Notification.error('Error loading schema list');
-          $log.error('Error loading schema list', error);
+          $log.error('Error loading schema list', schemaError);
       });
 
     })();
@@ -63,7 +63,7 @@ angular.module('titannicCmsApp')
 
       function onClickCallback(){
         $scope.$apply(function(){
-          $location.path('/login')
+          $location.path('/login');
         });
       }
 

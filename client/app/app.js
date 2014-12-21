@@ -89,7 +89,7 @@ angular.module('titannicCmsApp', [
 
     $rootScope.$on('$viewContentLoaded', function(event){
 
-      var $elLoaderScreen = $("#index-loader-screen");
+      var $elLoaderScreen = $('#index-loader-screen');
 
       //TODO would be nicer with promises in app run
       //   on route load/ready/rendered...

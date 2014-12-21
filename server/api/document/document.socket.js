@@ -4,6 +4,7 @@
 
 'use strict';
 
+var User = require('../user/user.model');
 var Document = require('./document.model');
 var DocumentController = require('./document.controller');
 

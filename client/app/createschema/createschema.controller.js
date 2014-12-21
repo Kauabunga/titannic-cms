@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('titannicCmsApp')
-  .controller('CreateschemaCtrl', function ($scope, $log, $http, $q, $location) {
+  .controller('CreateschemaCtrl', function ($scope, $log, $http, $q, $location, Notification) {
 
     //Document model
     $scope.document = {
@@ -82,7 +82,7 @@ angular.module('titannicCmsApp')
         name: '',
         info: '',
         googleDocSchemaId: ''
-      }
+      };
     }
 
 

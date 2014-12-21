@@ -57,7 +57,7 @@ angular.module('titannicCmsApp')
               },
               function error(){
                 Notification.error('Server failed to create new document');
-            })
+            });
 
           }
 
@@ -107,7 +107,7 @@ angular.module('titannicCmsApp')
         liveContentGoogleDocId: '',
         devContentGoogleDocId: '',
         schemaId: ''
-      }
+      };
     }
 
 

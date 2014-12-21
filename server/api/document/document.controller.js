@@ -189,15 +189,15 @@ exports.show = function(req, res) {
 
 
             }
-            catch(error){
-              log.error(error);
+            catch(jsonParseError){
+              log.error(jsonParseError);
               res.send(500);
             }
 
 
           },
-          function error(error){
-            log.error(error);
+          function error(contentFetchError){
+            log.error(contentFetchError);
             res.send(500);
           });
 
@@ -211,8 +211,8 @@ exports.show = function(req, res) {
 
 
       },
-      function error(error){
-        log.error(error);
+      function error(getSchemaObjectError){
+        log.error(getSchemaObjectError);
         res.send(500);
       }
     );

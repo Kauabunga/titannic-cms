@@ -204,7 +204,7 @@
       console.log('REQUEST : ' + httpOptions.name + '    url: ' + httpOptions.host + httpOptions.path);
 
       //TODO or if the request was rejected
-      var googleContentRequest = https.get(httpOptions, function googleResponse(googleResponse) {
+      var googleContentRequest = https.get(httpOptions, function(googleResponse) {
 
         if (googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
           console.log('          ---> ' + httpOptions.name + ' 200 response = ' + googleResponse.statusCode);
@@ -326,9 +326,9 @@
           googleContentDeferred.reject(error);
         }
 
-      }, function error(error) {
+      }, function error(getCurrentUserError) {
 
-        googleContentDeferred.reject(error);
+        googleContentDeferred.reject(getCurrentUserError);
       });
 
 

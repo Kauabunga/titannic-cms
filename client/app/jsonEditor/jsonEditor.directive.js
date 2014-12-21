@@ -1,3 +1,7 @@
+/* global JSONEditor */
+/* jshint camelcase: false */
+
+
 'use strict';
 
 angular.module('titannicCmsApp')
@@ -79,7 +83,7 @@ angular.module('titannicCmsApp')
           function yesCallback(){
             $log.debug('yes callback for reset');
 
-            $scope.$apply(function(){
+            scope.$apply(function(){
               editor.setValue(scope.document.contentOriginal);
             });
           }

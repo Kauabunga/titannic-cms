@@ -1,3 +1,5 @@
+/* global noty */
+
 'use strict';
 
 angular.module('titannicCmsApp')
