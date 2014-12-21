@@ -6,14 +6,12 @@ var request = require('supertest');
 
 describe('GET /api/documents', function() {
 
-  it('should respond with JSON array', function(done) {
+  it('should get a 401', function(done) {
     request(app)
       .get('/api/documents')
-      .expect(200)
-      .expect('Content-Type', /json/)
+      .expect(401)
       .end(function(err, res) {
         if (err) return done(err);
-        res.body.should.be.instanceof(Array);
         done();
       });
   });
