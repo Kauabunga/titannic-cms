@@ -25,7 +25,11 @@
         // Allow same origin resource loads.
         'self',
         // Allow loading from our assets domain.  Notice the difference between * and **.
-        'http://localhost/**'
+        'http://localhost/**',
+        'http://titanic.solnetsolutions.co.nz:80/**',
+        'http://titanic.solnetsolutions.co.nz/**',
+        'titanic.solnetsolutions.co.nz:80/**',
+        'titanic.solnetsolutions.co.nz/**'
       ]);
 
       // The blacklist overrides the whitelist so the open redirect here is blocked.

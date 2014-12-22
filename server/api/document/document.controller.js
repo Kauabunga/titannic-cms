@@ -106,8 +106,7 @@ exports.getPreview = function(req, res){
           previewDeferred.resolve();
 
           var responseBody = {
-            //TODO generate this url correctly - based on Document attribute
-            url: 'http://localhost:80/' + (document.previewPath || '')
+            url: config.localSiteProtocol + '://' + config.localSite + ':' + config.localSitePort + '/' + (document.previewPath || '')
           };
 
           res.status(200).json(responseBody);

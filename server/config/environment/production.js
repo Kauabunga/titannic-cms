@@ -21,7 +21,9 @@ module.exports = {
             'mongodb://localhost/titanniccms'
   },
 
-  domain: 'http://titanic.solnetsolutions.co.nz:9000', //titanic.solnetsolutions.co.nz ip '203.99.128.84',
+
+
+  domain: 'http://titanic.solnetsolutions.co.nz:9000',
 
   seedDB: true
 
