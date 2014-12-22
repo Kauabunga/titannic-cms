@@ -11,6 +11,10 @@ var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
 
+console.log('****** CONFIG *****');
+console.log(config);
+console.log('****** END CONFIG *****');
+
 // Connect to database
 mongoose.connect(config.mongo.uri, config.mongo.options);
 
