@@ -6,7 +6,8 @@ module.exports = {
   // Server IP
   ip:       process.env.OPENSHIFT_NODEJS_IP ||
             process.env.IP ||
-            undefined,
+            //titanic.solnetsolutions.co.nz ip
+            '203.99.128.84',
 
   // Server port
   port:     process.env.OPENSHIFT_NODEJS_PORT ||
