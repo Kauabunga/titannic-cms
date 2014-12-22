@@ -89,16 +89,19 @@
     var fetchDeferred = fetchGoogleDoc(name, googleId, options);
 
     fetchDeferred.then(
-      function success(){
-        var subscribeDeferred = subscribeGoogleDoc(name, googleId, dbId, options);
+      function success(fetchResponse){
 
-        subscribeDeferred.then(
-          function success(){
-            deferred.resolve();
-          },
-          function error(){
-            deferred.reject();
-        });
+        deferred.resolve(fetchResponse);
+
+        //var subscribeDeferred = subscribeGoogleDoc(name, googleId, dbId, options);
+
+        //subscribeDeferred.then(
+        //  function success(){
+        //    deferred.resolve();
+        //  },
+        //  function error(){
+        //    deferred.reject();
+        //});
       },
       function error(){
         deferred.reject();
