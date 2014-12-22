@@ -6,8 +6,7 @@ module.exports = {
   // Server IP
   ip:       process.env.OPENSHIFT_NODEJS_IP ||
             process.env.IP ||
-            //titanic.solnetsolutions.co.nz ip
-            '203.99.128.84',
+            undefined,
 
   // Server port
   port:     process.env.OPENSHIFT_NODEJS_PORT ||
@@ -21,6 +20,8 @@ module.exports = {
             process.env.OPENSHIFT_MONGODB_DB_URL+process.env.OPENSHIFT_APP_NAME ||
             'mongodb://localhost/titanniccms'
   },
+
+  domain: process.env.DOMAIN || 'titanic.solnetsolutions.co.nz', //titanic.solnetsolutions.co.nz ip '203.99.128.84',
 
   seedDB: true
 
