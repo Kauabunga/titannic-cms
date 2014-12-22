@@ -19,6 +19,9 @@
        */
       self.confirmation = function (content, yesCallback, noCallback) {
 
+        yesCallback = yesCallback || function(){};
+        noCallback = noCallback || function(){};
+
         var n = noty({
           text: content,
           type: 'info',
