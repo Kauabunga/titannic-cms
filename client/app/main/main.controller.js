@@ -26,9 +26,21 @@
         var schemaDeferred;
         if(Auth.isAdmin()){
           schemaDeferred = Schema.getAll();
+
+          schemaDeferred.then(
+            function success(schemas) {
+              $scope.schemaList = schemas;
+              socket.syncUpdates('schema', $scope.schemaList);
+
+            },
+            function error(schemaError) {
+              Notification.error('Error loading schema list');
+              $log.error('Error loading schema list', schemaError);
+            });
+
         }
         else{
-
+          schemaDeferred = $q.when();
         }
 
 
@@ -52,17 +64,6 @@
             $log.error('Error loading document list', documentError);
           });
 
-
-        schemaDeferred.then(
-          function success(schemas) {
-            $scope.schemaList = schemas;
-            socket.syncUpdates('schema', $scope.schemaList);
-
-          },
-          function error(schemaError) {
-            Notification.error('Error loading schema list');
-            $log.error('Error loading schema list', schemaError);
-          });
 
       })();
 

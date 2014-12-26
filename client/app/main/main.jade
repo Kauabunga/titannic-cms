@@ -17,7 +17,7 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}', ng-cloak='')
         .row.list-title
           .col-sm-8
             h1.page-header Documents
-          .col-sm-4
+          .col-sm-4(ng-if='isAdmin()')
             button.btn.btn-primary.add-btn(type='button', ng-click='createDocument()') +
               span &nbsp;Document
 
@@ -27,7 +27,7 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}', ng-cloak='')
             li(ng-click='editDocument(document)', tooltip='{{document.info}}')
               a
                 | {{document.name}}
-                button.close(type='button', ng-click='deleteDocument($event, document)') ×
+                button.close(type='button', ng-click='deleteDocument($event, document)', ng-if='isAdmin()') ×
 
 
       .schemas.col-md-10.col-md-offset-1(ng-if="isAdmin()")

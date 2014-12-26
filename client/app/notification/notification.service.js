@@ -33,7 +33,7 @@
           setTimeout(function(){
             $n.close();
           }, 200);
-          
+
           setTimeout(function(){
             $n.close();
           }, 500);

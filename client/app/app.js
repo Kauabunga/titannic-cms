@@ -82,6 +82,14 @@
         });
       });
 
+      /**
+       *
+       * @returns {Boolean}
+       */
+      $rootScope.isAdmin = function(){
+        return Auth.isAdmin();
+      };
+
       //add a class based upon the current route
       $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         try {
