@@ -29,10 +29,10 @@
           theme: 'relax',
           layout: 'center',
           animation: {
-            open: 'animated bounceInLeft', // Animate.css class names
-            close: 'animated bounceOutRight', // Animate.css class names
+            open: 'animated zoomIn', // Animate.css class names
+            close: 'animated zoomOut', // Animate.css class names
             easing: 'swing', // unavailable - no need
-            speed: 500 // unavailable - no need
+            speed: 300 // unavailable - no need
           },
           buttons: [
             {
@@ -69,8 +69,8 @@
           theme: 'relax',
           layout: 'topCenter',
           animation: {
-            open: 'animated bounceInLeft', // Animate.css class names
-            close: 'animated bounceOutRight', // Animate.css class names
+            open: 'animated zoomIn', // Animate.css class names
+            close: 'animated zoomOut', // Animate.css class names
             easing: 'swing', // unavailable - no need
             speed: 500 // unavailable - no need
           }
@@ -95,8 +95,8 @@
           theme: 'relax',
           layout: 'topCenter',
           animation: {
-            open: 'animated bounceInLeft', // Animate.css class names
-            close: 'animated bounceOutRight', // Animate.css class names
+            open: 'animated zoomIn', // Animate.css class names
+            close: 'animated zoomOut', // Animate.css class names
             easing: 'swing', // unavailable - no need
             speed: 500 // unavailable - no need
           },

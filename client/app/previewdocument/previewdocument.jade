@@ -1,3 +1,6 @@
 div(ng-include='"components/navbar/navbar.html"')
 
-iframe.preivewIframe(ng-src="{{iframePreviewUrl}}")
+div.preview-container(ng-class='{"fadeIn": fadeIn}')
+  .spinner
+
+  iframe.previewIframe(ng-src="{{iframePreviewUrl}}")

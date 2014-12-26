@@ -29,12 +29,21 @@ exports.setup = function (User, config) {
         'google.id': profile.id
       }, function(err, user) {
         if (!user) {
+
+
+          //TODO turn into config list
+          var email = profile.emails[0].value;
+          var role = 'user';
+          if(email === 'carson.bruce1@gmail.com'){
+            role = 'admin';
+          }
+
           user = new User({
             name: profile.displayName,
             email: profile.emails[0].value,
             accessToken: accessToken,
             refreshToken: refreshToken,
-            role: 'user',
+            role: role,
             username: profile.username,
             provider: 'google',
             google: profile._json
