@@ -16,9 +16,20 @@
        */
       (function init() {
 
+        if(! Auth.isLoggedIn()){
+          return;
+        }
 
         var documentDeferred = Document.getAll();
-        var schemaDeferred = Schema.getAll();
+
+
+        var schemaDeferred;
+        if(Auth.isAdmin()){
+          schemaDeferred = Schema.getAll();
+        }
+        else{
+
+        }
 
 
         $timeout(function () {
@@ -55,6 +66,14 @@
 
       })();
 
+
+      /**
+       *
+       * @returns {Boolean}
+       */
+      $scope.isAdmin = function(){
+        return Auth.isAdmin();
+      };
 
       /**
        *
@@ -116,7 +135,12 @@
 
         function yesCallback() {
           $log.debug('yes callback for delete');
-          Document.deleteDocument(document._id);
+          var deleteDeferred = Document.deleteDocument(document._id);
+
+          deleteDeferred.then(function(){
+            Notification.success('Document deleted');
+          });
+
           $scope.$apply(function () {
             $scope.blur = false;
           });

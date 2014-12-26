@@ -1,5 +1,5 @@
 div(ng-include='"components/navbar/navbar.html"')
-.container
+.container.login-container(ng-class='{"fade-in": fadeIn}')
   .row(class='login-area')
     //.col-sm-12
       h1 Login
@@ -20,7 +20,8 @@ div(ng-include='"components/navbar/navbar.html"')
     .col-sm-12
       h1(class='login-help-text') Welcome to the Solnet CMS
     .col-sm-12
-      a.btn.btn-google-plus(href='', ng-click='loginOauth("google")')
+      a.btn.btn-google-plus(ng-class='{"logging-in": isLoggingIn}', href='', ng-click='loginOauth("google")')
+        .circle-loader
         i.fa.fa-google-plus
         | &nbsp;&nbsp;Login with Google
 

@@ -31,41 +31,95 @@
 
 
 
-//change the cursor when we start to login
-.logging-in {
-  .btn {
-    cursor: default !important;
+
+body.login {
+
+
+  .login-container.fade-in{
+    opacity: 1;
   }
-}
+  .login-container{
+    opacity: 0;
+    .transition(opacity 0.2s ease);
+  }
 
-.btn-google-plus {
 
-  i{
+  .circle-loader {
+    position: absolute;
+    opacity: 0;
+    left: 15px;
+    .transition(opacity 0.2s ease);
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    -webkit-box-sizing: border-box;
+    border: solid 2px rgba(255, 255, 255, 0.2);
+    border-top-color: #FFF;
+    -webkit-animation: spin 1s infinite linear;
+  }
+  @-webkit-keyframes spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+
+
+
+  //change the cursor when we start to login
+  &.logging-in {
+    .btn {
+      cursor: default !important;
+    }
+
+    .circle-loader {
+      opacity: 1;
+    }
+
+    .btn-google-plus {
+
+      background-color: @gray-dark;
+
+      i {
+        opacity: 0;
+      }
+    }
+  }
+
+  .btn-google-plus {
+
+    i{
+      position: relative;
+      top: 2px;
+      opacity: 1;
+      .transition(opacity 0.2s ease);
+    }
+
+    left: 50%;
+    margin-left: -90px;
+    margin-bottom: 100px;
     position: relative;
-    top: 2px;
+    font-family: Museo;
+    font-weight: bold;
+    letter-spacing: -1px;
+    border-radius: 0;
+    box-shadow: none;
+    border: none;
+    padding: 10px 20px;
+    .transition (background-color 0.2s ease);
   }
 
-  left: 50%;
-  margin-left: -90px;
-  margin-bottom: 100px;
-  position: relative;
-  font-family: Museo;
-  font-weight: bold;
-  letter-spacing: -1px;
-  border-radius: 0;
-  box-shadow: none;
-  border: none;
-  padding: 10px 20px;
-  .transition (background-color 0.2s ease);
-}
+  .login-help-text {
+    letter-spacing: -1.5px;
+    margin: 50px 0 20px 0;
+    text-align: center;
+  }
 
-.login-help-text {
-  letter-spacing: -1.5px;
-  margin: 50px 0 20px 0;
-  text-align: center;
-}
+  hr {
+    border-bottom: 1px solid @gray-dark-2;
+    border-top: 0;
+  }
 
-hr {
-  border-bottom: 1px solid @gray-dark-2;
-  border-top: 0;
+
+
 }

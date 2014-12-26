@@ -127,8 +127,13 @@
       /**
        *
        */
-      $scope.previewDocument = function previewDocument() {
-        $location.path('/previewdocument/' + $stateParams.documentId);
+      $scope.previewDocument = function previewDocument($event) {
+        //$location.path('/previewdocument/' + $stateParams.documentId);
+
+        if($scope.isUpdating){
+          $event.preventDefault();
+        }
+
       };
 
 

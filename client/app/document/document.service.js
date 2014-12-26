@@ -45,7 +45,12 @@
        *
        */
       self.deleteDocument = function (id) {
-        $http.delete('/api/documents/' + id);
+        var deferred = $q.defer();
+        $http.delete('/api/documents/' + id).success(function(response){
+          deferred.resolve(response);
+        }).error(function(response, statusCode){
+          deferred.reject(statusCode);
+        });
 
         if (_documents[id]) {
           delete _documents[id];
@@ -53,6 +58,8 @@
         if (_deferredGetDocument[id]) {
           delete _deferredGetDocument[id];
         }
+
+        return deferred.promise;
       };
 
       /**
@@ -122,26 +129,37 @@
         var deferred = $q.defer();
 
         //Dont need to be passing the schema back to the webservice
-        var updateDocument = angular.copy(_documents[docId]);
-        delete updateDocument.schema;
+        if(_documents && _documents[docId]){
+          var updateDocument = angular.copy(_documents[docId]);
+          if(updateDocument && updateDocument.schema){
+            delete updateDocument.schema;
+          }
 
-        $log.debug('Submitting document', updateDocument);
 
-        $http.put('/api/documents/' + updateDocument._id, updateDocument)
-          .success(function () {
-            deferred.resolve();
+          $log.debug('Submitting document', updateDocument);
 
-            Notification.success('Document updated');
+          $http.put('/api/documents/' + updateDocument._id, updateDocument)
+            .success(function () {
+              deferred.resolve();
 
-          })
-          .error(function (error) {
-            deferred.reject();
+              Notification.success('Document updated');
 
-            $log.error(error);
+            })
+            .error(function (error) {
+              deferred.reject();
 
-            Notification.error('Document service failed to update document');
+              $log.error(error);
 
-          });
+              Notification.error('Document service failed to update document');
+
+            });
+
+        }
+        else{
+          deferred.reject('Document doesnt (yet?) exist');
+        }
+
+
 
         return deferred.promise;
       };

@@ -3,10 +3,15 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('LoginCtrl', function ($scope, Auth, $location, $window, socket) {
+    .controller('LoginCtrl', function ($scope, Auth, $location, $window, $timeout) {
       $scope.user = {};
       $scope.errors = {};
 
+      $scope.fadeIn = undefined;
+
+      $timeout(function(){
+        $scope.fadeIn = true;
+      }, 50);
 
       if (Auth.isLoggedIn()) {
         $location.path('/');
@@ -40,6 +45,7 @@
 
 
         //TODO if we reach 5000ms then we should display a message - logging into Google....
+
 
         var $body = $('body');
         $body.css('transition', 'opacity 3s ease');

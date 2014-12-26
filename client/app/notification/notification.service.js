@@ -25,7 +25,6 @@
         var n = noty({
           text: content,
           type: 'info',
-          timeout: 2000,
           theme: 'relax',
           layout: 'center',
           animation: {
@@ -65,7 +64,7 @@
         var n = noty({
           text: content,
           type: 'success',
-          timeout: 2000,
+          timeout: 3000,
           theme: 'relax',
           layout: 'topCenter',
           animation: {
