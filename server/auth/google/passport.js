@@ -28,7 +28,19 @@ exports.setup = function (User, config) {
       User.findOne({
         'google.id': profile.id
       }, function(err, user) {
-        if (!user) {
+
+        if(user){
+          //update the users access token
+          user.accessToken = accessToken;
+          user.refreshToken = refreshToken;
+
+          user.save(function(err) {
+            if (err) done(err);
+            return done(err, user);
+          });
+
+        }
+        else {
 
 
           //TODO turn into config list
@@ -52,8 +64,6 @@ exports.setup = function (User, config) {
             if (err) done(err);
             return done(err, user);
           });
-        } else {
-          return done(err, user);
         }
       });
     }
