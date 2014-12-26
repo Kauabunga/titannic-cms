@@ -17,10 +17,14 @@
        * @param yesCallback
        * @param noCallback
        */
-      self.confirmation = function (content, yesCallback, noCallback) {
+      self.confirmation = function (content, yesCallback, noCallback, options) {
 
         yesCallback = yesCallback || function(){};
         noCallback = noCallback || function(){};
+
+        options = options || {};
+        options.yesText = options.yesText || 'Delete';
+        options.noText = options.noText || 'Cancel';
 
         var n = noty({
           text: content,
@@ -36,7 +40,7 @@
           buttons: [
             {
               addClass: 'btn btn-danger',
-              text: 'Delete', onClick: function ($noty) {
+              text: options.yesText, onClick: function ($noty) {
               $noty.close();
               // this = button element
               // $noty = $noty element
@@ -46,7 +50,7 @@
             },
             {
               addClass: 'btn btn-primary',
-              text: 'Cancel', onClick: function ($noty) {
+              text: options.noText, onClick: function ($noty) {
               $noty.close();
               noCallback();
             }

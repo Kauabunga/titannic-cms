@@ -84,6 +84,7 @@
             function yesCallback() {
               $log.debug('yes callback for reset');
 
+              Notification.success('Content reset');
               scope.$apply(function () {
                 editor.setValue(scope.document.contentOriginal);
               });
@@ -93,7 +94,7 @@
               $log.debug('no callback for reset');
             }
 
-            Notification.confirmation('Ready to reset your document?', yesCallback, noCallback);
+            Notification.confirmation('Ready to reset your document?', yesCallback, noCallback, {yesText: 'Reset'});
 
 
           };
