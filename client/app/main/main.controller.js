@@ -127,11 +127,7 @@
        */
       $scope.deleteDocument = function deleteDocument($event, document) {
 
-        //Do not want to trigger the edit document click trigger
-        $event.preventDefault();
-        $event.stopPropagation();
 
-        $scope.blur = true;
 
         function yesCallback() {
           $log.debug('yes callback for delete');
@@ -143,18 +139,34 @@
 
           $scope.$apply(function () {
             $scope.blur = false;
+            $scope.deletingDocument = false;
           });
+
         }
 
         function noCallback() {
           $log.debug('no callback for delete');
           $scope.$apply(function () {
             $scope.blur = false;
+            $scope.deletingDocument = false;
           });
         }
 
-        Notification.confirmation('Are you sure you want to delete the document?', yesCallback, noCallback);
 
+
+        if( ! $scope.deletingDocument){
+          //Do not want to trigger the edit document click trigger
+          $event.preventDefault();
+          $event.stopPropagation();
+
+
+
+          $scope.deletingDocument = true;
+
+          $scope.blur = true;
+
+          Notification.confirmation('Are you sure you want to delete the document?', yesCallback, noCallback);
+        }
 
       };
 

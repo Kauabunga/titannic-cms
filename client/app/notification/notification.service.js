@@ -26,7 +26,24 @@
         options.yesText = options.yesText || 'Delete';
         options.noText = options.noText || 'Cancel';
 
-        var n = noty({
+        var $notificationScreen = $('#notification-screen');
+        var $n;
+
+        $notificationScreen.toggleClass('active', true);
+
+
+
+        //if we
+        $notificationScreen.on('click', closeNoty);
+
+        function closeNoty(){
+          $n.close();
+          $notificationScreen.toggleClass('active', false);
+          $notificationScreen.off('click', closeNoty);
+          noCallback();
+        }
+
+        $n = noty({
           text: content,
           type: 'info',
           theme: 'relax',
@@ -41,18 +58,22 @@
             {
               addClass: 'btn btn-danger',
               text: options.yesText, onClick: function ($noty) {
-              $noty.close();
-              // this = button element
-              // $noty = $noty element
-              yesCallback();
 
+              $noty.close();
+              $notificationScreen.off('click', closeNoty);
+              $notificationScreen.toggleClass('active', false);
+              yesCallback();
             }
             },
             {
               addClass: 'btn btn-primary',
               text: options.noText, onClick: function ($noty) {
               $noty.close();
+              $notificationScreen.off('click', closeNoty);
+              $notificationScreen.toggleClass('active', false);
               noCallback();
+
+
             }
             }
           ]
