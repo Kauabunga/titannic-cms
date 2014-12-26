@@ -11,6 +11,8 @@
       var self = this;
 
 
+      var confimationActive = false;
+
       /**
        *
        * @param content
@@ -19,65 +21,92 @@
        */
       self.confirmation = function (content, yesCallback, noCallback, options) {
 
-        yesCallback = yesCallback || function(){};
-        noCallback = noCallback || function(){};
-
-        options = options || {};
-        options.yesText = options.yesText || 'Delete';
-        options.noText = options.noText || 'Cancel';
-
-        var $notificationScreen = $('#notification-screen');
         var $n;
 
-        $notificationScreen.toggleClass('active', true);
-
-
-
-        //if we
-        $notificationScreen.on('click', closeNoty);
-
         function closeNoty(){
-          $n.close();
+
+          if($n){
+            //TODO have to wait for it to be completely open?
+            $n.close();
+          }
+
+          setTimeout(function(){
+            $n.close();
+          }, 200);
+          
+          setTimeout(function(){
+            $n.close();
+          }, 500);
+
+          setTimeout(function(){
+            $n.close();
+          }, 1000);
+
           $notificationScreen.toggleClass('active', false);
           $notificationScreen.off('click', closeNoty);
+          confimationActive = false;
           noCallback();
         }
 
-        $n = noty({
-          text: content,
-          type: 'info',
-          theme: 'relax',
-          layout: 'center',
-          animation: {
-            open: 'animated zoomIn', // Animate.css class names
-            close: 'animated zoomOut', // Animate.css class names
-            easing: 'swing', // unavailable - no need
-            speed: 300 // unavailable - no need
-          },
-          buttons: [
-            {
-              addClass: 'btn btn-danger',
-              text: options.yesText, onClick: function ($noty) {
+        if( ! confimationActive){
 
-              $noty.close();
-              $notificationScreen.off('click', closeNoty);
-              $notificationScreen.toggleClass('active', false);
-              yesCallback();
-            }
+          confimationActive = true;
+
+          yesCallback = yesCallback || function(){};
+          noCallback = noCallback || function(){};
+
+          options = options || {};
+          options.yesText = options.yesText || 'Delete';
+          options.noText = options.noText || 'Cancel';
+
+          var $notificationScreen = $('#notification-screen');
+
+          $notificationScreen.toggleClass('active', true);
+
+          $notificationScreen.on('click', closeNoty);
+
+
+          $n = noty({
+            text: content,
+            type: 'info',
+            theme: 'relax',
+            layout: 'center',
+            animation: {
+              open: 'animated zoomIn', // Animate.css class names
+              close: 'animated zoomOut', // Animate.css class names
+              easing: 'swing', // unavailable - no need
+              speed: 300 // unavailable - no need
             },
-            {
-              addClass: 'btn btn-primary',
-              text: options.noText, onClick: function ($noty) {
-              $noty.close();
-              $notificationScreen.off('click', closeNoty);
-              $notificationScreen.toggleClass('active', false);
-              noCallback();
+            buttons: [
+              {
+                addClass: 'btn btn-danger',
+                text: options.yesText, onClick: function ($noty) {
+
+                $noty.close();
+                $notificationScreen.off('click', closeNoty);
+                $notificationScreen.toggleClass('active', false);
+                yesCallback();
+                confimationActive = false;
+              }
+              },
+              {
+                addClass: 'btn btn-primary',
+                text: options.noText, onClick: function ($noty) {
+                $noty.close();
+                $notificationScreen.off('click', closeNoty);
+                $notificationScreen.toggleClass('active', false);
+                noCallback();
+                confimationActive = false;
 
 
-            }
-            }
-          ]
-        });
+              }
+              }
+            ]
+          });
+
+
+        }
+
 
       };
 
