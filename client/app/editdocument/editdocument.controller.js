@@ -13,6 +13,7 @@
       $scope.fadeIn = undefined;
       $scope.blur = undefined;
       $scope.isUpdating = undefined;
+      $scope.stillLoadingMessage = undefined;
 
       /**
        * TODO this is nasty having to watch the entire document should subscribe to the $emit event
@@ -54,16 +55,27 @@
       (function init() {
 
 
-        setTimeout(function () {
-          $scope.$apply(function () {
-            $scope.fadeIn = true;
-          });
+        $timeout(function () {
+          $scope.fadeIn = true;
         }, 0);
 
         var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
 
+
+        var finishedLoading = false;
+
+        $timeout(function(){
+          if( ! finishedLoading){
+            //show still loading message
+            $scope.stillLoadingMessage = true;
+          }
+        }, 500);
+
         getDocumentDeferred.finally(function () {
-          $scope.fadeIn = true;
+
+          finishedLoading = true;
+          $scope.stillLoadingMessage = false;
+
         });
 
 

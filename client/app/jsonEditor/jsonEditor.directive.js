@@ -106,10 +106,21 @@
           scope.toggleOptions = function () {
             scope.optionsEnabled = !scope.optionsEnabled;
 
-            editor.destroy();
+            scope.editorLoaded = false;
 
-            var jsonEditorOptions = getEditorOptions();
-            editor = newEditor(jsonEditorOptions);
+            //need the timeouts here to give the animations a chance
+            $timeout(function(){
+              destroyEditor(editor);
+
+              var jsonEditorOptions = getEditorOptions();
+              editor = newEditor(jsonEditorOptions);
+
+              $timeout(function(){
+                scope.editorLoaded = true;
+              }, 50);
+
+            }, 50);
+
 
           };
 
@@ -174,12 +185,20 @@
 
           /**
            *
+           * @param editor
+           */
+          function destroyEditor(editor){
+            editor.off('change', changeHandle);
+            editor.destroy();
+          }
+
+          /**
+           *
            */
           var destroyHandle = scope.$on('$destroy', function () {
 
             if (editor) {
-              editor.off('change', changeHandle);
-              editor.destroy();
+              destroyEditor(editor);
             }
             destroyHandle();
           });

@@ -94,6 +94,18 @@ body.editdocument {
   }
 
 
+  .still-loading-container {
+    opacity: 0;
+
+    .transition(opacity 0.2s ease);
+    position: absolute;
+    &.still-loading {
+      opacity: 1;
+    }
+    text-align: center;
+    left: 0;
+  }
+
   h1, h2, h3 {
     display: block;
     margin-top: 35px;
@@ -135,7 +147,6 @@ body.editdocument {
 
     .transition(opacity 0.2s ease);
 
-    font-size: 110%;
     padding: 10px 30px;
     margin: 10px 0px;
     border-radius: 0;

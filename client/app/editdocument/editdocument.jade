@@ -26,12 +26,14 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}')
               | Preview
 
     .row
+      .col-sm-12.still-loading-container(ng-class='{"still-loading": stillLoadingMessage}')
+        h2 Still loading
       .col-sm-12
         span.json-editor
 
 
 
-
+    //TODO Move to document info page
     form.document-form.form(ng-show='isAdmin()')
       .form-group
         label Document name
