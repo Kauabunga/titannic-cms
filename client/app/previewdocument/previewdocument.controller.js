@@ -21,7 +21,7 @@
 
         getPreviewUrlDeferred.then(
           function success(data) {
-            Notification.success('Successful response from get preview url');
+
             if (data && data.url) {
               $scope.iframePreviewUrl = data.url;
             }

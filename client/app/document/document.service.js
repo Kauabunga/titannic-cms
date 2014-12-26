@@ -142,6 +142,8 @@
             .success(function () {
               deferred.resolve();
 
+              _documents[docId].contentOriginal = angular.copy(_documents[docId].content);
+
               Notification.success('Document updated');
 
             })
