@@ -8,7 +8,8 @@
         .state('createschema', {
           url: '/createschema',
           templateUrl: 'app/createschema/createschema.html',
-          controller: 'CreateschemaCtrl'
+          controller: 'CreateschemaCtrl',
+          authenticate: true
         });
     });
 

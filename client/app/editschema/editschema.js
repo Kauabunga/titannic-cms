@@ -8,7 +8,8 @@
         .state('editschema', {
           url: '/editschema/{schemaId}',
           templateUrl: 'app/editschema/editschema.html',
-          controller: 'EditschemaCtrl'
+          controller: 'EditschemaCtrl',
+          authenticate: true
         });
     });
 

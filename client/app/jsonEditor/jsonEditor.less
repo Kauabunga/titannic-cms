@@ -15,6 +15,31 @@ body.editdocument {
       transform: translateY(0);
     }
 
+    &.dirty {
+
+      h4.dirty-header {
+        opacity: 1 !important;
+      }
+
+    }
+
+    h4.dirty-header {
+      .transition(opacity 0.2s ease);
+      position: absolute;
+      opacity: 0;
+      top: -10px;
+      right: 0;
+
+      color: @gray-2;
+      i {
+        margin-left: 4px;
+        font-size: 90%;
+        margin-top: -2px;
+
+      }
+
+    }
+
     transform: translateY(10px);
 
     opacity: 0;

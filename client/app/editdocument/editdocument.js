@@ -9,7 +9,8 @@
         .state('editdocument', {
           url: '/editdocument/{documentId}',
           templateUrl: 'app/editdocument/editdocument.html',
-          controller: 'EditdocumentCtrl'
+          controller: 'EditdocumentCtrl',
+          authenticate: true
         });
     });
 

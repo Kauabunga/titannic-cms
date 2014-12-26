@@ -6,7 +6,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .directive('jsonEditor', function ($log, $q, Document, $timeout, Notification, $stateParams) {
+    .directive('jsonEditor', function ($log, $q, Document, $timeout, Notification, $stateParams, $rootScope) {
       return {
         templateUrl: 'app/jsonEditor/jsonEditor.html',
         restrict: 'EAC',
@@ -39,6 +39,7 @@
           scope.optionsEnabled = false;
 
           scope.editorLoaded = false;
+          scope.editorDirty = false;
 
 
           /**
@@ -61,6 +62,10 @@
                   $timeout(function () {
                     editor = newEditor(jsonEditorOptions);
                     scope.editorLoaded = true;
+                    $timeout(function(){
+                      scope.editorDirty = false;
+                    });
+
 
                   }, 50);
 
@@ -76,26 +81,34 @@
           })();
 
 
+
+
           /**
            *
            */
           scope.resetJson = function () {
+
 
             function yesCallback() {
               $log.debug('yes callback for reset');
 
               Notification.success('Content reset');
               scope.$apply(function () {
+                scope.editorDirty = false;
                 editor.setValue(scope.document.contentOriginal);
+                scope.resetingJson = false;
               });
             }
 
             function noCallback() {
+              scope.resetingJson = false;
               $log.debug('no callback for reset');
             }
 
-            Notification.confirmation('Ready to reset your document?', yesCallback, noCallback, {yesText: 'Reset'});
-
+            if( ! scope.resetingJson){
+              scope.resetingJson = true;
+              Notification.confirmation('Ready to reset your document?', yesCallback, noCallback, {yesText: 'Reset'});
+            }
 
           };
 
@@ -167,6 +180,8 @@
                 element.css('background-color', '');
               }
 
+              scope.editorDirty = true;
+
               Document.setDocumentContent($stateParams.documentId, editor.getValue());
             });
           }
@@ -182,6 +197,15 @@
             editor.on('change', changeHandle);
             return editor;
           }
+
+          /**
+           *
+           */
+          var documentUpdatedHandle = $rootScope.$on('document:updated', function(){
+            scope.editorDirty = false;
+
+          });
+
 
           /**
            *
@@ -201,6 +225,7 @@
               destroyEditor(editor);
             }
             destroyHandle();
+            documentUpdatedHandle();
           });
 
         }

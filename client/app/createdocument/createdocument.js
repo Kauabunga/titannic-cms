@@ -8,7 +8,8 @@
         .state('createdocument', {
           url: '/createdocument',
           templateUrl: 'app/createdocument/createdocument.html',
-          controller: 'CreatedocumentCtrl'
+          controller: 'CreatedocumentCtrl',
+          authenticate: true
         });
     });
 

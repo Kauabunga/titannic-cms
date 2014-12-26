@@ -289,9 +289,9 @@ exports.update = function(req, res) {
         });
 
       },
-      function error(updateError){
-        log.error('Failed to update google doc content', updateError);
-        res.send(500);
+      function error(updateError, statusCode){
+        log.error('Failed to update google doc content', updateError, statusCode);
+        res.send(statusCode);
     });
 
 

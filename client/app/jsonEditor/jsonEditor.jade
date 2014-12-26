@@ -9,6 +9,9 @@ span
 
 .row
   .col-lg-12
-    .json-editor-root(ng-class='{"loaded": editorLoaded}')
+    .json-editor-root(ng-class='{"loaded": editorLoaded, "dirty": editorDirty}')
+        h4.dirty-header edited
+          i.fa.fa-pencil
+
         .json-editor-anchor
 

@@ -144,6 +144,7 @@
 
               _documents[docId].contentOriginal = angular.copy(_documents[docId].content);
 
+              $rootScope.$emit('document:updated');
               Notification.success('Document updated');
 
             })

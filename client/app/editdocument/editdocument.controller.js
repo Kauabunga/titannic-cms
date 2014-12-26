@@ -64,9 +64,9 @@
 
         var finishedLoading = false;
 
+        //show still loading message after 500ms
         $timeout(function(){
           if( ! finishedLoading){
-            //show still loading message
             $scope.stillLoadingMessage = true;
           }
         }, 500);
@@ -120,18 +120,16 @@
       $scope.updateDocument = function updateDocument() {
 
         $scope.isUpdating = true;
-        var updateDefered = Document.updateDocument($stateParams.documentId);
 
-        updateDefered.finally(function(){
+        var $inputs = $('span.json-editor input');
+        $inputs.attr('disabled', 'disabled');
+        var updateDeferred = Document.updateDocument($stateParams.documentId);
+
+        updateDeferred.finally(function(){
           $scope.isUpdating = false;
+          $inputs.removeAttr('disabled');
         });
 
-        updateDefered.then(function success() {
-
-          },
-          function error() {
-
-          });
 
       };
 
@@ -140,7 +138,6 @@
        *
        */
       $scope.previewDocument = function previewDocument($event) {
-        //$location.path('/previewdocument/' + $stateParams.documentId);
 
         if($scope.isUpdating){
           $event.preventDefault();
