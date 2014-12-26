@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('CreatedocumentCtrl', function ($scope, $log, $http, $q, Document, $location, Schema, Notification) {
+    .controller('CreatedocumentCtrl', function ($scope, $log, $http, $q, Document, $location, Schema, Notification, $timeout) {
 
 
       //Document model
@@ -16,6 +16,7 @@
       };
 
       $scope.schemaList = undefined;
+      $scope.fadeIn = undefined;
 
       //TODO permission levels
 
@@ -30,6 +31,10 @@
             Notification.error('Failed to get schema list');
           }
         );
+
+        $timeout(function(){
+          $scope.fadeIn = true;
+        }, 50);
 
       })();
 

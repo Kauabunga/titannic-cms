@@ -84,6 +84,26 @@
        *
        * @param content
        */
+      self.info = function (content) {
+        var n = noty({
+          text: content,
+          type: 'info',
+          timeout: 2000,
+          theme: 'relax',
+          layout: 'topCenter',
+          animation: {
+            open: 'animated zoomIn', // Animate.css class names
+            close: 'animated zoomOut', // Animate.css class names
+            easing: 'swing', // unavailable - no need
+            speed: 500 // unavailable - no need
+          }
+        });
+      };
+
+      /**
+       *
+       * @param content
+       */
       self.error = function (content, options) {
 
         options = options || {};

@@ -119,17 +119,23 @@
        */
       $scope.updateDocument = function updateDocument() {
 
-        $scope.isUpdating = true;
+        if(! $scope.isUpdating){
 
-        var $inputs = $('span.json-editor input');
-        $inputs.attr('disabled', 'disabled');
-        var updateDeferred = Document.updateDocument($stateParams.documentId);
+          $scope.isUpdating = true;
 
-        updateDeferred.finally(function(){
-          $scope.isUpdating = false;
-          $inputs.removeAttr('disabled');
-        });
+          var $inputs = $('span.json-editor input');
+          $inputs.attr('disabled', 'disabled');
+          var updateDeferred = Document.updateDocument($stateParams.documentId);
 
+          updateDeferred.finally(function(){
+            $timeout(function(){
+              $scope.isUpdating = false;
+              $inputs.removeAttr('disabled');
+            });
+
+          });
+
+        }
 
       };
 

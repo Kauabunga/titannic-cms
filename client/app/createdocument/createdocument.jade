@@ -1,19 +1,50 @@
 div(ng-include='"components/navbar/navbar.html"')
 
+.create-document-container(ng-class='{"fade-in": fadeIn}')
 
-.container
-  form.document-form
-    label Link a new Google doc to the cms
-    .input-group
+  header#banner.hero-unit
+    .container
+      h3 Create document
+      p Link a new Google Doc to the CMS
+        br
+        | &nbsp;
 
-      input.form-control(type='text', placeholder='Name', ng-model='document.name')
-      input.form-control(type='text', placeholder='Info', ng-model='document.info')
-      input.form-control(type='text', placeholder='LIVE :: Google Doc Content Id e.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.liveContentGoogleDocId')
-      input.form-control(type='text', placeholder='DEV  :: Google Doc Content Id e.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.devContentGoogleDocId')
-      select.form-control(type='text',
+
+
+  .container
+
+
+    form.document-form
+
+      .col-sm-10.col-sm-offset-1
+        .row
+          .col-sm-4
+            label Name
+            input.form-control(type='text', placeholder='', ng-model='document.name')
+
+        .row
+          .col-sm-6
+            label Production content id
+            input.form-control(type='text', placeholder='E.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.liveContentGoogleDocId')
+          .col-sm-6
+            label Development content id
+            input.form-control(type='text', placeholder='E.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.devContentGoogleDocId')
+
+        .row
+          .col-sm-8
+            label Info
+            input.form-control(type='text', placeholder='', ng-model='document.info')
+
+          .col-sm-4
+            label Type
+            select.form-control(type='text',
             placeholder='Google Doc Schema',
             ng-model='document.schemaId',
             ng-options="schema._id as schema.name for schema in schemaList")
 
-      span.input-group-btn
-        button.btn.btn-primary(type='submit', ng-click='newDocument()') Add New
+
+
+
+        .row
+          .col-sm-6.col-sm-offset-3
+            button.btn.btn-primary(type='submit', ng-click='newDocument()') Add New
