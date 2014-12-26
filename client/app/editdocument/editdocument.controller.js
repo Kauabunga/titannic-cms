@@ -12,6 +12,7 @@
 
       $scope.fadeIn = undefined;
       $scope.blur = undefined;
+      $scope.isUpdating = undefined;
 
       /**
        * TODO this is nasty having to watch the entire document should subscribe to the $emit event
@@ -105,7 +106,13 @@
        *
        */
       $scope.updateDocument = function updateDocument() {
+
+        $scope.isUpdating = true;
         var updateDefered = Document.updateDocument($stateParams.documentId);
+
+        updateDefered.finally(function(){
+          $scope.isUpdating = false;
+        });
 
         updateDefered.then(function success() {
 

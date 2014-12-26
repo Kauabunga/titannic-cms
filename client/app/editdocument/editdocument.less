@@ -8,6 +8,53 @@
 
 body.editdocument {
 
+  .updating {
+
+    .circle-loader {
+      opacity: 0.8;
+    }
+  }
+
+  .row.actions {
+
+    .updating {
+
+      &.btn.btn-update {
+        i {
+          opacity: 0;
+        }
+        cursor: default;
+
+        opacity: 0.7;
+        &:hover {
+          opacity: 0.7;
+        }
+        background-color: @gray;
+      }
+    }
+  }
+
+
+
+  .circle-loader {
+    position: absolute;
+    opacity: 0;
+    .transition(opacity 0.2s ease);
+    width: 20px;
+    height: 20px;
+    border-radius: 10px;
+    -webkit-box-sizing: border-box;
+    border: solid 2px rgba(255, 255, 255, 0.2);
+    border-top-color: #FFF;
+    -webkit-animation: spin 1s infinite linear;
+  }
+  @-webkit-keyframes spin {
+    100% {
+      -webkit-transform: rotate(360deg);
+    }
+  }
+
+
   .row.actions {
     margin-top: 30px;
     .btn {
@@ -79,6 +126,8 @@ body.editdocument {
   .btn {
 
     i {
+      .transition(opacity 0.2s ease);
+      opacity: 1;
       padding-right: 10px;
     }
 

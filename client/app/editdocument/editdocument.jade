@@ -15,7 +15,8 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}')
     .row.actions
       .col-sm-12
         span
-          button.btn.btn-info(type='submit', ng-click='updateDocument()')
+          button.btn.btn-update.btn-info(ng-class='{"updating": isUpdating}', type='submit', ng-click='updateDocument()')
+            .circle-loader
             i.fa.fa-cloud-upload
             | Update
         span
