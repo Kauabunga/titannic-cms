@@ -1,1 +1,52 @@
 .trash { color:rgb(209, 91, 71); }
+
+
+
+body.admin{
+
+
+
+  ul.list-group {
+
+    margin-top: 100px;
+
+    li {
+      border: 0;
+      border-radius: 0;
+      margin-top: 10px;
+
+
+      a.trash {
+
+        position: relative;
+        top: -12px;
+
+
+        float: right;
+        color: @gray;
+
+        .transition(all 0.2s ease);
+
+        &:hover {
+          cursor: pointer;
+          color: @gray-lighter;
+        }
+
+        font-size: 1.3em;
+        text-shadow: none;
+        &:focus {outline:0;}
+
+      }
+
+      span {
+        color: @gray-darker;
+      }
+
+
+      background-color: @gray-light;
+    }
+
+  }
+
+
+}

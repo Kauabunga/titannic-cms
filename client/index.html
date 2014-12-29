@@ -41,6 +41,10 @@
         position: absolute;
       }
 
+      #index-loader-screen.fade-out {
+        opacity: 0;
+      }
+
       #notification-screen.active {
         display: block;
       }
@@ -62,21 +66,20 @@
     <script>
       document.addEventListener("DOMContentLoaded", function(event) {
 
-
-        var $elLoaderScreen = $("#index-loader-screen");
-
-        //TODO would be nicer with promises in app run
-        //   on route load/ready/rendered...
         setTimeout(function(){
-          $elLoaderScreen.toggleClass('fade-out', true);
-        }, 1000);
+          //we also attempt to remove this loading screen on route view loaded
+          var $elLoaderScreen = $("#index-loader-screen");
 
+          setTimeout(function(){
+            $elLoaderScreen.toggleClass('fade-out', true);
+          }, 1000);
 
-        setTimeout(function(){
-          if($elLoaderScreen){
-            $elLoaderScreen.remove();
-          }
-        }, 1800);
+          setTimeout(function(){
+            if($elLoaderScreen){
+              $elLoaderScreen.remove();
+            }
+          }, 1800);
+        }, 0);
 
       });
 

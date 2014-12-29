@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('NavbarCtrl', function ($scope, $location, Auth) {
+    .controller('NavbarCtrl', function ($scope, $location, Auth, $timeout) {
       $scope.menu = [{
         'title': 'Home',
         'link': '/'
@@ -22,7 +22,10 @@
 
       $scope.logout = function () {
         Auth.logout();
-        $location.path('/login');
+        $timeout(function(){
+          $location.path('/login');
+        });
+
       };
 
       $scope.isActive = function (route) {

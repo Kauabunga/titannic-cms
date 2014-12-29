@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('AdminCtrl', function ($scope, $http, Auth, User) {
+    .controller('AdminCtrl', function ($scope, $http, Auth, User, $location) {
 
       // Use the User $resource to fetch all users
       $scope.users = User.query();
@@ -16,6 +16,16 @@
           }
         });
       };
+
+      /**
+       *
+       */
+      $scope.addUser = function(){
+        $location.path('/adduser');
+      };
+
+
+
     });
 
 })();

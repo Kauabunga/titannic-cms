@@ -12,18 +12,13 @@
       $scope.fadeIn = false;
 
       /**
-       *
+       * timeout on init to ensure that all the user state is sorted out
        */
-      (function init() {
-
-        if(! Auth.isLoggedIn()){
-          return;
-        }
+      $timeout(function init() {
 
         var documentDeferred = Document.getAll();
-
-
         var schemaDeferred;
+
         if(Auth.isAdmin()){
           schemaDeferred = Schema.getAll();
 
@@ -43,11 +38,6 @@
           schemaDeferred = $q.when();
         }
 
-
-        $timeout(function () {
-          $scope.fadeIn = true;
-        }, 200);
-
         $q.all([documentDeferred, schemaDeferred]).finally(function () {
           $timeout(function () {
             $scope.fadeIn = true;
@@ -65,7 +55,15 @@
           });
 
 
-      })();
+      }, 0);
+
+
+      /**
+       * ensure that our main page fades in at most after 200ms
+       */
+      $timeout(function () {
+        $scope.fadeIn = true;
+      }, 200);
 
 
       /**
