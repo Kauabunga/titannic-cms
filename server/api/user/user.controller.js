@@ -20,6 +20,14 @@ var validationError = function(res, err) {
   return res.json(422, err);
 };
 
+
+/**
+ * Get a list of all the roles avalible to set a user as
+ */
+exports.roles = function(req, res){
+  res.json({roles: config.userRoles});
+};
+
 /**
  *
  */

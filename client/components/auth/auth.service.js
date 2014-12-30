@@ -52,6 +52,23 @@
         },
 
         /**
+         *
+         */
+        getRoles: function(){
+          var deferred = $q.defer();
+
+          $http.get('api/users/roles')
+            .success(function(successResponse){
+              deferred.resolve(successResponse);
+            })
+            .error(function(errorResponse, statusCode){
+              deferred.reject(statusCode);
+            });
+
+          return deferred.promise;
+        },
+
+        /**
          * Create a new user
          *
          * @param  {Object}   user     - user info

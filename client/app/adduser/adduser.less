@@ -1,0 +1,53 @@
+
+
+
+
+body.adduser{
+
+
+
+
+  .add-user-container {
+
+    &.fade-in {
+
+      .hero-unit{
+        .container {
+          opacity: 1;
+        }
+      }
+
+
+    }
+
+    .hero-unit{
+      .container {
+        .transition(opacity 0.2s ease);
+        opacity: 0;
+      }
+    }
+
+
+  }
+
+
+
+  form {
+    margin-top: 40px;
+    margin-bottom: 40px;
+
+  }
+
+
+  input, select {
+    border-radius: 0;
+    box-shadow: none;
+
+    -webkit-appearance: none;
+  }
+
+  label {
+    color: @grey-light-2;
+  }
+
+}
