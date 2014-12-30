@@ -1,16 +1,20 @@
-(function(){
+/* global Select */
 
+(function(){
 
   'use strict';
 
+  console.log('uyoyoyoyo');
   angular.module('titannicCmsApp')
-    .directive('select', function ($log) {
+    .directive('select', function ($log, $timeout) {
       return {
         templateUrl: 'app/select/select.html',
-        restrict: 'EA',
+        restrict: 'EAC',
         link: function (scope, element, attrs) {
 
-          $log.debug('Select directive link');
+          $timeout(function(){
+            Select.init();
+          });
 
 
         }

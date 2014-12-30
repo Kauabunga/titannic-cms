@@ -9,23 +9,23 @@ div(ng-include='"components/navbar/navbar.html"')
         | &nbsp;
 
   .container
-    .col-sm-12
+    .col-sm-8.col-sm-offset-2
       form.form(name='userForm', ng-submit='createUser()', novalidate)
 
         .row
-          .col-sm-6.form-group.col-sm-offset-2
+          .col-sm-9.form-group
             label Name
             input.form-control(type='text', name='name', ng-model='user.name', required='')
-          .col-sm-2.form-group
+          .col-sm-3.form-group
             label Role
-            select.form-control(type='text', name='role', required=''
-            placeholder='User role',
-            ng-model='user.role',
-            ng-options="role for role in roles")
+            select.form-control(type='text', name='role', required='', select-select='',
+              placeholder='User role',
+              ng-model='user.role',
+              ng-options="role for role in roles")
 
 
         .row
-          .col-sm-8.form-group.col-sm-offset-2
+          .col-sm-12.form-group
             label Email
             input.form-control(type='email', name='email', ng-model='user.email', required='')
 

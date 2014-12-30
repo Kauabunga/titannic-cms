@@ -8,7 +8,9 @@
       $scope.fadeIn = undefined;
       $scope.roles = undefined;
 
-
+      $scope.user = {
+        role: 'user'
+      };
 
 
       /**
