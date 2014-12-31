@@ -1,24 +1,30 @@
 div(ng-include='"components/navbar/navbar.html"')
 
+.admin-container(ng-class='{"fade-in": fadeIn}')
 
-header#banner.hero-unit
+  header#banner.hero-unit
+    .container
+      h3 Admin
+      p
+        br
+        | &nbsp;
+
+
   .container
-    h3 Admin users
-    p
-      br
-      | &nbsp;
 
+    button.btn.btn-create(ng-click='addUser()') +
+      span &nbsp;User
 
-.container
-
-  button.btn.btn-create(ng-click='addUser()') +
-    span &nbsp;User
-
-
-  ul.list-group
-    li.list-group-item(ng-repeat='user in users')
-      strong {{user.name}}
-      br
-      span.text-muted {{user.email}}
-      a.trash(ng-click='delete(user)')
-        i.fa.fa-times
+    .col-sm-12
+      h1.page-header Users
+    .col-sm-12
+      ul.list-group
+        li.list-group-item(ng-repeat='user in users')
+          .row
+            .col-sm-2.user-role {{user.role}}
+            .col-sm-10
+              strong.user-name {{user.name}}
+              br
+              span.text-muted.user-email {{user.email}}
+              a.trash(ng-click='delete(user)')
+                i.fa.fa-times

@@ -91,6 +91,28 @@
         },
 
         /**
+         * Create a new user from a admin account
+         *
+         * @param  {Object}   user     - user info
+         * @return {Promise}
+         */
+        adminCreateUser: function (user) {
+
+          var deferred = $q.defer();
+
+          $http.post('/api/users/admincreate', user)
+            .success(function(response){
+              deferred.resolve(response);
+            })
+            .error(function(response, status){
+              deferred.reject(status);
+            });
+
+          return deferred.promise;
+
+        },
+
+        /**
          * Change password
          *
          * @param  {String}   oldPassword

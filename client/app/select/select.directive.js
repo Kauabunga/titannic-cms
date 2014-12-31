@@ -4,7 +4,6 @@
 
   'use strict';
 
-  console.log('uyoyoyoyo');
   angular.module('titannicCmsApp')
     .directive('select', function ($log, $timeout) {
       return {
@@ -16,10 +15,8 @@
             Select.init();
           });
 
-
         }
       };
     });
-
 
 })();

@@ -9,7 +9,9 @@
       $scope.roles = undefined;
 
       $scope.user = {
-        role: 'user'
+        role: 'user',
+        name: undefined,
+        email: undefined
       };
 
 
@@ -17,8 +19,8 @@
        *
        */
       $timeout(function init(){
-        $log.debug('Add User Ctrl init');
 
+        $log.debug('Add User Ctrl init');
 
         //fade in static elements
         $timeout(function(){
@@ -38,9 +40,6 @@
 
           });
 
-
-
-
       });
 
 
@@ -48,8 +47,13 @@
        *
        */
       $scope.createUser = function(){
-        //TODO use angular form validation.... need 1.3...
 
+        //TODO use angular form validation.... need 1.3...
+        $log.debug('Creating user with form', $scope.userForm);
+        $log.debug('Creating user with user', $scope.user);
+
+
+        Auth.adminCreateUser($scope.user);
 
       };
 
