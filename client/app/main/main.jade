@@ -15,9 +15,9 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}', ng-cloak='')
     .row
       .documents.col-md-10.col-md-offset-1
         .row.list-title
-          .col-sm-8
+          .col-xs-8
             h1.page-header Documents
-          .col-sm-4(ng-if='isAdmin()')
+          .col-xs-4(ng-if='isAdmin()')
             button.btn.btn-primary.btn-create(type='button', ng-click='createDocument()') +
               span &nbsp;Document
 
@@ -32,9 +32,9 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}', ng-cloak='')
 
       .schemas.col-md-10.col-md-offset-1(ng-if="isAdmin()")
         .row.list-title
-          .col-sm-8
+          .col-xs-8
             h1.page-header Schemas
-          .col-sm-4
+          .col-xs-4
             button.btn.btn-primary.btn-create(type='button', ng-click='createSchema()') +
               span &nbsp;Schema
         .row
