@@ -13,14 +13,6 @@
         $scope.fadeIn = true;
       }, 50);
 
-      //TODO this needs to be a check with the server
-      Auth.isLoggedInAsync(function(isLoggedIn){
-
-          if(isLoggedIn){
-            $location.path('/');
-          }
-
-        });
 
       //TODO submit login event to same session browsers
       //socket.socket.on('login')

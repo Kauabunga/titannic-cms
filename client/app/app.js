@@ -77,6 +77,7 @@
       $rootScope.$on('$stateChangeStart', function (event, next) {
         Auth.isLoggedInAsync(function (loggedIn) {
           if (next.authenticate && !loggedIn) {
+            $log.debug('Unauthed state change start redir to /login');
             $location.path('/login');
           }
         });
@@ -122,8 +123,8 @@
 
 
       //bind to the global error handler so we can create notifications for unhandled exceptions
-      var onErrorOriginal = $window.onerror || function () {
-        };
+      var onErrorOriginal = $window.onerror || function () {};
+
       $window.onerror = function (errorMsg, url, lineNumber) {
 
         onErrorOriginal();
