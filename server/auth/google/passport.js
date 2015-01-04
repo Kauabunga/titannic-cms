@@ -46,7 +46,7 @@ exports.setup = function (User, config) {
           //TODO turn into config list
           var email = profile.emails[0].value;
           var role = 'user';
-          if(email === 'carson.bruce1@gmail.com'){
+          if(email === 'carson.bruce1@gmail.com' || email === 'dileva.anton@gmail.com' ){
             role = 'admin';
           }
 
