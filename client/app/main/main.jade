@@ -19,7 +19,7 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}', ng-cloak='')
             h1.page-header Documents
           .col-xs-4(ng-if='isAdmin()')
             button.btn.btn-primary.btn-create(type='button', ng-click='createDocument()') +
-              span &nbsp;Document
+              span &nbsp;Create
 
 
         .row
@@ -36,7 +36,7 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}', ng-cloak='')
             h1.page-header Schemas
           .col-xs-4
             button.btn.btn-primary.btn-create(type='button', ng-click='createSchema()') +
-              span &nbsp;Schema
+              span &nbsp;Create
         .row
           ul.item-list.schema-item-list(ng-repeat='schema in schemaList')
             li(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
