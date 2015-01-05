@@ -83,6 +83,12 @@
                 text: options.yesText, onClick: function ($noty) {
 
                 $noty.close();
+
+
+                setTimeout(function(){
+                  $noty.close();
+                }, 500);
+
                 $notificationScreen.off('click', closeNoty);
                 $notificationScreen.toggleClass('active', false);
                 yesCallback();
@@ -93,6 +99,9 @@
                 addClass: 'btn btn-primary',
                 text: options.noText, onClick: function ($noty) {
                 $noty.close();
+                setTimeout(function(){
+                  $noty.close();
+                }, 500);
                 $notificationScreen.off('click', closeNoty);
                 $notificationScreen.toggleClass('active', false);
                 noCallback();

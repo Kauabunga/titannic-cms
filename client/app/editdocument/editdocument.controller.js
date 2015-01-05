@@ -147,8 +147,7 @@
        */
       $scope.publishDocument = function publishDocument() {
 
-        if(! $scope.isUpdating && ! $scope.isPublishing){
-
+        function yesCallback(){
           $scope.isPublishing = true;
 
           var $inputs = $('span.json-editor input');
@@ -165,6 +164,16 @@
 
           });
 
+
+        }
+
+        function noCallback(){
+          $scope.isPublishing = false;
+        }
+
+
+        if(! $scope.isUpdating && ! $scope.isPublishing){
+          Notification.confirmation('Are you sure you want make this document live?', yesCallback, noCallback, {yesText: 'Publish', noText: 'Cancel'});
         }
 
       };
