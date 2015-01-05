@@ -259,7 +259,7 @@ exports.unlockById = function(docId){
 };
 
 /**
- * Updates an existing document in the DB.
+ * Updates an existing document in the DB and google docs
  */
 exports.update = function(req, res) {
 
@@ -292,7 +292,7 @@ exports.update = function(req, res) {
       function error(updateError, statusCode){
         log.error('Failed to update google doc content', updateError, statusCode);
         res.send(statusCode);
-    });
+      });
 
 
 
@@ -305,6 +305,54 @@ exports.update = function(req, res) {
   }
 
 };
+
+
+/**
+ * Publishes a document
+ *
+ * TODO should validate that the content passed is identical to the dev content
+ */
+exports.publish = function(req, res) {
+
+  log.debug('Publishing document', req.body._id);
+
+  if(req.body._id) { delete req.body._id; }
+
+  //get user from the session -> helper in user
+
+  if(req.body && req.body.content){
+
+    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.body.liveContentGoogleDocId, req.body.content);
+
+    googleContentUpdateDeferred.then(
+      function success(){
+
+        log.debug('succesfully published google doc document -> updating local info');
+        //dont want to update the document in our db on an publish request
+        Document.findById(req.params.id, function (err, document) {
+          if (err) { return handleError(res, err); }
+          if(!document) { return res.send(404); }
+          return res.json(200, document);
+        });
+
+      },
+      function error(updateError, statusCode){
+        log.error('Failed to update google doc content', updateError, statusCode);
+        res.send(statusCode);
+      });
+
+
+
+  }
+  else{
+    //TODO is it mandatory to update a document with content?
+    //      should separate documents meta data from content
+    log.error('Content not passed while updating document');
+    res.send(500);
+  }
+
+};
+
 
 /**
  * Deletes a document from the DB.

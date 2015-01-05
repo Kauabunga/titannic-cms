@@ -8,22 +8,30 @@
 
 body.editdocument {
 
-  .updating {
-    .circle-loader {
-      opacity: 0.8;
-    }
-  }
 
   .row.actions {
-    .updating {
-      &.btn.btn-update {
-        i {
-          opacity: 0;
-        }
-      }
 
-      &.btn,
-      &.btn.button-success {
+    .updating.btn.btn-update {
+      i {
+        opacity: 0;
+      }
+      .circle-loader {
+        opacity: 0.8;
+      }
+    }
+
+    .publishing.btn.btn-publish {
+      i {
+        opacity: 0;
+      }
+      .circle-loader {
+        opacity: 0.8;
+      }
+    }
+
+    .updating,
+    .publishing {
+      &.btn {
         cursor: default;
 
         opacity: 0.7 !important;
@@ -38,8 +46,9 @@ body.editdocument {
 
 
   .circle-loader {
-    position: absolute;
-    left: 42px;
+    position: relative;
+    float: right;
+    left: -52px;
     opacity: 0;
     .transition(opacity 0.2s ease);
     width: 20px;
@@ -112,6 +121,11 @@ body.editdocument {
     font-family: museo;
   }
 
+
+
+  input {
+    opacity: 0.75;
+  }
 
 
   .btn:hover,

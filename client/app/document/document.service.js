@@ -135,7 +135,6 @@
             delete updateDocument.schema;
           }
 
-
           $log.debug('Submitting document', updateDocument);
 
           $http.put('/api/documents/' + updateDocument._id, updateDocument)
@@ -150,9 +149,7 @@
             })
             .error(function (error) {
               deferred.reject();
-
               $log.error(error);
-
               Notification.error('Document service failed to update document');
 
             });
@@ -162,7 +159,47 @@
           deferred.reject('Document doesnt (yet?) exist');
         }
 
+        return deferred.promise;
+      };
 
+
+      /**
+       *
+       */
+      self.publishDocument = function (docId) {
+
+        var deferred = $q.defer();
+
+        //Dont need to be passing the schema back to the webservice
+        if(_documents && _documents[docId]){
+          var publishDocument = angular.copy(_documents[docId]);
+          if(publishDocument && publishDocument.schema){
+            delete publishDocument.schema;
+          }
+
+          $log.debug('Submitting document to publish', publishDocument);
+
+          $http.put('/api/documents/publish' + publishDocument._id, publishDocument)
+            .success(function () {
+              deferred.resolve();
+
+              _documents[docId].contentOriginal = angular.copy(_documents[docId].content);
+
+              $rootScope.$emit('document:publish');
+              Notification.success('Document published');
+
+            })
+            .error(function (error) {
+              deferred.reject();
+              $log.error(error);
+              Notification.error('Document service failed to publish document');
+
+            });
+
+        }
+        else{
+          deferred.reject('Document doesnt (yet?) exist');
+        }
 
         return deferred.promise;
       };

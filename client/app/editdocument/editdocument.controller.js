@@ -13,6 +13,7 @@
       $scope.fadeIn = undefined;
       $scope.blur = undefined;
       $scope.isUpdating = undefined;
+      $scope.isPublishing = undefined;
       $scope.stillLoadingMessage = undefined;
 
       /**
@@ -119,7 +120,7 @@
        */
       $scope.updateDocument = function updateDocument() {
 
-        if(! $scope.isUpdating){
+        if(! $scope.isUpdating && ! $scope.isPublishing){
 
           $scope.isUpdating = true;
 
@@ -140,12 +141,41 @@
       };
 
 
+
+      /**
+       *
+       */
+      $scope.publishDocument = function publishDocument() {
+
+        if(! $scope.isUpdating && ! $scope.isPublishing){
+
+          $scope.isPublishing = true;
+
+          var $inputs = $('span.json-editor input');
+          $inputs.attr('disabled', 'disabled');
+
+          var publishDeferred = Document.publishDocument($stateParams.documentId);
+
+          publishDeferred.finally(function(){
+            $timeout(function(){
+              $scope.isPublishing = false;
+
+              $inputs.removeAttr('disabled');
+            });
+
+          });
+
+        }
+
+      };
+
+
       /**
        *
        */
       $scope.previewDocument = function previewDocument($event) {
 
-        if($scope.isUpdating){
+        if($scope.isUpdating || $scope.isPublishing){
           $event.preventDefault();
         }
 

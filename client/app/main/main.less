@@ -5,7 +5,7 @@
   ul.item-list {
     li:hover {
       cursor: pointer;
-      background-color: darken(@gray-2, 20%);
+      background-color: darken(@gray-2, 15%);
 
       a {
         color: #2daddc !important;
@@ -65,8 +65,12 @@ body.main{
   .blur-container {
     .transition(all 1s ease);
     &.blur {
-      filter: blur(5px);
+      filter: blur(2px);
+      background-color: #111;
+      opacity: 0.5;
     }
+
+
 
   }
 
@@ -126,7 +130,7 @@ body.main{
     text-align: center;
     padding: 30px 0;
     margin-top: 70px;
-    border-top: 1px solid #E5E5E5;
+//    border-top: 1px solid #E5E5E5;
   }
 
 
