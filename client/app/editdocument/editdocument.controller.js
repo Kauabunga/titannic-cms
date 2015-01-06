@@ -15,6 +15,7 @@
       $scope.isUpdating = undefined;
       $scope.isPublishing = undefined;
       $scope.stillLoadingMessage = undefined;
+      $scope.isDirty = undefined;
 
       /**
        * TODO this is nasty having to watch the entire document should subscribe to the $emit event
@@ -172,7 +173,10 @@
         }
 
 
-        if(! $scope.isUpdating && ! $scope.isPublishing && ! $scope.isDirty){
+        if($scope.isDirty){
+          Notification.info('You need to update the dev document before publishing');
+        }
+        else if(! $scope.isUpdating && ! $scope.isPublishing){
           Notification.confirmation('Are you sure you want make this document live?', yesCallback, noCallback, {yesText: 'Publish', noText: 'Cancel'});
         }
 

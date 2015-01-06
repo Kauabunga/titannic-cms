@@ -27,7 +27,7 @@ div.blur-container(ng-class='{"blur": blur, "fadeIn": fadeIn}')
               | Preview
 
         span(ng-if='isAdmin()')
-          button.btn.btn-publish.btn-warning(ng-class='{"disabled": isDirty, "updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='publishDocument()')
+          button.btn.btn-publish.btn-warning(ng-class='{"dirty": isDirty, "updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='publishDocument()')
             .circle-loader
             i.fa.fa-paper-plane
             | Publish
