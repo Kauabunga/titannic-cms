@@ -172,7 +172,7 @@
         }
 
 
-        if(! $scope.isUpdating && ! $scope.isPublishing){
+        if(! $scope.isUpdating && ! $scope.isPublishing && ! $scope.isDirty){
           Notification.confirmation('Are you sure you want make this document live?', yesCallback, noCallback, {yesText: 'Publish', noText: 'Cancel'});
         }
 

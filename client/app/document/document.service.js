@@ -179,7 +179,7 @@
 
           $log.debug('Submitting document to publish', publishDocument);
 
-          $http.put('/api/documents/publish' + publishDocument._id, publishDocument)
+          $http.put('/api/documents/publish/' + publishDocument._id, publishDocument)
             .success(function () {
               deferred.resolve();
 

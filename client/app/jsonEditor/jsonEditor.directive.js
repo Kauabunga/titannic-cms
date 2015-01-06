@@ -10,6 +10,9 @@
       return {
         templateUrl: 'app/jsonEditor/jsonEditor.html',
         restrict: 'EAC',
+        scope: {
+          'editorDirty': '=?'
+        },
         link: function (scope, element, attrs) {
 
           $log.debug('Directive jsonEditor link');
@@ -203,7 +206,6 @@
            */
           var documentUpdatedHandle = $rootScope.$on('document:updated', function(){
             scope.editorDirty = false;
-
           });
 
 
