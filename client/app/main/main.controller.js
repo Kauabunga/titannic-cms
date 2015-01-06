@@ -15,46 +15,75 @@
        */
       $timeout(function init() {
 
-        var documentDeferred = Document.getAll();
-        var schemaDeferred;
+        //need to ensure that the user is logged in before loading resources as this is the landing page
+        var loggedinDeferred = $q.defer();
 
-        if(Auth.isAdmin()){
-          schemaDeferred = Schema.getAll();
-
-          schemaDeferred.then(
-            function success(schemas) {
-              $scope.schemaList = schemas;
-              socket.syncUpdates('schema', $scope.schemaList);
-
-            },
-            function error(schemaError) {
-              Notification.error('Error loading schema list');
-              $log.error('Error loading schema list', schemaError);
-            });
-
+        if(Auth.isLoggedIn()){
+          loggedinDeferred.resolve();
         }
         else{
-          schemaDeferred = $q.when();
+          //perform an async login check - its possible that our session has timed out but we can live with that edge case
+
+          Auth.isLoggedInAsync(function(isLoggedIn){
+
+            if(isLoggedIn){
+              loggedinDeferred.resolve();
+            }
+            else{
+              //should be handled by our routing
+            }
+          });
+
         }
 
-        $q.all([documentDeferred, schemaDeferred]).finally(function () {
-          $timeout(function () {
-            $scope.fadeIn = true;
+
+        //We do not want to go fetching all this junk if the user is not authenticated.
+        //It is tricky as this is our landing page and our authentication router hook is dependant on the
+        // async login call
+        loggedinDeferred.promise.finally(function(){
+
+          var documentDeferred = Document.getAll();
+          var schemaDeferred;
+
+          if(Auth.isAdmin()){
+            schemaDeferred = Schema.getAll();
+
+            schemaDeferred.then(
+              function success(schemas) {
+                $scope.schemaList = schemas;
+                socket.syncUpdates('schema', $scope.schemaList);
+
+              },
+              function error(schemaError) {
+                Notification.error('Error loading schema list');
+                $log.error('Error loading schema list', schemaError);
+              });
+
+          }
+          else{
+            schemaDeferred = $q.when();
+          }
+
+          $q.all([documentDeferred, schemaDeferred]).finally(function () {
+            $timeout(function () {
+              $scope.fadeIn = true;
+            });
           });
+
+          documentDeferred.then(
+            function success(documents) {
+              $scope.documentList = documents;
+              socket.syncUpdates('document', $scope.documentList);
+            },
+            function error(documentError) {
+              Notification.error('Error loading document list');
+              $log.error('Error loading document list', documentError);
+            });
+
         });
 
-        documentDeferred.then(
-          function success(documents) {
-            $scope.documentList = documents;
-            socket.syncUpdates('document', $scope.documentList);
-          },
-          function error(documentError) {
-            Notification.error('Error loading document list');
-            $log.error('Error loading document list', documentError);
-          });
 
-
-      }, 0);
+      });
 
 
       /**
