@@ -8,7 +8,6 @@
       $scope.documentList = undefined;
       $scope.schemaList = undefined;
 
-      $scope.blur = undefined;
       $scope.fadeIn = false;
 
       /**
@@ -137,7 +136,6 @@
           });
 
           $scope.$apply(function () {
-            $scope.blur = false;
             $scope.deletingDocument = false;
           });
 
@@ -146,7 +144,6 @@
         function noCallback() {
           $log.debug('no callback for delete');
           $scope.$apply(function () {
-            $scope.blur = false;
             $scope.deletingDocument = false;
           });
         }
@@ -158,11 +155,7 @@
           $event.preventDefault();
           $event.stopPropagation();
 
-
-
           $scope.deletingDocument = true;
-
-          $scope.blur = true;
 
           Notification.confirmation('Are you sure you want to delete the document?', yesCallback, noCallback);
         }

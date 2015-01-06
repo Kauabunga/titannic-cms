@@ -5,7 +5,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .service('Notification', function () {
+    .service('Notification', function ($timeout) {
 
 
       var self = this;
@@ -22,6 +22,31 @@
       self.confirmation = function (content, yesCallback, noCallback, options) {
 
         var $n;
+
+
+        function fadeoutNoty(){
+
+          var fadeOutSuccessful = false;
+
+          $notificationScreen.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(){
+            if( ! fadeOutSuccessful) {
+              fadeOutSuccessful = true;
+              $notificationScreen.toggleClass('active', false);
+            }
+          });
+
+          $timeout(function(){
+            $timeout(function(){
+              if( ! fadeOutSuccessful){
+                fadeOutSuccessful = true;
+                $notificationScreen.toggleClass('active', false);
+              }
+            }, 501);
+
+            $notificationScreen.toggleClass('fade-in', false);
+          });
+
+        }
 
         function closeNoty(){
 
@@ -42,7 +67,9 @@
             $n.close();
           }, 1000);
 
-          $notificationScreen.toggleClass('active', false);
+
+          fadeoutNoty();
+
           $notificationScreen.off('click', closeNoty);
           confimationActive = false;
           noCallback();
@@ -62,6 +89,9 @@
           var $notificationScreen = $('#notification-screen');
 
           $notificationScreen.toggleClass('active', true);
+          $timeout(function(){
+            $notificationScreen.toggleClass('fade-in', true);
+          });
 
           $notificationScreen.on('click', closeNoty);
 
@@ -90,7 +120,9 @@
                 }, 500);
 
                 $notificationScreen.off('click', closeNoty);
-                $notificationScreen.toggleClass('active', false);
+
+                fadeoutNoty();
+
                 yesCallback();
                 confimationActive = false;
               }
@@ -103,7 +135,9 @@
                   $noty.close();
                 }, 500);
                 $notificationScreen.off('click', closeNoty);
-                $notificationScreen.toggleClass('active', false);
+
+                fadeoutNoty();
+
                 noCallback();
                 confimationActive = false;
 
