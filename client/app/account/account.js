@@ -12,7 +12,7 @@
           templateUrl: 'app/account/login/login.html',
           controller: 'LoginCtrl',
           resolve: {
-            isLoggedIn: function(Auth, $q, Notification, $location){
+            isLoggedIn: function(Auth, $q, Notification, $location, $timeout){
 
               var continueToLogin = $q.defer();
 
@@ -26,6 +26,10 @@
                 continueToLogin.reject();
               }
 
+              //after a second we need the route to do something...
+              $timeout(function(){
+                continueToLogin.resolve();
+              }, 1000);
 
               Auth.isLoggedInAsync(function callback(isLoggedIn){
                 if(isLoggedIn){
