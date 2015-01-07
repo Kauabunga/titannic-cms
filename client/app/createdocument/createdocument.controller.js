@@ -43,8 +43,6 @@
        */
       $scope.newDocument = function newDocument() {
 
-        $log.debug('Adding new document', $scope);
-
         var deferred = $q.defer();
 
         var validationDeferred = isValid();
@@ -53,9 +51,15 @@
           function success(valid) {
 
             if (!valid) {
+              $log.debug('Form invalid');
+
+              Notification.error('Some fields are buggered mate');
+
               deferred.reject();
             }
             else {
+
+              $log.debug('Adding new document', $scope);
 
               var createDeferred = Document.createDocument($scope.document);
               createDeferred.then(
@@ -89,33 +93,13 @@
         //TODO validate that the google doc id is valid i.e. can get publicly and can edit via server
 
         var deferred = $q.defer();
-        var valid = true;
 
-        if ($scope.document.name === '' ||
-          $scope.document.liveContentGoogleDocId === '' ||
-          $scope.document.devContentGoogleDocId === '' ||
-          $scope.document.schemaId === '') {
-
-          valid = false;
-        }
-
-        deferred.resolve(valid);
+        deferred.resolve($scope.documentForm.$valid);
 
         return deferred.promise;
       }
 
-      /**
-       *
-       */
-      function reset() {
-        $scope.document = {
-          name: '',
-          info: '',
-          liveContentGoogleDocId: '',
-          devContentGoogleDocId: '',
-          schemaId: ''
-        };
-      }
+
 
 
     });

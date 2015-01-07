@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('AdduserCtrl', function ($scope, $timeout, $log, Auth) {
+    .controller('AdduserCtrl', function ($scope, $timeout, $log, Auth, $location, Notification, $q) {
 
       $scope.fadeIn = undefined;
       $scope.roles = undefined;
@@ -48,15 +48,56 @@
        */
       $scope.createUser = function(){
 
-        //TODO use angular form validation.... need 1.3...
-        $log.debug('Creating user with form', $scope.userForm);
-        $log.debug('Creating user with user', $scope.user);
+        var deferred = $q.defer();
 
+        var validationDeferred = isValid();
 
-        Auth.adminCreateUser($scope.user);
+        validationDeferred.then(
+          function success(valid) {
 
+            if (!valid) {
+              $log.debug('Form invalid');
+              Notification.error('Some fields are buggered mate');
+              deferred.reject();
+            }
+            else {
+
+              $log.debug('Creating user with form', $scope.userForm);
+              $log.debug('Creating user with user', $scope.user);
+
+              var createDeferred = Auth.adminCreateUser($scope.user);
+
+              createDeferred.then(
+                function success() {
+                  $location.path('/admin');
+                },
+                function error() {
+                  Notification.error('Server failed to create new user');
+                });
+
+            }
+
+          },
+          function error() {
+            //TODO handle validation error
+            Notification.error('New user form invalid');
+
+          });
+
+        return deferred.promise;
       };
 
+
+      /**
+       *
+       */
+      function isValid() {
+        var deferred = $q.defer();
+
+        deferred.resolve($scope.userForm.$valid);
+
+        return deferred.promise;
+      }
 
 
     });
