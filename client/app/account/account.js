@@ -27,17 +27,27 @@
               }
 
               //after a second we need the route to do something...
+              var asyncCheckSuccess = false;
               $timeout(function(){
-                continueToLogin.resolve();
+                if(! asyncCheckSuccess){
+                  asyncCheckSuccess = true;
+                  continueToLogin.resolve();
+                }
+
               }, 1000);
 
               Auth.isLoggedInAsync(function callback(isLoggedIn){
-                if(isLoggedIn){
-                  Notification.confirmation('Are you sure you want to logout?', yesCallback, noCallback, {yesText: 'Logout', noText: 'Cancel'});
+
+                if(! asyncCheckSuccess){
+                  asyncCheckSuccess = true;
+                  if(isLoggedIn){
+                    Notification.confirmation('Are you sure you want to logout?', yesCallback, noCallback, {yesText: 'Logout', noText: 'Cancel'});
+                  }
+                  else{
+                    continueToLogin.resolve();
+                  }
                 }
-                else{
-                  continueToLogin.resolve();
-                }
+
               });
 
 
