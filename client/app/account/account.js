@@ -2,13 +2,45 @@
 
   'use strict';
 
+
+
   angular.module('titannicCmsApp')
     .config(function ($stateProvider) {
       $stateProvider
         .state('login', {
           url: '/login',
           templateUrl: 'app/account/login/login.html',
-          controller: 'LoginCtrl'
+          controller: 'LoginCtrl',
+          resolve: {
+            isLoggedIn: function(Auth, $q, Notification, $location){
+
+              var continueToLogin = $q.defer();
+
+              function yesCallback(){
+                Auth.logout();
+                continueToLogin.resolve();
+              }
+
+              function noCallback(){
+                $location.path('/');
+                continueToLogin.reject();
+              }
+
+
+              Auth.isLoggedInAsync(function callback(isLoggedIn){
+                if(isLoggedIn){
+                  Notification.confirmation('Are you sure you want to logout?', yesCallback, noCallback, {yesText: 'Logout', noText: 'Cancel'});
+                }
+                else{
+                  continueToLogin.resolve();
+                }
+              });
+
+
+              return continueToLogin.promise;
+
+            }
+          }
         })
         .state('signup', {
           url: '/signup',

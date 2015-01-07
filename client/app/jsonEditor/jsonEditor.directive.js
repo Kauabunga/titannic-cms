@@ -153,7 +153,7 @@
               disable_properties: !scope.optionsEnabled,
               disable_collapse: !scope.optionsEnabled,
               disable_edit_json: !scope.optionsEnabled,
-              disable_array_add: !scope.optionsEnabled,
+              disable_array_add: false,
               disable_array_delete: !scope.optionsEnabled,
               disable_array_reorder: !scope.optionsEnabled,
               no_additional_properties: true,

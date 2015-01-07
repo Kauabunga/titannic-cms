@@ -80,8 +80,11 @@
    * App run
    *
    */
-    .run(function ($rootScope, $location, Auth, $window, Notification, $log) {
-      // Redirect to login if route requires auth and you're not logged in
+    .run(function ($rootScope, $location, Auth, $window, Notification, $log, $timeout) {
+
+      /**
+       * Redirect to login if route requires auth and you're not logged in
+       */
       $rootScope.$on('$stateChangeStart', function (event, next) {
         Auth.isLoggedInAsync(function (loggedIn) {
           if (next.authenticate && !loggedIn) {
@@ -91,7 +94,23 @@
         });
       });
 
-      /**
+      $rootScope.$on('$stateChangeError', function(error, state){
+
+        if(state.name === 'login'){
+          $log.debug('cancel logout from login route', arguments);
+
+          $timeout(function(){
+            $location.path('/');
+          });
+        }
+        else{
+          $log.error('state change error', arguments);
+        }
+
+      });
+
+
+        /**
        *
        * @returns {Boolean}
        */
@@ -110,6 +129,9 @@
       });
 
 
+      /**
+       *
+       */
       $rootScope.$on('$viewContentLoaded', function (event) {
 
         var $elLoaderScreen = $('#index-loader-screen');
@@ -130,13 +152,28 @@
       });
 
 
+      /**
+       *
+       * @type {boolean}
+       */
+      $rootScope.isOnline = navigator.onLine;
+      $window.addEventListener('offline', function () {
+        $rootScope.$apply(function() {
+          $rootScope.isOnline = false;
+        });
+      }, false);
+      $window.addEventListener('online', function () {
+        $rootScope.$apply(function() {
+          $rootScope.isOnline = true;
+        });
+      }, false);
+
+
       //bind to the global error handler so we can create notifications for unhandled exceptions
       var onErrorOriginal = $window.onerror || function () {};
 
       $window.onerror = function (errorMsg, url, lineNumber) {
-
         onErrorOriginal();
-
         Notification.error('Uncaught explosions!!! ' + errorMsg);
         $log.error(errorMsg);
         $log.error(url + ' ' + lineNumber);

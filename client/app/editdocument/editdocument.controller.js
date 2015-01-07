@@ -11,7 +11,6 @@
       $log.debug('Editing document', $stateParams.documentId);
 
       $scope.fadeIn = undefined;
-      $scope.blur = undefined;
       $scope.isUpdating = undefined;
       $scope.isPublishing = undefined;
       $scope.stillLoadingMessage = undefined;

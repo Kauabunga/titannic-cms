@@ -1,10 +1,16 @@
-div(ng-include='"components/navbar/navbar.html"')
-.container
-  form.document-form
-    label Create a new schema type for content
-    .input-group
-      input.form-control(type='text', placeholder='Name', ng-model='schema.name')
-      input.form-control(type='text', placeholder='Info', ng-model='schema.info')
-      input.form-control(type='text', placeholder='Google Doc Schema Id e.g. 0B84YdCmz0nrQTl9tSHRYMXNmTFU', ng-model='schema.googleDocSchemaId')
-      span.input-group-btn
-        button.btn.btn-primary(type='submit', ng-click='newSchema()') Add New
+div.create-schema-container
+
+  div(ng-include='"components/navbar/navbar.html"')
+  .container
+    form.document-form
+      label Create a new schema type for content
+      .input-group
+        input.form-control(type='text', placeholder='Name', ng-model='schema.name')
+        input.form-control(type='text', placeholder='Info', ng-model='schema.info')
+        input.form-control(type='text', placeholder='Google Doc Schema Id e.g. 0B84YdCmz0nrQTl9tSHRYMXNmTFU', ng-model='schema.googleDocSchemaId')
+        span.input-group-btn
+          button.btn.btn-primary(type='submit', ng-click='newSchema()') Add New
+
+
+
+  div(ng-include='"components/footer/footer.html"')

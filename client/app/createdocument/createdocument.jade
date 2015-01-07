@@ -1,53 +1,55 @@
-div(ng-include='"components/navbar/navbar.html"')
+div
 
-.create-document-container(ng-class='{"fade-in": fadeIn}')
+  div(ng-include='"components/navbar/navbar.html"')
 
-  header#banner.hero-unit
+  div.create-document-container(ng-class='{"fade-in": fadeIn}')
+
+    header#banner.hero-unit
+      .container
+        h3 Create document
+        p Link a new Google Doc to the CMS
+          br
+          | &nbsp;
+
+
+
     .container
-      h3 Create document
-      p Link a new Google Doc to the CMS
-        br
-        | &nbsp;
+
+
+      form.document-form(name='documentForm', ng-submit='newDocument()', novalidate)
+
+        .col-sm-8.col-sm-offset-2
+          .row
+            .col-sm-8
+              label Name
+              input.form-control(type='text', placeholder='', ng-model='document.name', required='')
+
+            .col-sm-4
+              label Type
+              select.form-control(type='text', required='',
+              placeholder='Google Doc Schema',
+              ng-model='document.schemaId',
+              ng-options="schema._id as schema.name for schema in schemaList")
 
 
 
-  .container
+          .row
+            .col-sm-6
+              label Production content id
+              input.form-control(type='text', placeholder='E.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.liveContentGoogleDocId', required='')
+            .col-sm-6
+              label Development content id
+              input.form-control(type='text', placeholder='E.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.devContentGoogleDocId', required='')
+
+          .row
+            .col-sm-12
+              label Info
+              input.form-control(type='text', placeholder='', ng-model='document.info', required='')
 
 
-    form.document-form(name='documentForm', ng-submit='newDocument()', novalidate)
-
-      .col-sm-8.col-sm-offset-2
-        .row
-          .col-sm-8
-            label Name
-            input.form-control(type='text', placeholder='', ng-model='document.name', required='')
-
-          .col-sm-4
-            label Type
-            select.form-control(type='text', required='',
-            placeholder='Google Doc Schema',
-            ng-model='document.schemaId',
-            ng-options="schema._id as schema.name for schema in schemaList")
+          .row
+            .col-sm-12
+              button.btn.btn-create(type='submit') Create
 
 
-
-        .row
-          .col-sm-6
-            label Production content id
-            input.form-control(type='text', placeholder='E.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.liveContentGoogleDocId', required='')
-          .col-sm-6
-            label Development content id
-            input.form-control(type='text', placeholder='E.g. 0B84YdCmz0nrQamtJTUJUVlpBOU0', ng-model='document.devContentGoogleDocId', required='')
-
-        .row
-          .col-sm-12
-            label Info
-            input.form-control(type='text', placeholder='', ng-model='document.info', required='')
-
-
-
-
-
-        .row
-          .col-sm-12
-            button.btn.btn-create(type='submit') Create
+  div(ng-include='"components/footer/footer.html"')

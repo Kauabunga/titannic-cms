@@ -1,36 +1,38 @@
-div(ng-include='"components/navbar/navbar.html"')
+div
+  div(ng-include='"components/navbar/navbar.html"')
 
-.add-user-container(ng-class='{"fade-in": fadeIn}')
-  header#banner.hero-unit
+  .add-user-container(ng-class='{"fade-in": fadeIn}')
+    header#banner.hero-unit
+      .container
+        h3 Create User
+        p Enter the new users name and email
+          br
+          | their activation link will be sent via mail
+
     .container
-      h3 Create User
-      p Enter the new users name and email
-        br
-        | their activation link will be sent via mail
+      .col-sm-8.col-sm-offset-2
+        form.form(name='userForm', ng-submit='createUser()', novalidate)
 
-  .container
-    .col-sm-8.col-sm-offset-2
-      form.form(name='userForm', ng-submit='createUser()', novalidate)
-
-        .row
-          .col-sm-9.form-group
-            label Name
-            input.form-control(type='text', name='name', ng-model='user.name', required='')
-          .col-sm-3.form-group
-            label Role
-            select.form-control(type='text', name='role', required='', select-select='',
-              placeholder='User role',
-              ng-model='user.role',
-              ng-options="role for role in roles")
+          .row
+            .col-sm-9.form-group
+              label Name
+              input.form-control(type='text', name='name', ng-model='user.name', required='')
+            .col-sm-3.form-group
+              label Role
+              select.form-control(type='text', name='role', required='', select-select='',
+                placeholder='User role',
+                ng-model='user.role',
+                ng-options="role for role in roles")
 
 
-        .row
-          .col-sm-12.form-group
-            label Email
-            input.form-control(type='email', name='email', ng-model='user.email', required='')
+          .row
+            .col-sm-12.form-group
+              label Email
+              input.form-control(type='email', name='email', ng-model='user.email', required='')
 
-        .row
-          .col-sm-12
-            button.btn.btn-create(type='submit') Create User
+          .row
+            .col-sm-12
+              button.btn.btn-create(type='submit') Create User
 
 
+  div(ng-include='"components/footer/footer.html"')

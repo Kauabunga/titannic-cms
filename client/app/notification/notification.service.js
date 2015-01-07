@@ -157,11 +157,16 @@
        *
        * @param content
        */
-      self.success = function (content) {
+      self.success = function (content, options) {
+
+        options = options || {};
+        options.duration = options.duration || 3000;
+
+
         var n = noty({
           text: content,
           type: 'success',
-          timeout: 3000,
+          timeout: options.duration,
           theme: 'relax',
           layout: 'topCenter',
           animation: {
@@ -177,11 +182,16 @@
        *
        * @param content
        */
-      self.info = function (content) {
+      self.info = function (content, options) {
+
+        options = options || {};
+        options.duration = options.duration || 3000;
+
+
         var n = noty({
           text: content,
           type: 'info',
-          timeout: 3000,
+          timeout: options.duration,
           theme: 'relax',
           layout: 'topCenter',
           animation: {
@@ -201,13 +211,13 @@
 
         options = options || {};
 
-        var onClickCallback = options.onClickCallback || function () {
-          };
+        options.onClickCallback = options.onClickCallback || function () {};
+        options.duration = options.duration || 3000;
 
         var n = noty({
           text: content,
           type: 'error',
-          timeout: 3000,
+          timeout: options.duration,
           theme: 'relax',
           layout: 'topCenter',
           animation: {
@@ -217,7 +227,7 @@
             speed: 500 // unavailable - no need
           },
           callback: {
-            onCloseClick: onClickCallback
+            onCloseClick: options.onClickCallback
           }
         });
 

@@ -5,7 +5,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .factory('socket', function (socketFactory, Auth) {
+    .factory('socket', function (socketFactory, Auth, Notification, $rootScope, $timeout, $log) {
 
       // socket.io now auto-configures its connection when we ommit a connection url
       var ioSocket = io('', {
@@ -17,6 +17,33 @@
       var socket = socketFactory({
         ioSocket: ioSocket
       });
+
+
+      function disconnect(){
+        $log.debug('socket disconnected');
+      }
+
+      function connectionFailed(){
+        //ensure that our online state has a chance to be all geezey
+        $timeout(function(){
+          if($rootScope.isOnline){
+            Notification.error('Socket connection failed. Server is dead!', {duration: -1});
+          }
+          else{
+            Notification.error('Socket connection failed. You are offline!', {duration: -1});
+          }
+
+        });
+
+      }
+
+      function error(){
+        Notification.error('Socket error', {duration: -1});
+      }
+
+      socket.on('disconnect', disconnect);
+      socket.on('connect_failed', connectionFailed);
+      socket.on('error', error);
 
       return {
         socket: socket,

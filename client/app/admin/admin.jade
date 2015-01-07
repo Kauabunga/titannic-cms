@@ -1,35 +1,39 @@
-div(ng-include='"components/navbar/navbar.html"')
+div
 
-.admin-container(ng-class='{"fade-in": fadeIn}')
+  div(ng-include='"components/navbar/navbar.html"')
 
-  header#banner.hero-unit
+  .admin-container(ng-class='{"fade-in": fadeIn}')
+
+    header#banner.hero-unit
+      .container
+        h3 Admin
+        p
+          br
+          | &nbsp;
+
+
     .container
-      h3 Admin
-      p
-        br
-        | &nbsp;
 
+      .row
+        .col-sm-10.col-sm-offset-1
+          .row
+            .col-xs-10
+              h1.page-header Users
+            .col-xs-2
+              button.btn.btn-create(ng-click='addUser()') +
+                span &nbsp;User
 
-  .container
+          .row
+            .col-sm-12
+              ul.list-group
+                li.list-group-item(ng-repeat='user in users')
+                  .row
+                    .col.xs-1.col-sm-2.user-role {{user.role}}
+                    .col-xs-11.col-sm-10
+                      strong.user-name {{user.name}}
+                      br
+                      span.text-muted.user-email {{user.email}}
+                      a.trash(ng-click='delete(user)')
+                        i.fa.fa-times
 
-    .row
-      .col-sm-10.col-sm-offset-1
-        .row
-          .col-xs-10
-            h1.page-header Users
-          .col-xs-2
-            button.btn.btn-create(ng-click='addUser()') +
-              span &nbsp;User
-
-        .row
-          .col-sm-12
-            ul.list-group
-              li.list-group-item(ng-repeat='user in users')
-                .row
-                  .col.xs-1.col-sm-2.user-role {{user.role}}
-                  .col-xs-11.col-sm-10
-                    strong.user-name {{user.name}}
-                    br
-                    span.text-muted.user-email {{user.email}}
-                    a.trash(ng-click='delete(user)')
-                      i.fa.fa-times
+  div(ng-include='"components/footer/footer.html"')
