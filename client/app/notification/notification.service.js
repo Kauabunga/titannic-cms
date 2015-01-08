@@ -9,9 +9,63 @@
 
 
       var self = this;
-
-
       var confimationActive = false;
+      var $n;
+      var $notificationScreen;
+
+      function fadeoutNoty(){
+
+        var fadeOutSuccessful = false;
+
+        $notificationScreen.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(){
+          if( ! fadeOutSuccessful) {
+            fadeOutSuccessful = true;
+            $notificationScreen.toggleClass('active', false);
+          }
+        });
+
+        $timeout(function(){
+          $timeout(function(){
+            if( ! fadeOutSuccessful){
+              fadeOutSuccessful = true;
+              $notificationScreen.toggleClass('active', false);
+            }
+          }, 501);
+
+          $notificationScreen.toggleClass('fade-in', false);
+        });
+
+      }
+
+
+
+      function closeNoty(){
+
+        if($n){
+          //TODO have to wait for it to be completely open?
+          $n.close();
+        }
+
+        setTimeout(function(){
+          $n.close();
+        }, 200);
+
+        setTimeout(function(){
+          $n.close();
+        }, 500);
+
+        setTimeout(function(){
+          $n.close();
+        }, 1000);
+
+
+        fadeoutNoty();
+
+
+        confimationActive = false;
+      }
+
+
 
       /**
        *
@@ -21,59 +75,17 @@
        */
       self.confirmation = function (content, yesCallback, noCallback, options) {
 
-        var $n;
+        function cancelNoty(){
 
+          closeNoty();
 
-        function fadeoutNoty(){
+          $notificationScreen.off('click', cancelNoty);
 
-          var fadeOutSuccessful = false;
-
-          $notificationScreen.one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(){
-            if( ! fadeOutSuccessful) {
-              fadeOutSuccessful = true;
-              $notificationScreen.toggleClass('active', false);
-            }
-          });
-
-          $timeout(function(){
-            $timeout(function(){
-              if( ! fadeOutSuccessful){
-                fadeOutSuccessful = true;
-                $notificationScreen.toggleClass('active', false);
-              }
-            }, 501);
-
-            $notificationScreen.toggleClass('fade-in', false);
-          });
-
-        }
-
-        function closeNoty(){
-
-          if($n){
-            //TODO have to wait for it to be completely open?
-            $n.close();
-          }
-
-          setTimeout(function(){
-            $n.close();
-          }, 200);
-
-          setTimeout(function(){
-            $n.close();
-          }, 500);
-
-          setTimeout(function(){
-            $n.close();
-          }, 1000);
-
-
-          fadeoutNoty();
-
-          $notificationScreen.off('click', closeNoty);
-          confimationActive = false;
           noCallback();
+
         }
+
+
 
         if( ! confimationActive){
 
@@ -86,14 +98,14 @@
           options.yesText = options.yesText || 'Delete';
           options.noText = options.noText || 'Cancel';
 
-          var $notificationScreen = $('#notification-screen');
+          $notificationScreen = $('#notification-screen');
 
           $notificationScreen.toggleClass('active', true);
           $timeout(function(){
             $notificationScreen.toggleClass('fade-in', true);
           });
 
-          $notificationScreen.on('click', closeNoty);
+          $notificationScreen.on('click', cancelNoty);
 
 
           $n = noty({
@@ -110,39 +122,25 @@
             buttons: [
               {
                 addClass: 'btn btn-danger',
-                text: options.yesText, onClick: function ($noty) {
+                text: options.yesText,
+                onClick: function ($noty) {
 
-                $noty.close();
+                  closeNoty();
 
+                  $notificationScreen.off('click', cancelNoty);
 
-                setTimeout(function(){
-                  $noty.close();
-                }, 500);
-
-                $notificationScreen.off('click', closeNoty);
-
-                fadeoutNoty();
-
-                yesCallback();
-                confimationActive = false;
-              }
+                  yesCallback();
+                }
               },
               {
                 addClass: 'btn btn-primary',
-                text: options.noText, onClick: function ($noty) {
-                $noty.close();
-                setTimeout(function(){
-                  $noty.close();
-                }, 500);
-                $notificationScreen.off('click', closeNoty);
+                text: options.noText,
+                onClick: function ($noty) {
 
-                fadeoutNoty();
-
-                noCallback();
-                confimationActive = false;
+                  cancelNoty();
 
 
-              }
+                }
               }
             ]
           });
