@@ -38,7 +38,7 @@
       }
 
       function error(){
-        Notification.error('Socket error', {duration: -1});
+        $log.debug('socket error');
       }
 
       socket.on('disconnect', disconnect);
