@@ -3595,7 +3595,7 @@
       }
 
       // Add "new row" and "delete last" buttons below editor
-      this.add_row_button = this.getButton(this.getItemTitle(), 'add', '+ ' + this.getItemTitle());
+      this.add_row_button = this.getButton(this.getItemTitle(), 'add', '+ Add ' + this.getItemTitle());
 
       this.add_row_button.addEventListener('click', function(e) {
         e.preventDefault();
