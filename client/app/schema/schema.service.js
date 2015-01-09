@@ -17,11 +17,11 @@
 
         $http.post('/api/schemas', schema)
           .success(function (data, status) {
-            deferred.resolve(data, status);
+            deferred.resolve(data);
 
           })
           .error(function (data, status) {
-            deferred.reject(data, status);
+            deferred.reject(status);
           });
 
         return deferred.promise;
@@ -48,7 +48,18 @@
        *
        */
       self.deleteSchema = function (id) {
-        $http.delete('/api/schemas/' + id);
+        var deferred = $q.defer();
+
+        $http.delete('/api/schemas/' + id)
+          .success(function (data, status) {
+            deferred.resolve(data);
+
+          })
+          .error(function (data, status) {
+            deferred.reject(status);
+          });
+
+        return deferred.promise;
       };
 
 
