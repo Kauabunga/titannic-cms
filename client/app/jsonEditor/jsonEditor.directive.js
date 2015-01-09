@@ -198,6 +198,11 @@
 
             var editor = new JSONEditor($editorAnchor[0], options);
             editor.on('change', changeHandle);
+
+            $timeout(function(){
+              $('textarea').autosize();
+            });
+
             return editor;
           }
 

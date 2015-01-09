@@ -36,7 +36,13 @@ Some nice and mankey temporary setup instructions :)
     - we need two properties: GOOGLE_ID & GOOGLE_SECRET
     - this should never be commited to the repository
     
-6. Run using grunt
+6. Set development environment variable
+      WINDOW COMMAND
+        set NODE_ENV=development
+      MAC COMMAND
+        export NODE_ENV=development
+    
+7. Run using grunt
       COMMANDS
         grunt serve
 

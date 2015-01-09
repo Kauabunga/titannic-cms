@@ -5384,7 +5384,7 @@
       var el = document.createElement('textarea');
       el.style = el.style || {};
       el.style.width = '100%';
-      el.style.height = '300px';
+      //el.style.height = '300px';
       el.style.boxSizing = 'border-box';
       return el;
     },
