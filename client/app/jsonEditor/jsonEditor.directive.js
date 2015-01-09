@@ -189,6 +189,10 @@
             });
           }
 
+
+
+          var $textareaResizeElements;
+
           /**
            *
            * @param editor
@@ -199,10 +203,14 @@
             var editor = new JSONEditor($editorAnchor[0], options);
             editor.on('change', changeHandle);
 
-            $timeout(function(){
-              $('textarea').autosize();
-            });
+            $textareaResizeElements = $('textarea:visible').autosize();
 
+            $('div.tabbable.tabs-left > ul > li').on('click', function(){
+              $textareaResizeElements.trigger('autosize.destroy');
+
+              $textareaResizeElements = $('textarea:visible');
+              $textareaResizeElements.autosize();
+            });
             return editor;
           }
 
@@ -219,7 +227,13 @@
            * @param editor
            */
           function destroyEditor(editor){
+
+            if($textareaResizeElements){
+              $textareaResizeElements.trigger('autosize.destroy');
+            }
+
             editor.off('change', changeHandle);
+
             editor.destroy();
           }
 
