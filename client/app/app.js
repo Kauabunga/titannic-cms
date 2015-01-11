@@ -13,7 +13,7 @@
    *
    * Config
    */
-    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider) {
+    .config(function ($stateProvider, $urlRouterProvider, $locationProvider, $httpProvider, $sceDelegateProvider, $logProvider) {
 
       $urlRouterProvider
         .otherwise('/');
@@ -44,6 +44,12 @@
       $sceDelegateProvider.resourceUrlBlacklist([
         'http://blacklist.example.com'
       ]);
+
+
+      //TODO abstract to config server provider / inject as js?
+      if($('#server-config #env').text() !== 'development'){
+        $logProvider.debugEnabled(false);
+      }
 
     })
 

@@ -84,8 +84,7 @@
           _noCallback();
         }
 
-        $rootScope.$on("$stateChangeStart", function(event, toState, toParams, fromState, fromParams){
-         //$log.debug(event, toState, toParams, fromState, fromParams);
+        $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
 
           if ( confimationActive) {
             event.preventDefault();
@@ -96,7 +95,7 @@
         });
 
         return function (content, yesCallback, noCallback, options) {
-        
+
           if( ! confimationActive){
 
             confimationActive = true;
