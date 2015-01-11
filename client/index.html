@@ -48,6 +48,7 @@
         background-color: #333333 !important;
       }
 
+
       #index-loader-screen {
         width: 100%;
         height: 100%;
@@ -106,6 +107,10 @@
 
       .main-ui-view {
         min-height: 100%;
+        margin-bottom: -99px;
+
+        padding-bottom: 150px;
+
       }
 
     </style>
@@ -149,6 +154,8 @@
 
     <!-- Add your site or application content here -->
     <div class="main-ui-view" ui-view="" ng-animate="'animate'"></div>
+
+    <div ng-include="'components/footer/footer.html'"></div>
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
