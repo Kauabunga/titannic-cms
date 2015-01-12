@@ -38,6 +38,9 @@
            */
 
           var editor;
+          var $textareaResizeElements;
+          var $changedElements = [];
+
           scope.editorValid = true;
           scope.optionsEnabled = false;
 
@@ -65,6 +68,8 @@
                   $timeout(function () {
                     editor = newEditor(jsonEditorOptions);
                     scope.editorLoaded = true;
+
+                    //TODO eeeek?
                     $timeout(function(){
                       scope.editorDirty = false;
                     });
@@ -97,7 +102,9 @@
 
               Notification.success('Content reset');
               scope.$apply(function () {
-                scope.editorDirty = false;
+
+                cleanEditorDirty();
+
                 editor.setValue(scope.document.contentOriginal);
                 scope.resetingJson = false;
               });
@@ -191,8 +198,6 @@
 
 
 
-          var $textareaResizeElements;
-
           /**
            *
            * @param editor
@@ -203,23 +208,70 @@
             var editor = new JSONEditor($editorAnchor[0], options);
             editor.on('change', changeHandle);
 
-            $textareaResizeElements = $('textarea:visible').autosize();
 
-            $('div.tabbable.tabs-left > ul > li').on('click', function(){
-              $textareaResizeElements.trigger('autosize.destroy');
+            //Delay non-priority bindings
+            $timeout(function(){
 
-              $textareaResizeElements = $('textarea:visible');
-              $textareaResizeElements.autosize();
+              //bind change field
+              bindChangeField();
+
+              //bind add button -> change + autosize
+              $('.json-editor-btn-add').on('click', function(){
+                $timeout(function(){
+                  bindChangeField();
+                  bindAutoSize();
+                });
+              });
             });
+
+
+            //bind text area auto size library
+            $textareaResizeElements = $('textarea:visible').autosize();
+            $('div.tabbable.tabs-left > ul > li').on('click', bindAutoSize);
+
             return editor;
           }
 
           /**
            *
            */
+          function bindChangeField(){
+            var $allInputElements = $('textarea:not(.change-bound), input:not(.change-bound), select:not(.change-bound)');
+            $allInputElements.toggleClass('change-bound', true);
+            $allInputElements.on('change', function($event){
+              var $controlElement = $($event.currentTarget);
+              $controlElement.toggleClass('changed', true);
+              $changedElements.push($controlElement);
+            });
+          }
+
+          /**
+           *
+           */
+          function bindAutoSize(){
+            if($textareaResizeElements){
+              $textareaResizeElements.trigger('autosize.destroy');
+              $textareaResizeElements = $('textarea:visible');
+              $textareaResizeElements.autosize();
+            }
+          }
+
+          /**
+           *
+           */
           var documentUpdatedHandle = $rootScope.$on('document:updated', function(){
-            scope.editorDirty = false;
+            cleanEditorDirty();
           });
+
+
+          function cleanEditorDirty(){
+
+            //remove changed states
+            $('.changed').toggleClass('changed', false);
+
+            scope.editorDirty = false;
+
+          }
 
 
           /**

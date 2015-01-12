@@ -142,9 +142,12 @@
 
         var $elLoaderScreen = $('#index-loader-screen');
 
+
+
         //TODO would be nicer with promises in app run
         //   on route load/ready/rendered...
         setTimeout(function () {
+          $elLoaderScreen.css('height', $(document).height() +'px');
           $elLoaderScreen.toggleClass('fade-out', true);
         }, 200);
 

@@ -119,10 +119,11 @@
       document.addEventListener("DOMContentLoaded", function(event) {
 
         setTimeout(function(){
-          //we also attempt to remove this loading screen on route view loaded
+          //we also remove this loading screen on route view loaded - this is a fail safe
           var $elLoaderScreen = $("#index-loader-screen");
 
           setTimeout(function(){
+            $elLoaderScreen.css('height', $(document).height() +'px');
             $elLoaderScreen.toggleClass('fade-out', true);
           }, 1000);
 

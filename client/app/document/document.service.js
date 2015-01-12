@@ -16,7 +16,7 @@
        * @param document
        */
       self.setDocumentContent = function (docId, content) {
-        $log.debug('DocumentService setting document', content);
+        $log.debug('DocumentService setting document', docId);
         _documents[docId].content = content;
         $rootScope.$emit('Document:' + docId + ':update', _documents[docId]);
 

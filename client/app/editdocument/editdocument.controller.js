@@ -42,9 +42,10 @@
        */
       function updateContent() {
 
+        $log.debug('updating content for document', $scope.document);
+
         if ($scope.document !== undefined) {
           $scope.documentContent = JSON.stringify($scope.document.content);
-          $log.debug($scope.documentContent);
         }
         else if (typeof $scope.document !== 'undefined') {
           $log.error('Content not a json object', $scope.document);
