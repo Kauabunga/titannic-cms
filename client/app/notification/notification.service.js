@@ -47,15 +47,22 @@
         }
 
         setTimeout(function(){
-          $n.close();
+          if(! confimationActive){
+            $n.close();
+          }
+
         }, 200);
 
         setTimeout(function(){
-          $n.close();
+          if(! confimationActive){
+            $n.close();
+          }
         }, 500);
 
         setTimeout(function(){
-          $n.close();
+          if(! confimationActive){
+            $n.close();
+          }
         }, 1000);
 
 
