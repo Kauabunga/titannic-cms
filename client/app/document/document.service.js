@@ -178,6 +178,9 @@
             socket.socket.removeListener('document:lock:success');
             socket.socket.removeListener('document:lock:error');
 
+            $(window).off('beforeunload', self.releaseDocument);
+
+
             _deferredGetDocument[docId].reject(423);
 
           });

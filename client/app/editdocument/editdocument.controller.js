@@ -29,7 +29,7 @@
       var destroyHandle = $scope.$on('$destroy', function () {
         $log.debug('EditdocumentCtrl $destroy', socket);
 
-        
+
         Document.releaseDocument($scope.document._id);
 
 
