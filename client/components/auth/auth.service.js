@@ -3,11 +3,124 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q) {
+    .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, $log, $timeout) {
+
       var currentUser = {};
       if ($cookieStore.get('token')) {
         currentUser = User.get();
+        //send event to other tabs
+        $timeout(function(){
+          localLogin();
+        });
       }
+
+
+      var loggedOutEvent = 'loggedoutevent',
+          loggedInEvent  = 'loggedinevent';
+
+
+
+
+      /**
+       * listen to storage events so we can communicate auth login/out events between tabs
+       */
+      function updateAuthState(event) {
+        if (event.key === loggedInEvent) {
+
+          if (!_isLoggedIn()) {
+            currentUser = User.get();
+            $rootScope.$apply(function () {
+              $location.path('/');
+            });
+          }
+        }
+        else if (event.key === loggedOutEvent) {
+
+          if (_isLoggedIn()) {
+            _logout();
+            $rootScope.$apply(function () {
+              $location.path('/login');
+            });
+          }
+
+        }
+      }
+      window.addEventListener('storage', updateAuthState);
+
+
+      /**
+       * TODO check login state with server on focus
+       */
+      function checkAuthState(){
+        _isLoggedInAsync(function(isLoggedIn){
+          if(! isLoggedIn){
+            _logout();
+            $rootScope.$apply(function () {
+              $location.path('/login');
+            });
+          }
+        });
+      }
+      //window.addEventListener('focus', checkAuthState);
+
+
+      /**
+       *
+       */
+      function localLogin(){
+        if(localStorage){
+          localStorage.setItem(loggedInEvent, loggedInEvent + _.random(9999999999999));
+        }
+      }
+
+      /**
+       *
+       */
+      function localLogout(){
+        if(localStorage){
+          localStorage.setItem(loggedOutEvent, loggedOutEvent + _.random(9999999999999));
+        }
+      }
+
+      /**
+       *
+       * @private
+       */
+      function _logout(){
+        $cookieStore.remove('token');
+        currentUser = {};
+      }
+
+      /**
+       *
+       * @param cb
+       * @private
+       */
+      function _isLoggedInAsync(cb){
+        if (currentUser.hasOwnProperty('$promise')) {
+          currentUser.$promise.then(function () {
+            cb(true);
+          }).catch(function () {
+            cb(false);
+          });
+        } else if (currentUser.hasOwnProperty('role')) {
+          cb(true);
+        } else {
+          cb(false);
+        }
+      }
+
+      /**
+       *
+       * @returns {boolean|*}
+       * @private
+       */
+      function _isLoggedIn() {
+        return currentUser.hasOwnProperty('role');
+      }
+
+
+
 
       return {
 
@@ -27,6 +140,7 @@
             password: user.password
           }).
             success(function (data) {
+              localLogin();
               $cookieStore.put('token', data.token);
               currentUser = User.get();
               deferred.resolve(data);
@@ -46,9 +160,9 @@
          *
          * @param  {Function}
          */
-        logout: function () {
-          $cookieStore.remove('token');
-          currentUser = {};
+        logout: function(){
+          _logout();
+          localLogout();
         },
 
         /**
@@ -147,26 +261,12 @@
          *
          * @return {Boolean}
          */
-        isLoggedIn: function () {
-          return currentUser.hasOwnProperty('role');
-        },
+        isLoggedIn: _isLoggedIn,
 
         /**
          * Waits for currentUser to resolve before checking if user is logged in
          */
-        isLoggedInAsync: function (cb) {
-          if (currentUser.hasOwnProperty('$promise')) {
-            currentUser.$promise.then(function () {
-              cb(true);
-            }).catch(function () {
-              cb(false);
-            });
-          } else if (currentUser.hasOwnProperty('role')) {
-            cb(true);
-          } else {
-            cb(false);
-          }
-        },
+        isLoggedInAsync: _isLoggedInAsync,
 
         /**
          * Check if a user is an admin

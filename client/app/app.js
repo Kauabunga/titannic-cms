@@ -47,7 +47,7 @@
 
 
       //TODO abstract to config server provider / inject as js?
-      if($('#server-config #env').text() !== 'development'){
+      if($('#server-config #env').text() === 'production'){
         $logProvider.debugEnabled(false);
       }
 
@@ -175,7 +175,11 @@
       }, false);
 
 
-      //bind to the global error handler so we can create notifications for unhandled exceptions
+      /**
+       * bind to the global error handler so we can create notifications for unhandled exceptions
+       *
+       * @type {Function}
+       */
       var onErrorOriginal = $window.onerror || function () {};
 
       $window.onerror = function (errorMsg, url, lineNumber) {
