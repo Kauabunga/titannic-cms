@@ -82,6 +82,43 @@
         return deferred.promise;
       };
 
+
+
+
+      //TODO ensure that when updating/publishing a document, that the user/tab owns the lock
+      //TODO ensure that when updating/publishing a document, that the user/tab owns the lock
+      //TODO ensure that when updating/publishing a document, that the user/tab owns the lock
+      //TODO ensure that when updating/publishing a document, that the user/tab owns the lock
+
+      /**
+       * Release the lock on a document
+       * @param docId
+       */
+      self.releaseDocument = function(docId, options){
+
+        socket.socket.emit('document:unlock', docId);
+
+        socket.socket.on('document:unlock:success', function(){
+          socket.socket.removeListener('document:unlock:success');
+          socket.socket.removeListener('document:unlock:error');
+
+          $log.debug('document unlock success');
+        });
+        socket.socket.on('document:unlock:error', function(){
+          socket.socket.removeListener('document:unlock:success');
+          socket.socket.removeListener('document:unlock:error');
+
+          $log.error('document unlock error');
+        });
+
+        //TODO error handling
+
+        if(_deferredGetDocument[docId]){
+          delete _deferredGetDocument[docId];
+        }
+
+      };
+
       /**
        *
        * @returns {*}
@@ -97,24 +134,44 @@
 
         $log.debug('Getting document', docId);
 
+
         if (!_deferredGetDocument[docId] || options.force) {
           _deferredGetDocument[docId] = $q.defer();
 
-          $http.get('/api/documents/' + docId).success(function (document) {
-            //make a copy of the content as we see from the server so we are able to reset
-            document.contentOriginal = angular.copy(document.content);
-            _documents[docId] = document;
-            _deferredGetDocument[docId].resolve(document);
+          //TODO handle socket disconnect scenarios - from start (isOnline?).. inbetween events
 
-            //TODO handle socket updating document on client until submission -> lasts as long as user session? As long as lock on file? Locks can be removed by admin?
-            //socket.syncUpdates('document', $scope.documentList);
+          socket.socket.on('document:lock:success', function(){
+            $log.debug('document lock success');
 
-          }).error(function (data, statusCode) {
+            socket.socket.removeListener('document:lock:success');
+            socket.socket.removeListener('document:lock:error');
 
-            $log.error('failed to get document', data);
-            _deferredGetDocument[docId].reject(statusCode);
+            $http.get('/api/documents/' + docId).success(function (document) {
+              //make a copy of the content as we see from the server so we are able to reset
+              document.contentOriginal = angular.copy(document.content);
+              _documents[docId] = document;
+              _deferredGetDocument[docId].resolve(document);
+
+            }).error(function (data, statusCode) {
+
+              $log.error('failed to get document', data);
+              _deferredGetDocument[docId].reject(statusCode);
+
+            });
 
           });
+
+          socket.socket.on('document:lock:error', function(error){
+            $log.error('document lock error', error);
+
+            socket.socket.removeListener('document:lock:success');
+            socket.socket.removeListener('document:lock:error');
+
+            _deferredGetDocument[docId].reject(423);
+
+          });
+
+          socket.socket.emit('document:lock', docId);
 
         }
 

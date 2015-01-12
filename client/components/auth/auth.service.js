@@ -15,8 +15,8 @@
       }
 
 
-      var loggedOutEvent = 'loggedoutevent',
-          loggedInEvent  = 'loggedinevent';
+      var loggedOutEvent = $location.host() + '.' + 'loggedoutevent',
+          loggedInEvent  = $location.host() + '.' + 'loggedinevent';
 
 
 
@@ -61,7 +61,7 @@
           }
         });
       }
-      //window.addEventListener('focus', checkAuthState);
+      window.addEventListener('focus', checkAuthState);
 
 
       /**
@@ -69,7 +69,7 @@
        */
       function localLogin(){
         if(localStorage){
-          localStorage.setItem(loggedInEvent, loggedInEvent + _.random(9999999999999));
+          localStorage.setItem(loggedInEvent, loggedInEvent + '.' + _.random(9999999999999));
         }
       }
 
@@ -78,7 +78,7 @@
        */
       function localLogout(){
         if(localStorage){
-          localStorage.setItem(loggedOutEvent, loggedOutEvent + _.random(9999999999999));
+          localStorage.setItem(loggedOutEvent, loggedOutEvent + '.' + _.random(9999999999999));
         }
       }
 

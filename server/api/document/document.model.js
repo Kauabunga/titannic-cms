@@ -6,7 +6,10 @@ var mongoose = require('mongoose'),
 var DocumentSchema = new Schema({
   name: String,
   info: String,
-  active: Boolean,
+
+
+  //key of the document lock (socket id of user)
+  lockedKey: String,
 
   //id of the google drive live + dev
   liveContentGoogleDocId: String,

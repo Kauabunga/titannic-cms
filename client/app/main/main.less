@@ -11,6 +11,13 @@
         color: #2daddc !important;
       }
     }
+
+    li.locked:hover {
+
+      a {
+        color: @red-alert !important;
+      }
+    }
   }
 }
 
@@ -89,6 +96,12 @@ body.main{
       margin: 0px 20px;
       background-color: @gray-2;
 
+    }
+
+    li.locked {
+      .close:hover {
+        color: @red-alert;
+      }
     }
 
     .close{

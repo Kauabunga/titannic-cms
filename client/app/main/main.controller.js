@@ -114,14 +114,20 @@
           });
         }
 
-        if (Auth.isLoggedIn()) {
-          $location.path('/editdocument/' + document._id);
+        if(document.lockedKey === undefined){
+          if (Auth.isLoggedIn()) {
+            $location.path('/editdocument/' + document._id);
+          }
+          else {
+            Notification.error('You need to be logged in to access this document', {
+              onClickCallback: onClickCallback
+            });
+          }
         }
-        else {
-          Notification.error('You need to be logged in to access this document', {
-            onClickCallback: onClickCallback
-          });
+        else{
+          Notification.error('Document already opened by someone');
         }
+
 
       };
 
@@ -155,7 +161,6 @@
       $scope.deleteDocument = function deleteDocument($event, document) {
 
 
-
         function yesCallback() {
           $log.debug('yes callback for delete');
           var deleteDeferred = Document.deleteDocument(document._id);
@@ -177,16 +182,22 @@
           });
         }
 
+        //Do not want to trigger the edit document click trigger
+        $event.preventDefault();
+        $event.stopPropagation();
 
 
-        if( ! $scope.deletingDocument){
-          //Do not want to trigger the edit document click trigger
-          $event.preventDefault();
-          $event.stopPropagation();
+        if(document.lockedKey === undefined) {
 
-          $scope.deletingDocument = true;
+          if (!$scope.deletingDocument) {
 
-          Notification.confirmation('Are you sure you want to delete the document?', yesCallback, noCallback);
+            $scope.deletingDocument = true;
+
+            Notification.confirmation('Are you sure you want to delete the document?', yesCallback, noCallback);
+          }
+        }
+        else{
+          Notification.error('Document currently opened by someone');
         }
 
       };

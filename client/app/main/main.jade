@@ -24,7 +24,7 @@ div(ng-class='{"fadeIn": fadeIn}')
 
         .row
           ul.item-list.document-item-list(ng-repeat='document in documentList')
-            li(ng-click='editDocument(document)', tooltip='{{document.info}}')
+            li(ng-click='editDocument(document)', tooltip='{{document.info}}', ng-class='{"locked": document.lockedKey !== undefined}')
               a
                 | {{document.name}}
                 button.close(type='button', ng-click='deleteDocument($event, document)', ng-if='isAdmin()') ×

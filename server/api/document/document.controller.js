@@ -142,7 +142,7 @@ exports.show = function(req, res) {
     if(!document) { return res.send(404); }
 
     //If the document is already being edited we need to deny this request
-    if(document.active){
+    if(document.lockedBy !== undefined){
       return res.send(423);
     }
 
@@ -206,7 +206,7 @@ exports.show = function(req, res) {
         //      if the document is updated then we need to only allow the user to view their old edits and perhaps copy them
         //      somewhere else
 
-        //TODO we need to lock (active) the current copy so other users are not able to edit it at the same time
+
 
 
       },
@@ -236,26 +236,80 @@ exports.create = function(req, res) {
 
 /**
  *
- * @param docId
  */
-exports.unlockById = function(docId){
+exports.lockDocument = function(docId, key){
+
+  var deferred = q.defer();
+
+  log.debug('Locking document', docId);
+
   Document.findById(docId, function (err, document) {
     if (err) {
       log.error('failed to find document to unlock', err);
-      return;
+      deferred.reject(err);
+
     }
-    if(!document) {
+    else if( ! document) {
       log.error('failed to find document to unlock');
-      return;
+      deferred.reject(err);
     }
-    document.active = false;
-    document.save(function (err) {
-      if (err) {
-        log.error('failed to update document ', err);
-      }
-      return;
-    });
+    else if(document.lockedKey){
+      log.error('document already locked with key', document.lockedKey);
+      deferred.reject();
+    }
+    else{
+      document.lockedKey = key;
+      document.save(function (err) {
+        if (err) {
+          log.error('failed to update document ', err);
+          deferred.reject(err);
+        }
+        else{
+          log.debug('successfully locked document', key);
+          deferred.resolve();
+        }
+
+      });
+    }
+
   });
+
+  return deferred.promise;
+};
+
+/**
+ *
+ * @param docId
+ */
+exports.unlockById = function(docId){
+
+  var deferred = q.defer();
+
+  Document.findById(docId, function (err, document) {
+    if (err) {
+      log.error('failed to find document to unlock', err);
+      deferred.reject();
+    }
+    else if(!document) {
+      log.error('failed to find document to unlock');
+      deferred.reject();
+    }
+    else{
+      document.lockedKey = undefined;
+      document.save(function (err) {
+        if (err) {
+          log.error('failed to update document ', err);
+          deferred.reject();
+        }
+        else{
+          deferred.resolve();
+        }
+      });
+    }
+
+  });
+
+  return deferred.promise;
 };
 
 /**

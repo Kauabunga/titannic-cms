@@ -20,7 +20,7 @@ var log = new Log('document.socket');
 
 
 /**
- *
+ * TODO should be in User controller
  * @param socket
  */
 function getUserFromSocket(socket){
@@ -51,15 +51,90 @@ function getUserFromSocket(socket){
 }
 
 
-
-
+/**
+ *
+ * @param socket
+ */
 exports.register = function(socket) {
+
+  var lockedDocumentId;
+
   Document.schema.post('save', function (doc) {
     onSave(socket, doc);
   });
   Document.schema.post('remove', function (doc) {
     onRemove(socket, doc);
   });
+
+
+  function unlockDocument(){
+    var unlockDeferred = DocumentController.unlockById(lockedDocumentId);
+    unlockDeferred.then(
+      function success() {
+        socket.emit('document:unlock:success');
+        lockedDocumentId = undefined;
+      },
+      function error(unlockError) {
+        socket.emit('document:unlock:error', unlockError);
+      });
+  }
+
+  /**
+   *
+   */
+  socket.on('document:unlock', function(){
+
+    if(lockedDocumentId !== undefined) {
+      unlockDocument();
+    }
+    else{
+      log.error('Client attempting unlock without lock');
+    }
+
+  });
+
+  /**
+   *
+   */
+  socket.on('connect_failed', function(){
+
+    if(lockedDocumentId !== undefined){
+      log.error('socket connect_failed with locked document');
+      //release on disconnect
+      unlockDocument();
+
+    }
+  });
+
+  socket.on('disconnect', function(){
+
+    if(lockedDocumentId !== undefined){
+      log.error('socket disconnected with locked document');
+      //release on disconnect
+      unlockDocument();
+
+    }
+  });
+
+
+  socket.on('document:lock', function(docId){
+
+    log.debug(docId);
+    log.debug(socket.id);
+
+    var lockedDeferred = DocumentController.lockDocument(docId, socket.id);
+
+    lockedDeferred.then(
+      function success(){
+        lockedDocumentId = docId;
+        socket.emit('document:lock:success');
+      },
+      function error(){
+        socket.emit('document:lock:error');
+      });
+
+  });
+
 };
 
 function onSave(socket, doc, cb) {
