@@ -57,19 +57,19 @@
           if(! confimationActive){
             $n.close();
           }
-        }, 500);
+        }, 501);
 
         setTimeout(function(){
           if(! confimationActive){
             $n.close();
           }
-        }, 1000);
 
+        }, 1001);
+
+        confimationActive = false;
 
         fadeoutNoty();
 
-
-        confimationActive = false;
       }
 
 
