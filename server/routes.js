@@ -25,7 +25,18 @@ module.exports = function(app) {
   // All other routes should redirect to the index.html
   app.route('/*')
     .get(function(req, res) {
-      res.render('../../' + app.get('appPath') + '/index.jade', config);
+
+
+      //calculate the index path depending on if it is an absolute path or not - assuming a unix based system
+      var path;
+      if(app.get('appPath')[0] === '/'){
+        path = app.get('appPath') + '/index.jade';
+      }
+      else{
+        path = '../../' + app.get('appPath') + '/index.jade';
+      }
+
+      res.render(path, config);
     });
 
 };

@@ -119,19 +119,27 @@ exports.register = function(socket) {
 
   socket.on('document:lock', function(docId){
 
-    log.debug(docId);
-    log.debug(socket.id);
+    var userDeferred = getUserFromSocket(socket);
 
-    var lockedDeferred = DocumentController.lockDocument(docId, socket.id);
+    userDeferred.then(
+      function success(user){
 
-    lockedDeferred.then(
-      function success(){
-        lockedDocumentId = docId;
-        socket.emit('document:lock:success');
+        var lockedDeferred = DocumentController.lockDocument(docId, socket.id, user.name);
+
+        lockedDeferred.then(
+          function success(){
+            lockedDocumentId = docId;
+            socket.emit('document:lock:success');
+          },
+          function error(){
+            socket.emit('document:lock:error');
+          });
+
       },
       function error(){
         socket.emit('document:lock:error');
       });
+
 
   });
 

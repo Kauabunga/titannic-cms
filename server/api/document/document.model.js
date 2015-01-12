@@ -10,6 +10,7 @@ var DocumentSchema = new Schema({
 
   //key of the document lock (socket id of user)
   lockedKey: String,
+  lockedBy: String,
 
   //id of the google drive live + dev
   liveContentGoogleDocId: String,

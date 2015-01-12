@@ -141,10 +141,10 @@ exports.show = function(req, res) {
     if(err) { return handleError(res, err); }
     if(!document) { return res.send(404); }
 
-    //If the document is already being edited we need to deny this request
-    if(document.lockedBy !== undefined){
-      return res.send(423);
-    }
+    //TODO validate that it is the same user -> require socket client id ... If the document is already being edited we need to deny this request
+    //if(document.lockedBy !== undefined){
+    //  return res.send(423);
+    //}
 
     log.debug('Document: ' + JSON.stringify(document));
     log.debug('Schema id: ' + document.schemaId);
@@ -237,7 +237,7 @@ exports.create = function(req, res) {
 /**
  *
  */
-exports.lockDocument = function(docId, key){
+exports.lockDocument = function(docId, key, username){
 
   var deferred = q.defer();
 
@@ -259,6 +259,7 @@ exports.lockDocument = function(docId, key){
     }
     else{
       document.lockedKey = key;
+      document.lockedBy = username;
       document.save(function (err) {
         if (err) {
           log.error('failed to update document ', err);
@@ -296,6 +297,7 @@ exports.unlockById = function(docId){
     }
     else{
       document.lockedKey = undefined;
+      document.lockedBy = undefined;
       document.save(function (err) {
         if (err) {
           log.error('failed to update document ', err);
