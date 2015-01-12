@@ -130,11 +130,23 @@ body.editdocument {
 
   textarea {
     resize: none;
+    padding: 15px 20px;
+  }
+
+  input {
+    padding: 10px 20px;
   }
 
   input,
   textarea {
     opacity: @input-opacity;
+
+    .transition(opacity 0.2s ease);
+
+    &:focus {
+      opacity: @input-opacity-focus;
+    }
+
   }
 
   .json-editor-row {
