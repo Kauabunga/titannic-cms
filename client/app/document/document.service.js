@@ -92,11 +92,13 @@
 
       /**
        * Release the lock on a document
-       * @param docId
+       * @param docId optional... server keeping this state
        */
       self.releaseDocument = function(docId, options){
 
         socket.socket.emit('document:unlock', docId);
+
+        $(window).off('unload', self.releaseDocument);
 
         socket.socket.on('document:unlock:success', function(){
           socket.socket.removeListener('document:unlock:success');
@@ -113,11 +115,14 @@
 
         //TODO error handling
 
-        if(_deferredGetDocument[docId]){
+        if(docId && _deferredGetDocument[docId]){
           delete _deferredGetDocument[docId];
         }
 
       };
+
+
+
 
       /**
        *
@@ -145,6 +150,9 @@
 
             socket.socket.removeListener('document:lock:success');
             socket.socket.removeListener('document:lock:error');
+
+            //if the user refreshes the page - first release the document
+            $(window).on('unload', self.releaseDocument);
 
             $http.get('/api/documents/' + docId).success(function (document) {
               //make a copy of the content as we see from the server so we are able to reset
