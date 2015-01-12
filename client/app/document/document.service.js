@@ -96,9 +96,12 @@
        */
       self.releaseDocument = function(docId, options){
 
-        socket.socket.emit('document:unlock', docId);
+        $log.debug('releasing document', docId);
 
-        $(window).off('unload', self.releaseDocument);
+
+        socket.socket.emit('document:unlock');
+
+        $(window).off('beforeunload', self.releaseDocument);
 
         socket.socket.on('document:unlock:success', function(){
           socket.socket.removeListener('document:unlock:success');
@@ -112,8 +115,6 @@
 
           $log.error('document unlock error');
         });
-
-        //TODO error handling
 
         if(docId && _deferredGetDocument[docId]){
           delete _deferredGetDocument[docId];
@@ -145,14 +146,16 @@
 
           //TODO handle socket disconnect scenarios - from start (isOnline?).. inbetween events
 
+          //if the user refreshes the page - first release the document
+          $(window).on('beforeunload', self.releaseDocument);
+
+
           socket.socket.on('document:lock:success', function(){
             $log.debug('document lock success');
 
             socket.socket.removeListener('document:lock:success');
             socket.socket.removeListener('document:lock:error');
 
-            //if the user refreshes the page - first release the document
-            $(window).on('unload', self.releaseDocument);
 
             $http.get('/api/documents/' + docId).success(function (document) {
               //make a copy of the content as we see from the server so we are able to reset
