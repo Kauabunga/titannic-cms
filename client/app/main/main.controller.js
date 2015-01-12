@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document, Notification, $log, Auth, $timeout, $q) {
+    .controller('MainCtrl', function ($scope, $http, socket, $location, Schema, Document, Notification, $log, Auth, $timeout, $q, User) {
 
       $scope.documentList = undefined;
       $scope.schemaList = undefined;
@@ -125,7 +125,13 @@
           }
         }
         else{
-          Notification.error('Document already opened by someone');
+
+          if(document.lockedBy === Auth.getCurrentUser().name){
+            Notification.error('You already have this document open');
+          }
+          else{
+            Notification.error('Document already opened by ' + document.lockedBy);
+          }
         }
 
 
@@ -197,7 +203,12 @@
           }
         }
         else{
-          Notification.error('Document currently opened by someone');
+          if(document.lockedBy === Auth.getCurrentUser().name){
+            Notification.error('You have this document open. Close it before deleting it.');
+          }
+          else{
+            Notification.error('Document currently in use by ' + document.lockedBy);
+          }
         }
 
       };
