@@ -11,6 +11,19 @@ div(ng-class='{"fadeIn": fadeIn}')
 
 
   .container
+
+    .row.actions(ng-class='{"active": documentHistoryLoaded}')
+      .col-sm-12
+        span
+          a(ng-href='/editdocument/{{document._id}}/history/dev', ng-click='')
+            button.btn.btn-success(type='button', ng-class='')
+              | Dev
+
+        span
+          a(ng-href='/editdocument/{{document._id}}/history/live', ng-click='')
+            button.btn.btn-success(type='button', ng-class='')
+              | Live
+
     .row
       .col-sm-12
         .history-loader.circle-loader(ng-class='{"active": ! documentHistoryLoaded}')
