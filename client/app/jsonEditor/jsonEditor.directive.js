@@ -50,7 +50,7 @@
           //should inject this from parent scope
           scope.document = undefined;
 
-
+          
           /**
            *
            */
@@ -106,9 +106,12 @@
               Notification.success('Content reset');
               scope.$apply(function () {
 
-                cleanEditorDirty();
-
                 editor.setValue(scope.document.contentOriginal);
+
+                $timeout(function(){
+                  cleanEditorDirty();
+                });
+
                 scope.resetingJson = false;
               });
             }
@@ -273,6 +276,9 @@
           });
 
 
+          /**
+           *
+           */
           function cleanEditorDirty(){
 
             //remove changed states

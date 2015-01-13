@@ -178,10 +178,13 @@
   function subscribeChangeEvent(){
 
 
-
-
-
   }
+
+
+
+
+
+
 
 
   /**
@@ -193,9 +196,11 @@
    */
   function fetchGoogleDoc(name, id, options) {
 
-    if( ! _deferredCache['cache-' + id] || (options && options.force)){
+    var deferredId = 'cache_' + id;
 
-      _deferredCache['cache-' + id] = q.defer();
+    if( ! _deferredCache[deferredId] || (options && options.force)){
+
+      _deferredCache[deferredId] = q.defer();
 
       var httpOptions = {
         name: name || '',
@@ -225,11 +230,11 @@
               content = Buffer.concat(bodyChunks);
               console.log('          ---> ' + httpOptions.name + '   CONTENT found ');
 
-              _deferredCache['cache-' + id].resolve(content);
+              _deferredCache[deferredId].resolve(content);
 
             }
             catch (error) {
-              _deferredCache['cache-' + id].reject(googleResponse);
+              _deferredCache[deferredId].reject(googleResponse);
 
               console.log('    ---> ' + httpOptions.name + '   Error parsing response for document: ' + httpOptions.name);
               console.log('         ' + httpOptions.name + '   CONTENT: ' + content);
@@ -239,13 +244,13 @@
             }
 
           }).on('error', function (error) {
-            _deferredCache['cache-' + id].reject(googleResponse);
+            _deferredCache[deferredId].reject(googleResponse);
             console.log('        ---> ' + httpOptions.name + '   ERROR https.get error: ' + error);
           });
 
         }
         else {
-          _deferredCache['cache-' + id].reject(googleResponse);
+          _deferredCache[deferredId].reject(googleResponse);
           console.log('          ---> ' + httpOptions.name + '   ERROR Non 200 response = ' + googleResponse.statusCode);
         }
 
@@ -253,21 +258,18 @@
 
       googleContentRequest.setTimeout(10000, function (error) {
         console.log('        ---> ' + httpOptions.name + '   Google doc timeout: ' + error);
-        _deferredCache['cache-' + id].reject(error);
+        _deferredCache[deferredId].reject(error);
       });
 
       googleContentRequest.on('error', function (error) {
         console.log('        ---> ' + options.name + '   ERROR https.get error: ' + error);
-        _deferredCache['cache-' + id].reject(error);
+        _deferredCache[deferredId].reject(error);
       });
 
     }
 
 
-
-
-
-    return _deferredCache['cache-' + id].promise;
+    return _deferredCache[deferredId].promise;
 
   }
 
