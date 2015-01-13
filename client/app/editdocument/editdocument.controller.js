@@ -13,6 +13,8 @@
       $scope.fadeIn = undefined;
       $scope.stillLoadingMessage = undefined;
 
+      $scope.getDocumentDeferred = undefined;
+
 
 
 
@@ -56,7 +58,7 @@
       (function init() {
 
 
-        var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
+        $scope.getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
 
         var finishedLoading = false;
 
@@ -67,7 +69,7 @@
           }
         }, 500);
 
-        getDocumentDeferred.finally(function () {
+        $scope.getDocumentDeferred.finally(function () {
 
           finishedLoading = true;
           $scope.stillLoadingMessage = false;
@@ -75,7 +77,7 @@
         });
 
 
-        getDocumentDeferred.then(
+        $scope.getDocumentDeferred.then(
           function success(document) {
             $log.debug('Successful Edit get document', $stateParams.documentId);
             $scope.document = document;

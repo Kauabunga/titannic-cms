@@ -14,6 +14,10 @@ div(ng-class='{"fadeIn": fadeIn}')
     .row
       .col-sm-12
 
+        .row(ng-repeat='historyItem in documentHistory.items track by $index', ng-cloak='')
+          h3 Edited by {{historyItem.lastModifyingUserName}} @ {{historyItem.modifiedDate}}
+
+
 
 
 

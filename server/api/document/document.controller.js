@@ -134,90 +134,99 @@ exports.getPreview = function(req, res){
  */
 exports.show = function(req, res) {
 
-  var schemaDeferred = q.defer();
+  if(req && req.params && req.params.id) {
 
-  Document.findById(req.params.id, function (err, document) {
+    var schemaDeferred = q.defer();
 
-    if(err) { return handleError(res, err); }
-    if(!document) { return res.send(404); }
+    Document.findById(req.params.id, function (err, document) {
 
-    //TODO validate that it is the same user -> require socket client id ... If the document is already being edited we need to deny this request
-    //if(document.lockedBy !== undefined){
-    //  return res.send(423);
-    //}
-
-    log.debug('Document: ' + JSON.stringify(document));
-    log.debug('Schema id: ' + document.schemaId);
-
-
-    //Get the documents schema
-    Schema.findById(document.schemaId, function (err, schema){
-      log.debug('Schema found: ' + JSON.stringify(schema));
-      schemaDeferred.resolve(schema);
-    });
-
-    schemaDeferred.promise.then(
-      function success(schema){
-
-        //TODO we need to fetch the google doc from goooogle - should really be using correct api + library as we will have to when editing?
-        //TODO distinguish google errors from server errors
-
-
-        log.debug('Fetching google doc and schema');
-        var googleContentDeferred = googledrive.fetchGoogleDoc(document.name, document.devContentGoogleDocId);
-        var googleSchemaDeferred = googledrive.fetchGoogleDoc(schema.name, schema.googleDocSchemaId);
-
-        /**
-         *
-         */
-        q.all([googleContentDeferred, googleSchemaDeferred]).then(
-          function success(responseBodies){
-            log.debug('          ---> Creating Response');
-
-            try{
-
-              var deserialisedContent = JSON.parse(responseBodies[0]);
-              var deserialisedSchema = JSON.parse(responseBodies[1]);
-              var documentObject = document.toObject();
-              documentObject.content = deserialisedContent;
-              documentObject.schema = deserialisedSchema;
-
-              log.debug('          ---> 200 RESPONSE to client' + '\n');
-              res.status(200).json(documentObject);
-
-
-
-            }
-            catch(jsonParseError){
-              log.error(jsonParseError);
-              res.send(500);
-            }
-
-
-          },
-          function error(contentFetchError){
-            log.error(contentFetchError);
-            res.send(500);
-          });
-
-
-        //TODO we need to store the content in our own database using the User id as a key
-        //      if the document is not saved we can keep the edit for as long as it doesn't get updated by someone else
-        //      if the document is updated then we need to only allow the user to view their old edits and perhaps copy them
-        //      somewhere else
-
-
-
-
-      },
-      function error(getSchemaObjectError){
-        log.error(getSchemaObjectError);
-        res.send(500);
+      if (err) {
+        return handleError(res, err);
       }
-    );
+      if (!document) {
+        return res.send(404);
+      }
+
+      //TODO validate that it is the same user -> require socket client id ... If the document is already being edited we need to deny this request
+      //if(document.lockedBy !== undefined){
+      //  return res.send(423);
+      //}
+
+      log.debug('Document: ' + JSON.stringify(document));
+      log.debug('Schema id: ' + document.schemaId);
 
 
-  });
+      //Get the documents schema
+      Schema.findById(document.schemaId, function (err, schema) {
+        log.debug('Schema found: ' + JSON.stringify(schema));
+        schemaDeferred.resolve(schema);
+      });
+
+      schemaDeferred.promise.then(
+        function success(schema) {
+
+          //TODO we need to fetch the google doc from goooogle - should really be using correct api + library as we will have to when editing?
+          //TODO distinguish google errors from server errors
+
+
+          log.debug('Fetching google doc and schema');
+          var googleContentDeferred = googledrive.fetchGoogleDoc(document.name, document.devContentGoogleDocId);
+          var googleSchemaDeferred = googledrive.fetchGoogleDoc(schema.name, schema.googleDocSchemaId);
+
+          /**
+           *
+           */
+          q.all([googleContentDeferred, googleSchemaDeferred]).then(
+            function success(responseBodies) {
+              log.debug('          ---> Creating Response');
+
+              try {
+
+                var deserialisedContent = JSON.parse(responseBodies[0]);
+                var deserialisedSchema = JSON.parse(responseBodies[1]);
+                var documentObject = document.toObject();
+                documentObject.content = deserialisedContent;
+                documentObject.schema = deserialisedSchema;
+
+                log.debug('          ---> 200 RESPONSE to client' + '\n');
+                res.status(200).json(documentObject);
+
+
+              }
+              catch (jsonParseError) {
+                log.error(jsonParseError);
+                res.send(500);
+              }
+
+
+            },
+            function error(contentFetchError) {
+              log.error(contentFetchError);
+              res.send(500);
+            });
+
+
+          //TODO we need to store the content in our own database using the User id as a key
+          //      if the document is not saved we can keep the edit for as long as it doesn't get updated by someone else
+          //      if the document is updated then we need to only allow the user to view their old edits and perhaps copy them
+          //      somewhere else
+
+
+        },
+        function error(getSchemaObjectError) {
+          log.error(getSchemaObjectError);
+          res.send(500);
+        }
+      );
+
+
+    });
+  }
+  else{
+    log.error('invalid params to get document');
+    res.send(400);
+  }
+
 };
 
 /**
@@ -314,6 +323,52 @@ exports.unlockById = function(docId){
   return deferred.promise;
 };
 
+
+/**
+ *
+ */
+exports.getHistory = function(req, res){
+
+  log.debug('Get Document history');
+
+  if(req && req.params && req.params.id) {
+
+    var googleContentUpdateDeferred = googledrive.getDocumentHistory(req, req.params.id);
+
+    googleContentUpdateDeferred.then(
+      function success(documentHistory) {
+
+        try {
+          if (typeof documentHistory === 'string') {
+            documentHistory = JSON.parse(documentHistory);
+          }
+
+          res.json(200, documentHistory);
+        }
+        catch(error){
+          log.error('error parsing document history');
+          res.send(500);
+        }
+
+      },
+      function error(statusCode) {
+
+        if(typeof statusCode !== "number"){
+          statusCode = 500;
+        }
+
+        log.error('Failed to get google doc history', statusCode);
+        res.send(statusCode);
+      });
+  }
+  else {
+    log.error('invalid params passed to document history');
+    res.send(400);
+  }
+
+};
+
+
 /**
  * Updates an existing document in the DB and google docs
  */
@@ -345,8 +400,13 @@ exports.update = function(req, res) {
         });
 
       },
-      function error(updateError, statusCode){
-        log.error('Failed to update google doc content', updateError, statusCode);
+      function error(statusCode){
+
+        if(typeof statusCode !== "number"){
+          statusCode = 500;
+        }
+
+        log.error('Failed to update google doc content', statusCode);
         res.send(statusCode);
       });
 
@@ -376,7 +436,7 @@ exports.publish = function(req, res) {
 
   //get user from the session -> helper in user
 
-  if(req.body && req.body.content){
+  if(req.body && req.body.content && req.body.liveContentGoogleDocId){
 
     var googleContentUpdateDeferred = googledrive.updateDocument(req, req.body.liveContentGoogleDocId, req.body.content);
 
@@ -392,8 +452,14 @@ exports.publish = function(req, res) {
         });
 
       },
-      function error(updateError, statusCode){
-        log.error('Failed to update google doc content', updateError, statusCode);
+      function error(statusCode){
+
+        if(typeof statusCode !== "number"){
+          statusCode = 500;
+        }
+
+        log.error('Failed to update google doc content', statusCode);
+
         res.send(statusCode);
       });
 
@@ -404,7 +470,7 @@ exports.publish = function(req, res) {
     //TODO is it mandatory to update a document with content?
     //      should separate documents meta data from content
     log.error('Content not passed while updating document');
-    res.send(500);
+    res.send(400);
   }
 
 };

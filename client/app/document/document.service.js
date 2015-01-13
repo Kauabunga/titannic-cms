@@ -123,6 +123,26 @@
       };
 
 
+      /**
+       *
+       */
+      self.getHistory = function(docId, options){
+
+        var deferred = $q.defer();
+
+        $http.get('api/documents/history/' + docId)
+          .success(function(documentHistory){
+            deferred.resolve(documentHistory);
+
+          })
+          .error(function(){
+            deferred.reject();
+          });
+
+
+        return deferred.promise;
+
+      };
 
 
       /**

@@ -14,5 +14,6 @@ router.put('/publish/:id', auth.isAuthenticated(), controller.publish);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 router.get('/preview/:id', controller.getPreview);
+router.get('/history/:id', auth.hasRole('admin'), controller.getHistory);
 
 module.exports = router;

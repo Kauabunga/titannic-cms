@@ -27,6 +27,10 @@
    */
   var _deferredCache = {};
 
+  var _deferredHistoryCache = {};
+
+  var _deferredCommentCache = {};
+
 
   /**
    *
@@ -109,82 +113,6 @@
 
     return deferred.promise;
   }
-
-
-  /**
-   *
-   * @param name
-   * @param id
-   * @param options
-   */
-  function subscribeGoogleDoc(name, googleId, dbId, options) {
-
-    var deferred = q.defer();
-
-
-    log.debug('subscribeGoogleDoc', name);
-
-
-    function googleCallback(error, body, googleResponse){
-
-      if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
-        log.debug('successful subscribe/watch response');
-        deferred.resolve();
-      }
-      else {
-        log.error('error subscribe/watch response', error);
-        deferred.reject();
-      }
-
-    }
-
-
-    try {
-
-
-      //var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
-      //
-      //oauth2Client.setCredentials({
-      //  access_token: user.accessToken
-      //});
-
-      var drive = google.drive({version: 'v2', apiKey: config.google.apiKey});
-
-
-      drive.files.watch({
-        fileId: googleId,
-        id: dbId,//string, A UUID or similar unique string that identifies this channel.
-        //expiration:  '', //long, Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds. Optional.
-        //token:  '', //string, An arbitrary string delivered to the target address with each notification delivered over this channel. Optional.
-        type: 'web_hook', //string, The type of delivery mechanism used for this channel. The only option is web_hook.
-        address: config.domain //string The address where notifications are delivered for this channel.
-      }, googleCallback);
-    }
-    catch(error){
-      log.error('failed to watch google doc', error);
-    }
-
-
-    //TODO subscribe for updates
-    //TODO create subscription service api
-
-    return deferred.promise;
-
-  }
-
-  /**
-   * TODO create endpoint for service api to call back
-   */
-  function subscribeChangeEvent(){
-
-
-  }
-
-
-
-
-
-
 
 
   /**
@@ -276,6 +204,77 @@
 
   /**
    *
+   *
+   *      AUTHENTICATED
+   *
+   *
+   */
+
+
+
+
+
+
+  /**
+   *
+   */
+  function getDocumentHistory(req, googleDocContentId, options){
+
+    var deferredId = 'cache_' + googleDocContentId;
+    var currentUserDeferred = User.getUserFromRequest(req);
+
+    if( ! _deferredHistoryCache[deferredId] || (options && options.force)) {
+
+      var googleHistoryDeferred = _deferredHistoryCache[deferredId] = q.defer();
+
+      currentUserDeferred.then(
+        function success(user) {
+
+          log.debug('authing with accessToken', user.accessToken);
+
+
+          function googleCallback(error, body, googleResponse) {
+
+            if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
+              log.debug('successful get history response body', body);
+              googleHistoryDeferred.resolve(body);
+            }
+            else {
+              log.error('Get document update google error', error, googleResponse.statusCode);
+              googleHistoryDeferred.reject(googleResponse.statusCode);
+            }
+          }
+
+          try {
+            var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
+            oauth2Client.setCredentials({ access_token: user.accessToken });
+            var drive = google.drive({version: 'v2', auth: oauth2Client});
+
+            drive.revisions.list({
+              fileId: googleDocContentId
+            }, googleCallback);
+
+          }
+          catch (error) {
+            log.error('Error getting google doc history google doc', error);
+            googleHistoryDeferred.reject(error);
+          }
+
+        },
+        function error(){
+          log.error('could not get user for google update document');
+          googleHistoryDeferred.reject(401);
+        });
+
+    }
+
+    return _deferredHistoryCache[deferredId].promise;
+  }
+
+
+
+  /**
+   *
    * @param googleDocContentId
    * @param content
    * @param googleApiKey
@@ -285,9 +284,10 @@
     var currentUserDeferred = User.getUserFromRequest(req);
     var googleContentDeferred = q.defer();
 
+    var deferredId = 'cache_' + googleDocContentId;
 
     //remove our cached copy of the promise
-    delete _deferredCache['cache-' + googleDocContentId];
+    delete _deferredCache[deferredId];
 
     log.debug('Updating document - current user:', req.user.name);
 
@@ -296,7 +296,6 @@
 
         log.debug('authing with accessToken', user.accessToken);
 
-
         function googleCallback(error, body, googleResponse) {
 
           if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
@@ -304,17 +303,13 @@
             googleContentDeferred.resolve();
           }
           else {
-            googleContentDeferred.reject(error);
+            googleContentDeferred.reject(googleResponse.statusCode);
           }
         }
 
         try {
           var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
-
-          oauth2Client.setCredentials({
-            access_token: user.accessToken
-          });
-
+          oauth2Client.setCredentials({ access_token: user.accessToken });
           var drive = google.drive({version: 'v2', auth: oauth2Client});
 
           drive.files.update({
@@ -331,9 +326,9 @@
           googleContentDeferred.reject(error);
         }
 
-      }, function error(getCurrentUserError) {
-
-        googleContentDeferred.reject(getCurrentUserError);
+      }, function error() {
+        log.error('could not get user for google update document');
+        googleContentDeferred.reject(401);
       });
 
 
@@ -341,10 +336,86 @@
   }
 
 
+
+
+
+  /**
+   *
+   * @param name
+   * @param id
+   * @param options
+   */
+  function subscribeGoogleDoc(name, googleId, dbId, options) {
+
+    var deferred = q.defer();
+
+
+    log.debug('subscribeGoogleDoc', name);
+
+
+    function googleCallback(error, body, googleResponse){
+
+      if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
+        log.debug('successful subscribe/watch response');
+        deferred.resolve();
+      }
+      else {
+        log.error('error subscribe/watch response', error);
+        deferred.reject();
+      }
+
+    }
+
+
+    try {
+
+
+      //var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
+      //
+      //oauth2Client.setCredentials({
+      //  access_token: user.accessToken
+      //});
+
+      var drive = google.drive({version: 'v2', apiKey: config.google.apiKey});
+
+
+      drive.files.watch({
+        fileId: googleId,
+        id: dbId,//string, A UUID or similar unique string that identifies this channel.
+        //expiration:  '', //long, Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds. Optional.
+        //token:  '', //string, An arbitrary string delivered to the target address with each notification delivered over this channel. Optional.
+        type: 'web_hook', //string, The type of delivery mechanism used for this channel. The only option is web_hook.
+        address: config.domain //string The address where notifications are delivered for this channel.
+      }, googleCallback);
+    }
+    catch(error){
+      log.error('failed to watch google doc', error);
+    }
+
+
+    //TODO subscribe for updates
+    //TODO create subscription service api
+
+    return deferred.promise;
+
+  }
+
+  /**
+   * TODO create endpoint for service api to call back
+   */
+  function subscribeChangeEvent(){
+
+
+  }
+
+
+
+
   exports.cacheGoogleDoc = cacheGoogleDoc;
   //exports.subscribeChangeEvent = subscribeChangeEvent;
   exports.updateDocument = updateDocument;
   exports.fetchGoogleDoc = fetchGoogleDoc;
+  exports.getDocumentHistory = getDocumentHistory;
 
 
 })();
