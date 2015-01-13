@@ -11,10 +11,7 @@
       $log.debug('Editing document', $stateParams.documentId);
 
       $scope.fadeIn = undefined;
-      $scope.isUpdating = undefined;
-      $scope.isPublishing = undefined;
       $scope.stillLoadingMessage = undefined;
-      $scope.isDirty = undefined;
 
 
 
@@ -31,9 +28,7 @@
        */
       var destroyHandle = $scope.$on('$destroy', function () {
         $log.debug('EditdocumentCtrl $destroy', socket);
-
         Document.releaseDocument($scope.document._id);
-
         destroyHandle();
       });
 
@@ -53,18 +48,12 @@
 
           Notification.error('Updating. Content not a json object');
         }
-
       }
 
       /**
        *
        */
       (function init() {
-
-        $timeout(function () {
-          $scope.fadeIn = true;
-        }, 0);
-
 
 
         var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
@@ -119,86 +108,6 @@
           });
 
       })();
-
-
-      /**
-       *
-       */
-      $scope.updateDocument = function updateDocument() {
-
-        if(! $scope.isUpdating && ! $scope.isPublishing){
-
-          $scope.isUpdating = true;
-
-          var $inputs = $('span.json-editor input');
-          $inputs.attr('disabled', 'disabled');
-          var updateDeferred = Document.updateDocument($stateParams.documentId);
-
-          updateDeferred.finally(function(){
-            $timeout(function(){
-              $scope.isUpdating = false;
-              $inputs.removeAttr('disabled');
-            });
-
-          });
-
-        }
-
-      };
-
-
-
-      /**
-       *
-       */
-      $scope.publishDocument = function publishDocument() {
-
-        function yesCallback(){
-          $scope.isPublishing = true;
-
-          var $inputs = $('span.json-editor input');
-          $inputs.attr('disabled', 'disabled');
-
-          var publishDeferred = Document.publishDocument($stateParams.documentId);
-
-          publishDeferred.finally(function(){
-            $timeout(function(){
-              $scope.isPublishing = false;
-
-              $inputs.removeAttr('disabled');
-            });
-
-          });
-
-
-        }
-
-        function noCallback(){
-          $scope.isPublishing = false;
-        }
-
-
-        if($scope.isDirty){
-          Notification.info('You need to update the dev document before publishing');
-        }
-        else if(! $scope.isUpdating && ! $scope.isPublishing){
-          Notification.confirmation('Are you sure you want make this document live?', yesCallback, noCallback, {yesText: 'Publish', noText: 'Cancel'});
-        }
-
-      };
-
-
-      /**
-       *
-       */
-      $scope.previewDocument = function previewDocument($event) {
-
-        if($scope.isUpdating || $scope.isPublishing){
-          $event.preventDefault();
-        }
-
-      };
-
 
     });
 
