@@ -11,7 +11,9 @@
         templateUrl: 'app/jsonEditor/jsonEditor.html',
         restrict: 'EAC',
         scope: {
-          'editorDirty': '=?'
+          'editorDirty': '=?',
+          'editorDocument': '=',
+          'editorDocumentDeferred': '='
         },
         link: function (scope, element, attrs) {
 
@@ -47,8 +49,8 @@
           scope.editorLoaded = false;
           scope.editorDirty = false;
 
-          //should inject this from parent scope
-          scope.document = undefined;
+          scope.editorDocument = scope.editorDocument || undefined;
+          scope.editorDocumentDeferred = scope.editorDocumentDeferred || undefined;
 
 
           /**
@@ -59,32 +61,29 @@
 
             //need to wait for our fadeIn animation on the main editcontroller
             $timeout(function () {
-              var deferred = Document.getDocument($stateParams.documentId);
 
-              deferred.then(
+              scope.editorDocumentDeferred.finally(function(){
+                scope.editorLoaded = true;
+              });
+              scope.editorDocumentDeferred.then(
                 function success(document) {
 
-                  scope.document = document;
+                  $timeout(function(){
+                    var jsonEditorOptions = getEditorOptions();
 
-                  var jsonEditorOptions = getEditorOptions();
+                    $timeout(function () {
+                      editor = newEditor(jsonEditorOptions);
 
-                  $timeout(function () {
-                    editor = newEditor(jsonEditorOptions);
-                    scope.editorLoaded = true;
+                      //TODO eeeek?
+                      $timeout(function(){
+                        scope.editorDirty = false;
+                      });
 
-                    //TODO eeeek?
-                    $timeout(function(){
-                      scope.editorDirty = false;
-                    });
-
-
-                  }, 50);
-
+                    }, 50);
+                  });
 
                 },
                 function error(statusCode) {
-                  scope.editorLoaded = true;
-
                   $log.error('Editor failed to get document', statusCode);
                 });
             }, 50);
@@ -106,7 +105,7 @@
               Notification.success('Content reset');
               scope.$apply(function () {
 
-                editor.setValue(scope.document.contentOriginal);
+                editor.setValue(scope.editorDocument.contentOriginal);
 
                 $timeout(function(){
                   cleanEditorDirty();
@@ -156,7 +155,7 @@
            *
            */
           scope.gotoHistory = function(){
-            $location.path('/editdocument/' + scope.document._id + '/history');
+            $location.path('/editdocument/' + scope.editorDocument._id + '/history');
           };
 
 
@@ -166,9 +165,9 @@
            */
           function getEditorOptions() {
             return {
-              schema: scope.document.schema,
+              schema: scope.editorDocument.schema,
               theme: 'bootstrap2',
-              startval: scope.document.content,
+              startval: scope.editorDocument.content,
               disable_properties: !scope.optionsEnabled,
               disable_collapse: !scope.optionsEnabled,
               disable_edit_json: !scope.optionsEnabled,

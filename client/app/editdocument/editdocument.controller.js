@@ -5,15 +5,16 @@
   angular.module('titannicCmsApp')
     .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
 
+      $log.debug('Editing document', $stateParams.documentId);
+
       $scope.document = undefined;
       $scope.documentContent = undefined;
+      $scope.getDocumentDeferred = undefined;
 
-      $log.debug('Editing document', $stateParams.documentId);
 
       $scope.fadeIn = undefined;
       $scope.stillLoadingMessage = undefined;
 
-      $scope.getDocumentDeferred = undefined;
 
 
 
