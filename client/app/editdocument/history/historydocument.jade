@@ -28,8 +28,19 @@ div(ng-class='{"fadeIn": fadeIn}')
       .col-sm-12
         .history-loader.circle-loader(ng-class='{"active": ! documentHistoryLoaded}')
         .history-container
+          
+          //TODO abstract main styling
+          //TODO abstract main styling
+          //TODO abstract main styling
+          //TODO abstract main styling
+
           .row(ng-repeat='historyItem in documentHistory.items.slice().reverse() track by $index', ng-cloak='')
+
             //TODO load on scroll bottom?
+            //TODO load on scroll bottom?
+            //TODO load on scroll bottom?
+            //TODO load on scroll bottom?
+
             div(ng-click='openHistory($event, historyItem)')
               h3(ng-if='documentHistory.items.length >= 100')
                 | \#{{documentHistory.items.length - $index | numberpad:3}} Edited by {{historyItem.lastModifyingUserName}} @ {{historyItem.modifiedDate | amCalendar}}

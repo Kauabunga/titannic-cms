@@ -10,8 +10,6 @@
       $urlRouterProvider.when('/editdocument/{documentId}', '/editdocument/{documentId}/content');
       $urlRouterProvider.when('/editdocument/{documentId}/history', '/editdocument/{documentId}/history/dev');
 
-      //TODO these should really be child routes/states of a parent edit state - locking function in root - rest in each seperately
-
 
       $stateProvider
         .state('editdocument', {
@@ -21,21 +19,37 @@
           authenticate: true
         });
 
-      $stateProvider
-        .state('editdocument.history', {
-          url: '/history/{env}',
-          templateUrl: 'app/editdocument/history/historydocument.html',
-          controller: 'EditdocumentHistoryCtrl',
-          authenticate: true
-        });
+          $stateProvider
+            .state('editdocument.history', {
+              url: '/history/{env}',
+              templateUrl: 'app/editdocument/history/historydocument.html',
+              controller: 'EditdocumentHistoryCtrl',
+              authenticate: true
+            });
 
-      $stateProvider
-        .state('editdocument.content', {
-          url: '/content',
-          templateUrl: 'app/editdocument/content/contentdocument.html',
-          controller: 'EditdocumentContentCtrl',
-          authenticate: true
-        });
+                $stateProvider
+                  .state('editdocument.history.view', {
+                    url: '/view',
+                    templateUrl: 'app/editdocument/history/historydocument.html',
+                    controller: 'EditdocumentHistoryViewCtrl',
+                    authenticate: true
+                  });
+
+                $stateProvider
+                  .state('editdocument.history.preview', {
+                    url: '/preview',
+                    templateUrl: 'app/editdocument/history/historydocument.html',
+                    controller: 'EditdocumentHistoryPreviewCtrl',
+                    authenticate: true
+                  });
+
+          $stateProvider
+            .state('editdocument.content', {
+              url: '/content',
+              templateUrl: 'app/editdocument/content/contentdocument.html',
+              controller: 'EditdocumentContentCtrl',
+              authenticate: true
+            });
     });
 
 
