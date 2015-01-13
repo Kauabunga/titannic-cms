@@ -144,7 +144,7 @@
       <!-- endinjector -->
     <!-- endbuild -->
   </head>
-  <body ng-app="titannicCmsApp" class="{{currentRoute}}" ng-cloak>
+  <body ng-app="titannicCmsApp" class="{{currentRoute}} {{currentSubroute}}" ng-cloak>
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
@@ -229,6 +229,7 @@
           <script src="app/vendor/tether.select.js"></script>
           <script src="components/auth/auth.service.js"></script>
           <script src="components/auth/user.service.js"></script>
+          <script src="components/filters/numberpad.js"></script>
           <script src="components/footer/footer.controller.js"></script>
           <script src="components/mongoose-error/mongoose-error.directive.js"></script>
           <script src="components/navbar/navbar.controller.js"></script>

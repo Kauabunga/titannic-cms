@@ -14,6 +14,7 @@
       $scope.documentHistoryDeferred = undefined;
 
 
+
       /**
        *
        */
@@ -37,7 +38,10 @@
               $scope.documentHistoryDeferred = Document.getHistory(documentEnvId);
 
               $scope.documentHistoryDeferred.finally(function(){
-                $scope.documentHistoryLoaded = true;
+                $timeout(function(){
+                  $scope.documentHistoryLoaded = true;
+                });
+
               });
               $scope.documentHistoryDeferred.then(
                 function success(documentHistory){
@@ -58,6 +62,17 @@
         );
 
 
+        /**
+         *
+         * @param $event
+         * @param historyItem
+         */
+        $scope.openHistory = function($event, historyItem){
+
+          $log.debug('open history', $event, historyItem);
+
+
+        };
 
 
 

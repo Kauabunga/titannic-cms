@@ -8,5 +8,33 @@ background-color: @gray-dark;
 
 .login-area {
   margin: 30px auto;
-  width: 100%; 
+  width: 100%;
+}
+
+
+
+
+
+
+
+.circle-loader {
+
+
+
+  position: absolute;
+  opacity: 0;
+
+  .transition(opacity 0.2s ease);
+  width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  -webkit-box-sizing: border-box;
+  border: solid 2px rgba(255, 255, 255, 0.2);
+  border-top-color: #FFF;
+  -webkit-animation: spin 1s infinite linear;
+}
+@-webkit-keyframes spin {
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
 }

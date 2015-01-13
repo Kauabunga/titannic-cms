@@ -130,6 +130,7 @@
         try {
           var split = toState.name.split('.');
           $rootScope.currentRoute = split[0];
+          $rootScope.currentSubroute = split[1] || '';
         }
         catch (error) {
           $log.debug('Error trying to attach body class name', error);
