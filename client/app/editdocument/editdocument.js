@@ -8,7 +8,7 @@
 
       $urlRouterProvider.when('/historydocument/{documentId}', '/historydocument/{documentId}/dev');
 
-      //TODO these should really be child routes/states of a parent edit state
+      //TODO these should really be child routes/states of a parent edit state - locking function in root - rest in each seperately
 
       $stateProvider
         .state('historydocument', {

@@ -16,6 +16,10 @@
       $scope.stillLoadingMessage = undefined;
       $scope.isDirty = undefined;
 
+      $scope.historyEnv = $stateParams.env || '';
+
+
+
       /**
        * TODO this is nasty having to watch the entire document should subscribe to the $emit event
        */
@@ -29,9 +33,7 @@
       var destroyHandle = $scope.$on('$destroy', function () {
         $log.debug('EditdocumentCtrl $destroy', socket);
 
-
         Document.releaseDocument($scope.document._id);
-
 
         destroyHandle();
       });
@@ -60,13 +62,13 @@
        */
       (function init() {
 
-
         $timeout(function () {
           $scope.fadeIn = true;
         }, 0);
 
-        var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
 
+
+        var getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
 
         var finishedLoading = false;
 
