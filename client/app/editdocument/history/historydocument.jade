@@ -14,6 +14,12 @@ div(ng-class='{"fadeIn": fadeIn}')
 
     .row.actions(ng-class='{"active": documentHistoryLoaded}')
       .col-sm-12
+
+        //TODO get list of avalible env from server or server config...
+        //TODO get list of avalible env from server or server config...
+        //TODO get list of avalible env from server or server config...
+        //TODO get list of avalible env from server or server config...
+
         span
           a(ng-href='/editdocument/{{document._id}}/history/dev', ng-click='')
             button.btn.btn-success(type='button', ng-class='')
@@ -28,7 +34,7 @@ div(ng-class='{"fadeIn": fadeIn}')
       .col-sm-12
         .history-loader.circle-loader(ng-class='{"active": ! documentHistoryLoaded}')
         .history-container
-          
+
           //TODO abstract main styling
           //TODO abstract main styling
           //TODO abstract main styling

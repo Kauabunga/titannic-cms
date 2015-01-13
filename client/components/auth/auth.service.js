@@ -97,15 +97,20 @@
        * @private
        */
       function _isLoggedInAsync(cb){
-        if (currentUser.hasOwnProperty('$promise')) {
+        if( ! $cookieStore.get('token')){
+          cb(false);
+        }
+        else if (currentUser.hasOwnProperty('$promise')) {
           currentUser.$promise.then(function () {
             cb(true);
           }).catch(function () {
             cb(false);
           });
-        } else if (currentUser.hasOwnProperty('role')) {
+        }
+        else if (currentUser.hasOwnProperty('role')) {
           cb(true);
-        } else {
+        }
+        else {
           cb(false);
         }
       }
@@ -116,7 +121,7 @@
        * @private
        */
       function _isLoggedIn() {
-        return currentUser.hasOwnProperty('role');
+        return $cookieStore.get('token') && currentUser.hasOwnProperty('role');
       }
 
 

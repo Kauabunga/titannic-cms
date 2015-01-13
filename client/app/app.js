@@ -58,7 +58,7 @@
    * Interceptor
    *
    */
-    .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location) {
+    .factory('authInterceptor', function ($rootScope, $q, $cookieStore, $location, $timeout){
       return {
         // Add authorization token to headers
         request: function (config) {
@@ -72,10 +72,19 @@
         // Intercept 401s and redirect you to login
         responseError: function (response) {
           if (response.status === 401) {
-            $location.path('/login');
+
             // remove any stale tokens
             $cookieStore.remove('token');
-            return $q.reject(response);
+
+            var deferred = $q.defer();
+
+            //give the logout a second
+            $timeout(function(){
+              deferred.reject(response);
+            });
+
+
+            return deferred.promise;
           }
           else {
             return $q.reject(response);
