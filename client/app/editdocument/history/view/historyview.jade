@@ -1,0 +1,20 @@
+div(ng-class='{"fadeIn": fadeIn}')
+
+  div(ng-include='"components/navbar/navbar.html"')
+
+  header#banner.hero-unit
+    .container
+      h3 {{document.name}} {{historyEnv}}
+      p Here you can restore or preview this document
+        br
+        | restoring the document will override the current development version
+
+
+  .container
+
+    .row.json-editor-row
+
+      .col-sm-12
+        span.json-editor(editor-dirty='isDirty', editor-document='document', editor-document-deferred='getDocumentDeferred')
+
+

@@ -61,25 +61,7 @@
           }
         );
 
-
-        /**
-         *
-         * @param $event
-         * @param historyItem
-         */
-        $scope.openHistory = function($event, historyItem){
-
-          $log.debug('open history', $event, historyItem);
-
-
-        };
-
-
-
-
       });
-
-
 
     });
 
