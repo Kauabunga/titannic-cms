@@ -161,10 +161,25 @@
 
       /**
        *
+       */
+      $scope.historyDocument = function historyDocument($event, document){
+        //Do not want to trigger the edit document click trigger
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $location.path('/documenthistory/' + document._id);
+      };
+
+      /**
+       *
        * @param $event
        * @param document
        */
       $scope.deleteDocument = function deleteDocument($event, document) {
+
+        //Do not want to trigger the edit document click trigger
+        $event.preventDefault();
+        $event.stopPropagation();
 
 
         function yesCallback() {
@@ -188,9 +203,6 @@
           });
         }
 
-        //Do not want to trigger the edit document click trigger
-        $event.preventDefault();
-        $event.stopPropagation();
 
 
         if(document.lockedKey === undefined) {
