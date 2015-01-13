@@ -16,7 +16,6 @@
       $scope.stillLoadingMessage = undefined;
       $scope.isDirty = undefined;
 
-      $scope.historyEnv = $stateParams.env || '';
 
 
 

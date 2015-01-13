@@ -127,7 +127,8 @@
       //add a class based upon the current route
       $rootScope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
         try {
-          $rootScope.currentRoute = toState.name;
+          var split = toState.name.split('.');
+          $rootScope.currentRoute = split[0];
         }
         catch (error) {
           $log.debug('Error trying to attach body class name', error);

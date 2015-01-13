@@ -168,7 +168,7 @@
         $event.stopPropagation();
 
         if(document.lockedKey === undefined) {
-          $location.path('/historydocument/' + document._id);
+          $location.path('/editdocument/' + document._id + '/history');
         }
         else{
           if(document.lockedBy === Auth.getCurrentUser().name){

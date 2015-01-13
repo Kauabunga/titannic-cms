@@ -50,7 +50,7 @@
           //should inject this from parent scope
           scope.document = undefined;
 
-          
+
           /**
            *
            */
@@ -156,7 +156,7 @@
            *
            */
           scope.gotoHistory = function(){
-            $location.path('/historydocument/' + scope.document._id);
+            $location.path('/editdocument/' + scope.document._id + '/history');
           };
 
 
