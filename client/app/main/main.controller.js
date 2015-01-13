@@ -167,7 +167,17 @@
         $event.preventDefault();
         $event.stopPropagation();
 
-        $location.path('/documenthistory/' + document._id);
+        if(document.lockedKey === undefined) {
+          $location.path('/historydocument/' + document._id);
+        }
+        else{
+          if(document.lockedBy === Auth.getCurrentUser().name){
+            Notification.error('You have this document open. Close it before deleting it.');
+          }
+          else{
+            Notification.error('Document currently in use by ' + document.lockedBy);
+          }
+        }
       };
 
       /**

@@ -6,7 +6,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .directive('jsonEditor', function ($log, $q, Document, $timeout, Notification, $stateParams, $rootScope) {
+    .directive('jsonEditor', function ($log, $q, Document, $timeout, Notification, $stateParams, $rootScope, $location) {
       return {
         templateUrl: 'app/jsonEditor/jsonEditor.html',
         restrict: 'EAC',
@@ -46,6 +46,9 @@
 
           scope.editorLoaded = false;
           scope.editorDirty = false;
+
+          //should inject this from parent scope
+          scope.document = undefined;
 
 
           /**
@@ -144,7 +147,13 @@
 
             }, 50);
 
+          };
 
+          /**
+           *
+           */
+          scope.gotoHistory = function(){
+            $location.path('/historydocument/' + scope.document._id);
           };
 
 
