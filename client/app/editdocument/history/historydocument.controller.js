@@ -36,7 +36,7 @@
               $scope.googleDocumentEnvId = document[$scope.historyEnv + 'ContentGoogleDocId'];
 
               if(! $scope.googleDocumentEnvId ){
-                $log.error('Document does not have property', documentEnvId, document);
+                $log.error('Document does not have property', $scope.googleDocumentEnvId, document);
                 Notification.error('Document does not have content for ' + $scope.historyEnv + ' environment');
               }
               else{
