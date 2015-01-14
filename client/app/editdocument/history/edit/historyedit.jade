@@ -17,22 +17,22 @@ div(ng-class='{"fadeIn": fadeIn}')
 
         //TODO get list of avalible env from server or server config...
         //TODO get list of avalible env from server or server config...
-        //TODO get list of avalible env from server or server config...
+        //TODO get list of avalible env from server or server config... + ng-repeat
         //TODO get list of avalible env from server or server config...
 
         span
-          a(ng-href='/editdocument/{{document._id}}/history/dev', ng-click='')
-            button.btn.btn-success(type='button', ng-class='')
+          a(ng-href='/editdocument/{{document._id}}/history/dev', ng-click='changeEnv($event, "dev")')
+            button.btn.btn-success(type='button', ng-class='{"active": historyEnv === "dev"}')
               | Dev
 
         span
-          a(ng-href='/editdocument/{{document._id}}/history/live', ng-click='')
-            button.btn.btn-success(type='button', ng-class='')
+          a(ng-href='/editdocument/{{document._id}}/history/live', ng-click='changeEnv($event, "live")')
+            button.btn.btn-success(type='button', ng-class='{"active": historyEnv === "live"}')
               | Live
 
     .row
       .col-sm-12
-        .history-loader.circle-loader(ng-class='{"active": ! documentHistoryLoaded}')
+        .history-loader.circle-loader.circle-loader-large(ng-class='{"active": ! documentHistoryLoaded}')
         .history-container
 
           //TODO abstract main styling

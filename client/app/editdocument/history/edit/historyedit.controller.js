@@ -34,6 +34,17 @@
       };
 
 
+      /**
+       *
+       * @param $event
+       * @param env
+       */
+      $scope.changeEnv = function($event, env){
+        if(env === $scope.historyEnv){
+          $event.stopPropagation();
+          $event.preventDefault();
+        }
+      }
 
 
 

@@ -40,10 +40,12 @@
           },
           function error() {
             Notification.error('Error fetching preview url');
+            $location.path('/');
           });
 
-
       })();
+
+
 
 
     });

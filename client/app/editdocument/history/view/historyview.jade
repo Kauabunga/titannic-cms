@@ -22,7 +22,7 @@ div(ng-class='{"fadeIn": fadeIn}')
 
         span
           a(ng-href='/previewdocument/{{document._id}}/preview', ng-click='previewDocumentHistory($event)', target="_blank")
-            button.btn.btn-success.btn-preview(type='button', ng-class='{"updating": isUpdating, "ready": previewReady}')
+            button.btn.btn-success.btn-preview(type='button', ng-class='{"updating": isUpdating || !previewReady, "getting-ready": ! previewReady}')
               .circle-loader
               i.fa.fa-search
               | Preview

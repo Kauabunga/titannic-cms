@@ -17,6 +17,12 @@ body.editdocument {
         &active {
           opacity: 1;
         }
+
+        &.active{
+          opacity: 1;
+          cursor: default;
+        }
+
         opacity: 0.7;
       }
     }
@@ -45,6 +51,15 @@ body.editdocument {
     }
 
     .publishing.btn.btn-publish {
+      i {
+        opacity: 0;
+      }
+      .circle-loader {
+        opacity: 0.8;
+      }
+    }
+
+    .getting-ready.btn {
       i {
         opacity: 0;
       }
