@@ -31,7 +31,7 @@ div(ng-class='{"fadeIn": fadeIn}')
               | Live
 
     .row
-      .col-sm-12
+      .col-sm-8.col-sm-offset-2
         .history-loader.circle-loader.circle-loader-large(ng-class='{"active": ! documentHistoryLoaded}')
         .history-container
 
@@ -40,20 +40,36 @@ div(ng-class='{"fadeIn": fadeIn}')
           //TODO abstract main styling
           //TODO abstract main styling
 
-          .row(ng-repeat='historyItem in documentHistory.items track by $index', ng-cloak='')
+          .row.history-row(ng-repeat='historyItem in documentHistory.items track by $index',
+                      ng-cloak='', ng-click='openHistory($event, $index, historyItem)')
 
             //TODO load on scroll bottom?
             //TODO load on scroll bottom?
             //TODO load on scroll bottom?
             //TODO load on scroll bottom?
 
-            div.history-link(ng-click='openHistory($event, $index, historyItem)')
-              h3(ng-if='documentHistory.items.length >= 100')
-                | \#{{documentHistory.items.length - $index | numberpad:3}} Edited by {{historyItem.lastModifyingUserName}} @ {{historyItem.modifiedDate | amCalendar}}
-              h3(ng-if='documentHistory.items.length < 100 && documentHistory.items.length >= 10')
-                | \#{{documentHistory.items.length - $index | numberpad:2}} Edited by {{historyItem.lastModifyingUserName}} @ {{historyItem.modifiedDate | amCalendar}}
-              h3(ng-if='documentHistory.items.length < 10')
-                | \#{{documentHistory.items.length - $index}} Edited by {{historyItem.lastModifyingUserName}} @ {{historyItem.modifiedDate | amCalendar}}
+            div.history-link
+              div(ng-if='documentHistory.items.length >= 100')
+                span.col-sm-1.index-number
+                  h3 {{documentHistory.items.length - $index | numberpad:3}}
+                span.col-sm-7.history-date
+                  h3 {{historyItem.modifiedDate | amCalendar}}
+                span.col-sm-4.history-name
+                  h3 {{historyItem.lastModifyingUserName}}
+              div(ng-if='documentHistory.items.length < 100 && documentHistory.items.length >= 10')
+                span.col-sm-1.index-number
+                  h3 {{documentHistory.items.length - $index | numberpad:2}}
+                span.col-sm-7.history-date
+                  h3 {{historyItem.modifiedDate | amCalendar}}
+                span.col-sm-4.history-name
+                  h3 {{historyItem.lastModifyingUserName}}
+              div(ng-if='documentHistory.items.length < 10')
+                span.col-sm-1.index-number
+                  h3 {{documentHistory.items.length - $index}}
+                span.col-sm-7.history-date
+                  h3 {{historyItem.modifiedDate | amCalendar}}
+                span.col-sm-4.history-name
+                  h3 {{historyItem.lastModifyingUserName}}
 
 
 
