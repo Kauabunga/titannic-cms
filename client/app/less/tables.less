@@ -16,6 +16,15 @@
 
 
 
+
+input[disabled],
+textarea[disabled] {
+  cursor: default;
+  .user-select(none);
+}
+
+
+
 body.editdocument {
 
   @media (max-width: @screen-xs-max) {

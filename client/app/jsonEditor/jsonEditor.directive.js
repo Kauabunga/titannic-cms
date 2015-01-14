@@ -14,7 +14,9 @@
           'editorDirty': '=?',
           'editorDocument': '=',
           'editorDocumentDeferred': '=',
-          'editorDocumentContent': '='
+          'editorDocumentContent': '=',
+          'editorDisableAdd': '@?',
+          'editorReadOnly': '@?'
         },
         link: function (scope, element, attrs) {
 
@@ -49,6 +51,12 @@
 
           scope.editorLoaded = false;
           scope.editorDirty = false;
+          scope.editorDisableAdd = (scope.editorDisableAdd === 'true' || scope.editorDisableAdd === true) ? true : false;
+          scope.editorReadOnly = (scope.editorReadOnly === 'true' || scope.editorReadOnly === true) ? true : false;
+
+
+          $log.debug(scope.editorEnableAdd);
+
 
           scope.editorDocument = scope.editorDocument || undefined;
           scope.editorDocumentDeferred = scope.editorDocumentDeferred || undefined;
@@ -59,9 +67,7 @@
            */
           (function init() {
 
-
-            //need to wait for our fadeIn animation on the main editcontroller
-            $timeout(function () {
+            var initDocument = _.once(function(){
 
               scope.editorDocumentDeferred.finally(function(){
                 scope.editorLoaded = true;
@@ -87,7 +93,17 @@
                 function error(statusCode) {
                   $log.error('Editor failed to get document', statusCode);
                 });
-            }, 50);
+            });
+
+            //need to wait for our fadeIn animation on the main editcontroller
+            scope.$watch('editorDocumentDeferred', function(){
+              if(scope.editorDocumentDeferred){
+                initDocument();
+              }
+
+            });
+
+
 
           })();
 
@@ -172,7 +188,7 @@
               disable_properties: !scope.optionsEnabled,
               disable_collapse: !scope.optionsEnabled,
               disable_edit_json: !scope.optionsEnabled,
-              disable_array_add: false,
+              disable_array_add: scope.editorDisableAdd,
               disable_array_delete: !scope.optionsEnabled,
               disable_array_reorder: !scope.optionsEnabled,
               no_additional_properties: true,
@@ -220,6 +236,16 @@
             var editor = new JSONEditor($editorAnchor[0], options);
             editor.on('change', changeHandle);
 
+            if(scope.editorReadOnly){
+              var $allInputElements = $('textarea, input, select');
+              $allInputElements.attr('disabled', 'true');
+              $allInputElements.toggleClass('disabled', true);
+            }
+
+
+
+
+
 
             //Delay non-priority bindings
             $timeout(function(){
@@ -236,7 +262,6 @@
               });
             });
 
-
             //bind text area auto size library
             $textareaResizeElements = $('textarea:visible').autosize();
             $('div.tabbable.tabs-left > ul > li').on('click', bindAutoSize);
@@ -248,13 +273,15 @@
            *
            */
           function bindChangeField(){
-            var $allInputElements = $('textarea:not(.change-bound), input:not(.change-bound), select:not(.change-bound)');
-            $allInputElements.toggleClass('change-bound', true);
-            $allInputElements.on('change', function($event){
-              var $controlElement = $($event.currentTarget);
-              $controlElement.toggleClass('changed', true);
-              $changedElements.push($controlElement);
-            });
+            if(! scope.editorReadOnly){
+              var $allInputElements = $('textarea:not(.change-bound), input:not(.change-bound), select:not(.change-bound)');
+              $allInputElements.toggleClass('change-bound', true);
+              $allInputElements.on('change', function($event){
+                var $controlElement = $($event.currentTarget);
+                $controlElement.toggleClass('changed', true);
+                $changedElements.push($controlElement);
+              });
+            }
           }
 
           /**

@@ -15,7 +15,8 @@ div(ng-class='{"fadeIn": fadeIn}')
     .row.json-editor-row
 
       .col-sm-12
-        span.json-editor(editor-dirty='isDirty', editor-document='document', editor-document-content='historyContent', editor-document-deferred='historyContentDeferred')
+        span.json-editor(editor-dirty='isDirty', editor-document='document', editor-disable-add='true', editor-read-only='true'
+            editor-document-content='historyContent', editor-document-deferred='historyContentDeferred')
 
 
 
