@@ -5,9 +5,10 @@ var q = require('q');
 var Document = require('./document.model');
 var Schema = require('./../schema/schema.model');
 var googledrive = require('../../googledrive/googledrive.service');
+var preview = require('../../components/preview/preview.service');
 
 var https = require('follow-redirects').https;
-var http = require('http');
+
 
 var config = require('../../config/environment');
 
@@ -39,116 +40,67 @@ exports.index = function(req, res) {
  */
 exports.getPreview = function(req, res){
 
-  //first we need to attempt to update the local sites content (force it to refetch from google)
-  var refreshDeferred = q.defer();
-  var previewDeferred = q.defer();
 
 
-  if(req.params && req.params.id) {
 
-    Document.findById(req.params.id, function (err, document) {
+  Document.findById(req.params.id, function (err, document) {
 
-      if (err) {
-        previewDeferred.reject();
-        handleError(res, err);
+    if (err) {
+      handleError(res, err);
+    }
+    else if (!document) {
+      res.send(404);
+    }
+    else {
+
+      //get google id
+      req.params.env = req.params.env || 'dev';
+
+      //get the google doc id for the targeted environment
+      var envGoogleDocId;
+      switch(req.params.env){
+        case 'preview':
+          envGoogleDocId = document.previewContentGoogleDocId;
+          break;
+        case 'live':
+          envGoogleDocId = document.liveContentGoogleDocId;
+          break;
+        case 'dev':
+          envGoogleDocId = document.devContentGoogleDocId;
+          break;
+        default:
+          envGoogleDocId = document.devContentGoogleDocId;
+          break;
       }
-      else if (!document) {
-        previewDeferred.reject();
-        res.send(404);
-      }
-      else {
-
-        req.params.env = req.params.env || 'dev';
-        var httpClient = (config.localSiteProtocol.indexOf('https') !== -1) ? https : http;
-
-        //get the google doc id for the targeted environment
-        var envGoogleDocId;
-        switch(req.params.env){
-          case 'preview':
-            envGoogleDocId = document.previewContentGoogleDocId;
-            break;
-          case 'live':
-            envGoogleDocId = document.liveContentGoogleDocId;
-            break;
-
-          case 'dev':
-            envGoogleDocId = document.devContentGoogleDocId;
-            break;
-          default:
-            envGoogleDocId = document.devContentGoogleDocId;
-            break;
-        }
 
 
-        var options = {
-          host: config.localSite,
-          port: config.localSitePort,
-          path: '/api/forcecontentupdate/' + req.params.env + '/' + envGoogleDocId,
-          agent: false
-        };
+      var previewDeferred = preview.getPreview(req.params.env, envGoogleDocId);
 
-        log.debug('preview query with options:', options);
+      previewDeferred.then(
+        function success(){
+          log.debug('successful get preview document');
 
-        var request = httpClient.get(options, function (res) {
-          log.debug('Response from force update', res.statusCode);
-          if (res.statusCode >= 200 && res.statusCode < 300) {
-            refreshDeferred.resolve(res);
+          var responseBody = {
+            url: config.localSiteProtocol + '://' + config.localSite + ':' + config.localSitePort + '/' + (document.previewPath || '')
+          };
+
+          res.status(200).json(responseBody);
+
+        },
+        function error(statusCode){
+
+          if(typeof statusCode !== "number"){
+            statusCode = 500;
           }
-          else {
-            refreshDeferred.reject(res);
-          }
+
+          log.error('Failed to get document preview', statusCode);
+          res.send(statusCode);
+
         });
 
-        /**
-         *
-         */
-        request.setTimeout(10000, function (error) {
-          log.error('failed to get content refresh timeout', error);
-          refreshDeferred.reject(error);
-        });
+    }
+  });
 
-        /**
-         *
-         */
-        request.on('error', function (error) {
-          log.error('failed to get content refresh', error);
-          refreshDeferred.reject(error);
-        });
-
-
-        /**
-         * With a successful refresh we now need to build the link that will point to the content
-         */
-        refreshDeferred.promise.then(
-          function success() {
-
-            previewDeferred.resolve();
-
-            var responseBody = {
-              url: config.localSiteProtocol + '://' + config.localSite + ':' + config.localSitePort + '/' + (document.previewPath || '')
-            };
-
-            res.status(200).json(responseBody);
-
-          },
-          function error() {
-            previewDeferred.reject();
-            res.send(500);
-          });
-
-
-      }
-
-    });
-  }
-  else{
-    log.error('invalid params', req.params);
-    res.send(400);
-    previewDeferred.reject(400);
-  }
-
-
-  return previewDeferred.promise;
 
 };
 
