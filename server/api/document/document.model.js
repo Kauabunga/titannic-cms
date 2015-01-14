@@ -15,6 +15,7 @@ var DocumentSchema = new Schema({
   //id of the google drive live + dev
   liveContentGoogleDocId: String,
   devContentGoogleDocId: String,
+  previewContentGoogleDocId: String,
 
   previewPath: String,
 
