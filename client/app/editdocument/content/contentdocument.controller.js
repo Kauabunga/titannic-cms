@@ -92,6 +92,15 @@
 
 
       /**
+       * TODO if document is not dirty then use the current dev copy to prev
+       * TODO if document is not dirty then use the current dev copy to prev
+       * TODO if document is not dirty then use the current dev copy to prev
+       * TODO if document is not dirty then use the current dev copy to prev
+       *
+       * TODO     if the document becomes dirty - update the preview document with the current copy and disable button
+       *          on becoming clean again - use the dev copy
+       *
+       *          TODO will need to tidy dodgey dity states
        *
        */
       $scope.previewDocument = function previewDocument($event) {

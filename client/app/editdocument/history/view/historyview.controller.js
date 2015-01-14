@@ -92,7 +92,7 @@
 
 
       /**
-       * TODO should we just start writing this preview on init?
+       *
        */
       $scope.previewDocumentHistory = function($event){
 
@@ -100,6 +100,28 @@
           $event.stopPropagation();
           $event.preventDefault();
         }
+
+      };
+
+
+      /**
+       *
+       * @param $event
+       */
+      $scope.restoreDocument = function($event){
+
+
+        if(! $scope.isRestoring){
+          $log.debug('restoring document', $event);
+          $scope.isRestoring = true;
+
+          //TODO implement
+          //TODO implement
+          //TODO implement
+          //TODO implement
+
+        }
+
 
       };
 
