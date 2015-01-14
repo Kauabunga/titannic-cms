@@ -9,6 +9,8 @@
       $scope.fadeIn = undefined;
 
 
+      $scope.historyDocumentItem = undefined;
+
       $scope.historyContent = undefined;
       $scope.historyContentLoaded = false;
       $scope.historyContentDeferred = undefined;
@@ -32,15 +34,15 @@
            */
           $scope.getDocumentDeferred.then(function success(){
 
+            /**
+             * fetch history content
+             */
             $scope.historyContentDeferred = Document.getHistoryDocument($scope.googleDocumentEnvId, $stateParams.historyId);
             $scope.historyContentDeferred.finally(function(){ $scope.historyContentLoaded = true; });
             $scope.historyContentDeferred.then(
               function success(historyContent){
-
                 $log.debug('Successful get history document content', historyContent);
                 $scope.historyContent = historyContent;
-
-
               },
               function error(status){
                 $log.error('Error get history document content', status);
@@ -48,6 +50,21 @@
                   Notification.error('Failed to get history document content');
                 }
               });
+
+            /**
+             * get history item for meta data
+             */
+            $scope.documentHistoryDeferred.then(function success(){
+              var i, currentItem;
+              for(i = 0; i < $scope.documentHistory.items.length; i++){
+                currentItem = $scope.documentHistory.items[i];
+                if(currentItem.id === $stateParams.historyId){
+                  $scope.historyDocumentItem = currentItem;
+                  break;
+                }
+              }
+
+            });
 
           });
 

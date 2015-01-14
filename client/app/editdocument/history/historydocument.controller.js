@@ -11,6 +11,7 @@
 
       $scope.googleDocumentEnvId = undefined;
 
+      //TODO rename this to documentHistoryList
       $scope.documentHistory = undefined;
       $scope.documentHistoryLoaded = false;
       $scope.documentHistoryDeferred = undefined;
