@@ -12,6 +12,20 @@ div(ng-class='{"fadeIn": fadeIn}')
 
   .container
 
+    .row.actions
+      .col-sm-6.actions-document
+        span
+          button.btn.btn-update.btn-info(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
+            .circle-loader
+            i.fa.fa-clock-o
+            | Restore
+
+        span
+          a(ng-href='/previewdocument/{{document._id}}', ng-click='previewDocument($event)', target="_blank")
+            button.btn.btn-success(type='button', ng-class='{"updating": isUpdating, "publishing": isPublishing}')
+              i.fa.fa-search
+              | Preview
+
     .row.json-editor-row
 
       .col-sm-12

@@ -9,43 +9,6 @@
 body.editdocument.content {
 
 
-  .row.actions {
-
-    .updating.btn.btn-update {
-      i {
-        opacity: 0;
-      }
-      .circle-loader {
-        opacity: 0.8;
-      }
-    }
-
-    .publishing.btn.btn-publish {
-      i {
-        opacity: 0;
-      }
-      .circle-loader {
-        opacity: 0.8;
-
-      }
-    }
-
-
-
-    .updating,
-    .publishing,
-    .dirty {
-      &.btn {
-        cursor: default;
-
-        opacity: 0.7 !important;
-        &:hover {
-          opacity: 0.7 !important;
-        }
-        background-color: @gray !important;
-      }
-    }
-  }
 
 
 
@@ -54,11 +17,9 @@ body.editdocument.content {
   }
 
   .json-editor-btn{
-
     opacity: 0;
 
     .transition(all 0.2s ease);
-
 
     i {
       margin-right: 6px;
@@ -111,40 +72,11 @@ body.editdocument.content {
   }
 
 
-  .row.actions {
-    margin-top: 30px;
-    .btn {
-      .transition(all 0.4s ease);
-      opacity: 0;
-    }
-  }
 
 
 
-  .fadeIn {
-    .hero-unit{
-      .container {
-        opacity: 1;
-      }
-    }
 
-    .row.actions {
-      .btn {
-        &:hover,
-        &active {
-          opacity: 1;
-        }
-        opacity: 0.7;
-      }
-    }
-  }
 
-  .hero-unit{
-    .container {
-      .transition(opacity 0.4s ease);
-      opacity: 0;
-    }
-  }
 
 
   .still-loading-container {
@@ -168,117 +100,6 @@ body.editdocument.content {
   }
 
 
-
-
-
-
-
-
-  .control-group {
-
-    padding: 5px 20px;
-    margin-bottom: 10px;
-
-    .transition(color 0.5s ease);
-
-    &.changed {
-      label {
-//        color: @deep-blue;
-      }
-//      background-color: @lime-green-opacity;
-//      background-color: @charcoal-lighter;
-
-    }
-  }
-
-  .changed {
-    color: @deep-blue;
-  }
-
-
-
-  textarea {
-    resize: none;
-    padding: 15px 20px;
-  }
-
-  input {
-    padding: 10px 20px;
-  }
-
-  input,
-  textarea {
-    opacity: @input-opacity;
-
-    .transition(opacity 0.2s ease);
-
-    &:focus {
-      opacity: @input-opacity-focus;
-    }
-
-  }
-
-
-
-
-
-
-  .json-editor-row {
-    min-height: 800px;
-  }
-
-
-
-  .btn:hover,
-  .btn:active{
-    opacity: 1;
-  }
-
-
-  .btn-info {
-    background-color: @medium-blue;
-  }
-  .btn-success {
-    background-color: @lime-green-2;
-  }
-
-  .btn-danger {
-    background-color: @red-alert;
-  }
-
-  .btn-warning {
-    background-color: @orange-warning;
-  }
-
-  .btn-update,
-  .btn-publish {
-    //need to offset the padding from the circle loader
-    padding-right: 12px !important;
-  }
-
-
-  .btn {
-
-    i {
-      .transition(opacity 0.2s ease);
-      opacity: 1;
-      padding-right: 10px;
-    }
-
-    .transition(opacity 0.2s ease);
-
-    padding: 10px 30px;
-    margin: 10px 0px;
-    border-radius: 0;
-    border: 0;
-
-
-    color: @gray-darker;
-
-    &:focus {outline:0;}
-
-    font-family: museo;
-  }
 
 
 
