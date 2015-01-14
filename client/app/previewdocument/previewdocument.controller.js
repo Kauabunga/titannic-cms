@@ -6,13 +6,14 @@
     .controller('PreviewdocumentCtrl', function ($scope, $http, Document, $stateParams, Notification, $location, $timeout) {
 
       $scope.fadeIn = undefined;
+      $scope.environment = $stateParams.environment || 'dev';
 
       (function init() {
 
-        var getPreviewUrlDeferred = Document.getPreviewUrl($stateParams.documentId);
+
+        var getPreviewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, $scope.environment);
 
         getPreviewUrlDeferred.finally(function(){
-          //TODO get iframe loaded event?
           $timeout(function(){
             $scope.fadeIn = true;
           }, 800);
@@ -23,6 +24,13 @@
           function success(data) {
 
             if (data && data.url) {
+
+              $('.previewIframe').bind('load', function() {
+                $scope.$apply(function(){
+                  $scope.fadeIn = true;
+                });
+              });
+
               $scope.iframePreviewUrl = data.url;
             }
             else {

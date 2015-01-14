@@ -341,11 +341,11 @@
        *
        * @param docId
        */
-      self.getPreviewUrl = function (docId) {
+      self.getPreviewUrl = function (docId, environment) {
 
         var deferred = $q.defer();
 
-        $http.get('/api/documents/preview/' + docId)
+        $http.get('/api/documents/preview/' + docId + '/' + environment)
           .success(function (data) {
             deferred.resolve(data);
           })

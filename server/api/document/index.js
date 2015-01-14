@@ -13,7 +13,7 @@ router.put('/:id', auth.isAuthenticated(), controller.update);
 router.put('/publish/:id', auth.isAuthenticated(), controller.publish);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
-router.get('/preview/:id', controller.getPreview);
+router.get('/preview/:id/:env', controller.getPreview);
 router.get('/historylist/:id', auth.hasRole('admin'), controller.getHistory);
 router.get('/historydocument/:id/:historyId', auth.hasRole('admin'), controller.getHistoryContent);
 

@@ -40,85 +40,93 @@ exports.index = function(req, res) {
 exports.getPreview = function(req, res){
 
   //first we need to attempt to update the local sites content (force it to refetch from google)
-
-  var httpClient = (config.localSiteProtocol.indexOf('https') !== -1) ? https : http;
   var refreshDeferred = q.defer();
   var previewDeferred = q.defer();
 
-  var options = {
-    host: config.localSite,
-    port: config.localSitePort,
-    //TODO make this configurable
-    path: '/api/forcecontentupdate',
-    agent: false
-  };
 
-  log.debug('preview query with options:', options);
+  if(req.params && req.params.id) {
 
-  var request = httpClient.get(options, function(res){
+    req.params.env = req.params.env || 'dev';
+    var httpClient = (config.localSiteProtocol.indexOf('https') !== -1) ? https : http;
 
-    log.debug('Response from force update', res.statusCode);
+    var options = {
+      host: config.localSite,
+      port: config.localSitePort,
+      path: '/api/forcecontentupdate?env=' + req.params.env,
+      agent: false
+    };
 
-    if(res.statusCode >= 200 && res.statusCode < 300){
-      refreshDeferred.resolve(res);
-    }
-    else{
-      refreshDeferred.reject(res);
-    }
-  });
+    log.debug('preview query with options:', options);
 
-  /**
-   *
-   */
-  request.setTimeout(10000, function(error){
-    log.error('failed to get content refresh timeout', error);
-    refreshDeferred.reject(error);
-  });
+    var request = httpClient.get(options, function (res) {
 
-  /**
-   *
-   */
-  request.on('error', function(error){
-    log.error('failed to get content refresh', error);
-    refreshDeferred.reject(error);
-  });
+      log.debug('Response from force update', res.statusCode);
 
-
-
-  /**
-   * With a successful refresh we now need to build the link that will point to the content
-   */
-  refreshDeferred.promise.then(
-    function success(){
-
-
-      Document.findById(req.params.id, function (err, document) {
-
-        if (err) {
-          previewDeferred.reject();
-          handleError(res, err);
-        }
-        else if (!document) {
-          previewDeferred.reject();
-          res.send(404);
-        }
-        else{
-          previewDeferred.resolve();
-
-          var responseBody = {
-            url: config.localSiteProtocol + '://' + config.localSite + ':' + config.localSitePort + '/' + (document.previewPath || '')
-          };
-
-          res.status(200).json(responseBody);
-        }
-
-      });
-
-    },
-    function error(){
-      previewDeferred.reject();
-      res.send(500);
+      if (res.statusCode >= 200 && res.statusCode < 300) {
+        refreshDeferred.resolve(res);
+      }
+      else {
+        refreshDeferred.reject(res);
+      }
     });
+
+    /**
+     *
+     */
+    request.setTimeout(10000, function (error) {
+      log.error('failed to get content refresh timeout', error);
+      refreshDeferred.reject(error);
+    });
+
+    /**
+     *
+     */
+    request.on('error', function (error) {
+      log.error('failed to get content refresh', error);
+      refreshDeferred.reject(error);
+    });
+
+
+    /**
+     * With a successful refresh we now need to build the link that will point to the content
+     */
+    refreshDeferred.promise.then(
+      function success() {
+
+
+        Document.findById(req.params.id, function (err, document) {
+
+          if (err) {
+            previewDeferred.reject();
+            handleError(res, err);
+          }
+          else if (!document) {
+            previewDeferred.reject();
+            res.send(404);
+          }
+          else {
+            previewDeferred.resolve();
+
+            var responseBody = {
+              url: config.localSiteProtocol + '://' + config.localSite + ':' + config.localSitePort + '/' + (document.previewPath || '')
+            };
+
+            res.status(200).json(responseBody);
+          }
+
+        });
+
+      },
+      function error() {
+        previewDeferred.reject();
+        res.send(500);
+      });
+  }
+  else{
+    log.error('invalid params', req.params);
+    res.send(400);
+    previewDeferred.reject(400);
+  }
 
 
   return previewDeferred.promise;
