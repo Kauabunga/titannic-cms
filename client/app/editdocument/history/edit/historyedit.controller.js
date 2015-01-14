@@ -44,7 +44,7 @@
           $event.stopPropagation();
           $event.preventDefault();
         }
-      }
+      };
 
 
 

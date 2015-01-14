@@ -75,7 +75,10 @@
             var initDocument = _.once(function(){
 
               scope.editorDocumentDeferred.finally(function(){
-                scope.editorLoaded = true;
+                $timeout(function(){
+                  scope.editorLoaded = true;
+                }, 50);
+
               });
               scope.editorDocumentDeferred.then(
                 function success(document) {
@@ -91,7 +94,7 @@
                         scope.editorDirty = false;
                       });
 
-                    }, 50);
+                    });
                   });
 
                 },
