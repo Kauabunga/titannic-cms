@@ -337,6 +337,35 @@
       };
 
 
+
+      /**
+       * Update the content of a preview document
+       */
+      self.updatePreviewDocument = function (docId, previewContent) {
+
+        var deferred = $q.defer();
+
+        //Dont need to be passing the schema back to the webservice
+        $log.debug('Submitting document preview update', docId);
+
+        $http.put('/api/documents/updatepreview/' + docId, previewContent)
+          .success(function () {
+            deferred.resolve();
+          })
+          .error(function (error, statusCode) {
+
+            if(statusCode !== 401){
+              Notification.error('Document service failed to update document');
+            }
+            deferred.reject(statusCode);
+            $log.error(error, statusCode);
+
+          });
+
+        return deferred.promise;
+      };
+
+
       /**
        *
        * @param docId

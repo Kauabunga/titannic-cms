@@ -16,6 +16,9 @@
       $scope.historyContentDeferred = undefined;
 
 
+      $scope.isRestoring = undefined;
+      $scope.previewReady = false;
+
 
       /**
        *
@@ -66,6 +69,19 @@
 
             });
 
+            /**
+             * Start updating our preview document for the user to preview
+             */
+            $scope.historyContentDeferred.then(function success(historyContent){
+
+              var updatePreviewDeferred = Document.updatePreviewDocument($scope.document._id, historyContent);
+              updatePreviewDeferred.then(function success(){
+                $log.debug('update preview successful');
+                $scope.previewReady = true;
+              });
+
+            });
+
           });
 
         }));
@@ -75,6 +91,17 @@
       })();
 
 
+      /**
+       * TODO should we just start writing this preview on init?
+       */
+      $scope.previewDocumentHistory = function($event){
+
+        if( ! $scope.previewReady){
+          $event.stopPropagation();
+          $event.preventDefault();
+        }
+
+      };
 
 
 

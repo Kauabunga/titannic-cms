@@ -15,14 +15,15 @@ div(ng-class='{"fadeIn": fadeIn}')
     .row.actions
       .col-sm-6.actions-document
         span
-          button.btn.btn-update.btn-info(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
+          button.btn.btn-update.btn-info.btn-restore(ng-class='{"updating": isUpdating, "restoring": isRestoring}', type='submit', ng-click='updateDocument()')
             .circle-loader
             i.fa.fa-clock-o
             | Restore
 
         span
-          a(ng-href='/previewdocument/{{document._id}}/preview', ng-click='previewDocument($event)', target="_blank")
-            button.btn.btn-success(type='button', ng-class='{"updating": isUpdating, "publishing": isPublishing}')
+          a(ng-href='/previewdocument/{{document._id}}/preview', ng-click='previewDocumentHistory($event)', target="_blank")
+            button.btn.btn-success.btn-preview(type='button', ng-class='{"updating": isUpdating, "ready": previewReady}')
+              .circle-loader
               i.fa.fa-search
               | Preview
 

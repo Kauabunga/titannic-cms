@@ -52,7 +52,7 @@ exports.getPreview = function(req, res){
     var options = {
       host: config.localSite,
       port: config.localSitePort,
-      path: '/api/forcecontentupdate?env=' + req.params.env,
+      path: '/api/forcecontentupdate/' + req.params.env,
       agent: false
     };
 
@@ -424,6 +424,9 @@ exports.getHistoryContent = function(req, res){
 
 /**
  * Updates an existing document in the DB and google docs
+ *
+ * TODO this should be using the devContentGoogleDocId from the db rather than the request
+ *
  */
 exports.update = function(req, res) {
 
@@ -472,6 +475,57 @@ exports.update = function(req, res) {
     log.error('Content not passed while updating document');
     res.send(500);
   }
+
+};
+
+
+/**
+ *
+ * @param req
+ * @param res
+ */
+exports.updatePreviewContent = function(req, res){
+
+  log.debug('Updating preview content');
+
+  if(req.params && req.params.id) {
+
+    Document.findById(req.params.id, function (err, document) {
+      if (err) {
+        handleError(res, err);
+      }
+      else if (!document) {
+        res.send(404);
+      }
+      else{
+
+        var googleContentUpdateDeferred = googledrive.updateDocument(req, document.previewContentGoogleDocId, req.body);
+        googleContentUpdateDeferred.then(
+          function success(){
+
+            log.debug('succesfully updated google preview document');
+            res.send(200);
+
+          },
+          function error(statusCode){
+
+            if(typeof statusCode !== "number"){
+              statusCode = 500;
+            }
+
+            log.error('Failed to update google doc content', statusCode);
+            res.send(statusCode);
+          });
+
+      }
+
+    });
+  }
+  else {
+    log.error('invalid params to update preview content');
+    res.send(400);
+  }
+
 
 };
 
