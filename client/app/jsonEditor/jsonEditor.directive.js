@@ -16,7 +16,9 @@
           'editorDocumentDeferred': '=',
           'editorDocumentContent': '=',
           'editorDisableAdd': '@?',
-          'editorReadOnly': '@?'
+          'editorReadOnly': '@?',
+          'editorToggleOptions': '=?',
+          'editorReset': '=?'
         },
         link: function (scope, element, attrs) {
 
@@ -53,6 +55,9 @@
           scope.editorDirty = false;
           scope.editorDisableAdd = (scope.editorDisableAdd === 'true' || scope.editorDisableAdd === true) ? true : false;
           scope.editorReadOnly = (scope.editorReadOnly === 'true' || scope.editorReadOnly === true) ? true : false;
+
+
+
 
 
           $log.debug(scope.editorEnableAdd);
@@ -113,7 +118,7 @@
           /**
            *
            */
-          scope.resetJson = function () {
+          scope.resetJson = scope.editorReset = function () {
 
 
             function yesCallback() {
@@ -148,7 +153,7 @@
           /**
            *
            */
-          scope.toggleOptions = function () {
+          scope.toggleOptions = scope.editorToggleOptions = function () {
             scope.optionsEnabled = !scope.optionsEnabled;
 
             scope.editorLoaded = false;
@@ -166,13 +171,6 @@
 
             }, 50);
 
-          };
-
-          /**
-           *
-           */
-          scope.gotoHistory = function(){
-            $location.path('/editdocument/' + scope.editorDocument._id + '/history');
           };
 
 
@@ -241,10 +239,6 @@
               $allInputElements.attr('disabled', 'true');
               $allInputElements.toggleClass('disabled', true);
             }
-
-
-
-
 
 
             //Delay non-priority bindings

@@ -1,18 +1,10 @@
 
 
-span
-  button.json-editor-btn(ng-click='resetJson()')
-    i.fa.fa-ban
-span
-  button.json-editor-btn(ng-click='toggleOptions()')
-    i.fa.fa-cog
-span
-  button.json-editor-btn(ng-click='gotoHistory()')
-    i.fa.fa-history
 
 .row
   .col-lg-12.json-editor-col
     .json-editor-root(ng-class='{"loaded": editorLoaded, "dirty": editorDirty}')
+
         h4.dirty-header edited
           i.fa.fa-pencil
 

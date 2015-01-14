@@ -13,7 +13,7 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
 
   .container
     .row.actions
-      .col-sm-12
+      .col-sm-6.actions-document
         span
           button.btn.btn-update.btn-info(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
             .circle-loader
@@ -32,11 +32,28 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
             i.fa.fa-paper-plane
             | Publish
 
+      .col-sm-6.actions-editor
+        span
+          button.json-editor-btn(ng-click='resetEditor()')
+            i.fa.fa-ban
+            | Reset
+        span
+          button.json-editor-btn(ng-click='toggleEditorOptions()')
+            i.fa.fa-cog
+            | Options
+        span
+          button.json-editor-btn(ng-click='gotoHistory()')
+            i.fa.fa-history
+            | History
+
+
+
     .row.json-editor-row
       .col-sm-12.still-loading-container(ng-class='{"still-loading": stillLoadingMessage}')
         h2 Still loading
       .col-sm-12
-        span.json-editor(editor-dirty='isDirty', editor-document='document', editor-document-content='document.content', editor-document-deferred='getDocumentDeferred')
+        span.json-editor(editor-dirty='isDirty', editor-document='document', editor-reset='resetEditor', editor-toggle-options='toggleEditorOptions'
+                editor-document-content='document.content', editor-document-deferred='getDocumentDeferred')
 
 
 

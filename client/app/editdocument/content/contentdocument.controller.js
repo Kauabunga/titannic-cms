@@ -11,8 +11,8 @@
 
       $scope.isDirty = undefined;
 
-
-
+      $scope.resetEditor = $scope.resetEditor || undefined;
+      $scope.toggleEditorOptions = $scope.toggleEditorOptions || undefined;
 
       /**
        *
@@ -24,10 +24,6 @@
         }, 0);
 
       })();
-
-
-
-
 
       /**
        *
@@ -53,7 +49,6 @@
         }
 
       };
-
 
 
       /**
@@ -104,6 +99,14 @@
         if($scope.isUpdating || $scope.isPublishing){
           $event.preventDefault();
         }
+      };
+
+
+      /**
+       *
+       */
+      $scope.gotoHistory = function(){
+        $location.path('/editdocument/' + $scope.document._id + '/history');
       };
 
 
