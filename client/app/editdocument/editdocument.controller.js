@@ -5,18 +5,16 @@
   angular.module('titannicCmsApp')
     .controller('EditdocumentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
 
-      $log.debug('Editing document', $stateParams.documentId);
+      $log.debug('MAIN EDIT DOCUMENT CTRL', $stateParams.documentId);
 
       $scope.document = undefined;
+      $scope.documentId = undefined;
       $scope.documentContent = undefined;
       $scope.getDocumentDeferred = undefined;
 
 
       $scope.fadeIn = undefined;
       $scope.stillLoadingMessage = undefined;
-
-
-
 
 
       /**
@@ -31,7 +29,11 @@
        */
       var destroyHandle = $scope.$on('$destroy', function () {
         $log.debug('EditdocumentCtrl $destroy', socket);
-        Document.releaseDocument($scope.document._id);
+
+        if($scope.documentId){
+          Document.releaseDocument($scope.documentId);
+        }
+
         destroyHandle();
       });
 
@@ -58,6 +60,7 @@
        */
       (function init() {
 
+        $scope.documentId = $stateParams.documentId;
 
         $scope.getDocumentDeferred = Document.getDocument($stateParams.documentId, {force: true});
 
@@ -91,10 +94,11 @@
               $location.path('/');
             }
             else if (statusCode === 423) {
-              //TODO Document is already in use
+
               $log.error('Document already in use', statusCode);
               Notification.error('Document already in use');
               $location.path('/');
+
             }
             else if (statusCode === 404) {
               //not found redirect home

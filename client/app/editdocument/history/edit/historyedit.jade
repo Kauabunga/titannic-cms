@@ -40,14 +40,14 @@ div(ng-class='{"fadeIn": fadeIn}')
           //TODO abstract main styling
           //TODO abstract main styling
 
-          .row(ng-repeat='historyItem in documentHistory.items.slice().reverse() track by $index', ng-cloak='')
+          .row(ng-repeat='historyItem in documentHistory.items track by $index', ng-cloak='')
 
             //TODO load on scroll bottom?
             //TODO load on scroll bottom?
             //TODO load on scroll bottom?
             //TODO load on scroll bottom?
 
-            div.history-link(ng-click='openHistory($event, historyItem)')
+            div.history-link(ng-click='openHistory($event, $index, historyItem)')
               h3(ng-if='documentHistory.items.length >= 100')
                 | \#{{documentHistory.items.length - $index | numberpad:3}} Edited by {{historyItem.lastModifyingUserName}} @ {{historyItem.modifiedDate | amCalendar}}
               h3(ng-if='documentHistory.items.length < 100 && documentHistory.items.length >= 10')

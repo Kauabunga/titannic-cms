@@ -333,9 +333,9 @@ exports.getHistory = function(req, res){
 
   if(req && req.params && req.params.id) {
 
-    var googleContentUpdateDeferred = googledrive.getDocumentHistory(req, req.params.id);
+    var googleHistoryDeferred = googledrive.getDocumentHistory(req, req.params.id);
 
-    googleContentUpdateDeferred.then(
+    googleHistoryDeferred.then(
       function success(documentHistory) {
 
         try {
@@ -367,6 +367,51 @@ exports.getHistory = function(req, res){
   }
 
 };
+
+
+/**
+ *
+ */
+exports.getHistoryContent = function(req, res){
+
+  log.debug('Get Document history content');
+
+  if(req && req.params && req.params.id && req.params.historyId) {
+
+    var googleContentUpdateDeferred = googledrive.getDocumentHistoryContent(req, req.params.id, req.params.historyId);
+
+    googleContentUpdateDeferred.then(
+      function success(documentHistoryContent) {
+
+        try {
+
+          var deserialisedContent = JSON.parse(documentHistoryContent);
+          log.debug('          ---> 200 RESPONSE to get history content ' + '\n');
+          res.json(200, deserialisedContent);
+        }
+        catch(error){
+          log.error('error parsing document history content', error);
+          res.send(500);
+        }
+
+      },
+      function error(statusCode) {
+
+        if(typeof statusCode !== "number"){
+          statusCode = 500;
+        }
+
+        log.error('Failed to get google doc history content', statusCode);
+        res.send(statusCode);
+      });
+  }
+  else {
+    log.error('invalid params passed to document history content');
+    res.send(400);
+  }
+
+};
+
 
 
 /**

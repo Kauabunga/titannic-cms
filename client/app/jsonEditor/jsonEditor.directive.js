@@ -13,7 +13,8 @@
         scope: {
           'editorDirty': '=?',
           'editorDocument': '=',
-          'editorDocumentDeferred': '='
+          'editorDocumentDeferred': '=',
+          'editorDocumentContent': '='
         },
         link: function (scope, element, attrs) {
 
@@ -167,7 +168,7 @@
             return {
               schema: scope.editorDocument.schema,
               theme: 'bootstrap2',
-              startval: scope.editorDocument.content,
+              startval: scope.editorDocumentContent,
               disable_properties: !scope.optionsEnabled,
               disable_collapse: !scope.optionsEnabled,
               disable_edit_json: !scope.optionsEnabled,

@@ -39,7 +39,7 @@
                   });
                 $stateProvider
                   .state('editdocument.history.view', {
-                    url: '/view',
+                    url: '/view/{historyId}',
                     templateUrl: 'app/editdocument/history/view/historyview.html',
                     controller: 'EditdocumentHistoryViewCtrl',
                     authenticate: true

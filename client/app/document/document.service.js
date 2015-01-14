@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .service('Document', function ($log, $q, $http, $rootScope, Notification, socket) {
+    .service('Document', function ($log, $q, $http, $rootScope, Notification, socket, $timeout) {
 
       var _documents = {};
       var _deferredGetDocument = {};
@@ -124,25 +124,62 @@
 
 
       /**
-       *
+       * get a list of a documents history
        */
       self.getHistory = function(docId, options){
 
         var deferred = $q.defer();
 
-        $http.get('api/documents/history/' + docId)
-          .success(function(documentHistory){
-            deferred.resolve(documentHistory);
 
-          })
-          .error(function(){
-            deferred.reject();
-          });
+        if( ! docId ){
+          $log.error('no docId passed to getHistory');
+          deferred.reject(400);
+        }
+        else {
+
+          $http.get('api/documents/historylist/' + docId)
+            .success(function (documentHistory) {
+              deferred.resolve(documentHistory);
+
+            })
+            .error(function (response, status) {
+              deferred.reject(status);
+            });
+        }
 
 
         return deferred.promise;
 
       };
+
+
+      /**
+       * get a specific history revision of a google doc id
+       */
+      self.getHistoryDocument = function(googleDocId, historyId, options){
+
+        var deferred = $q.defer();
+
+        if( ! googleDocId || ! historyId){
+          $log.error('no docId or historyId passed to getHistoryDocument');
+          deferred.reject(400);
+        }
+        else {
+          $http.get('api/documents/historydocument/' + googleDocId + '/' + historyId)
+            .success(function(documentHistory){
+              deferred.resolve(documentHistory);
+
+            })
+            .error(function(response, status){
+              deferred.reject(status);
+            });
+        }
+
+
+        return deferred.promise;
+
+      };
+
 
 
       /**
@@ -205,7 +242,11 @@
 
           });
 
-          socket.socket.emit('document:lock', docId);
+          //TODO we should attempt this a couple of times in quick succession if we get rejected
+          $timeout(function(){
+            socket.socket.emit('document:lock', docId);
+          }, 100);
+
 
         }
 

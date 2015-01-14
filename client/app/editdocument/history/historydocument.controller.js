@@ -9,6 +9,8 @@
       $scope.fadeIn = undefined;
       $scope.historyEnv = $stateParams.env || '';
 
+      $scope.googleDocumentEnvId = undefined;
+
       $scope.documentHistory = undefined;
       $scope.documentHistoryLoaded = false;
       $scope.documentHistoryDeferred = undefined;
@@ -18,50 +20,68 @@
       /**
        *
        */
-      $timeout(function init() {
+      (function init() {
 
         $timeout(function () {
           $scope.fadeIn = true;
         });
 
 
-        $scope.getDocumentDeferred.then(
-          function success(document){
+        $scope.$watch('getDocumentDeferred', _.once(function(){
 
-            var documentEnvId = document[$scope.historyEnv + 'ContentGoogleDocId'];
+          $scope.getDocumentDeferred.then(
+            function success(document){
 
-            if(! documentEnvId ){
-              $log.error('Document does not have property', documentEnvId, document);
-              Notification.error('Document does not have content for ' + $scope.historyEnv + ' environment');
-            }
-            else{
-              $scope.documentHistoryDeferred = Document.getHistory(documentEnvId);
+              $scope.googleDocumentEnvId = document[$scope.historyEnv + 'ContentGoogleDocId'];
 
-              $scope.documentHistoryDeferred.finally(function(){
-                $timeout(function(){
-                  $scope.documentHistoryLoaded = true;
+              if(! $scope.googleDocumentEnvId ){
+                $log.error('Document does not have property', documentEnvId, document);
+                Notification.error('Document does not have content for ' + $scope.historyEnv + ' environment');
+              }
+              else{
+
+                $scope.documentHistoryDeferred = Document.getHistory($scope.googleDocumentEnvId);
+                $scope.documentHistoryDeferred.finally(function(){
+                  $timeout(function(){
+                    $scope.documentHistoryLoaded = true;
+                  });
+
                 });
+                $scope.documentHistoryDeferred.then(
+                  function success(documentHistory){
+                    $log.debug('Successfully fetched google doc history', documentHistory);
 
-              });
-              $scope.documentHistoryDeferred.then(
-                function success(documentHistory){
-                  $scope.documentHistory = documentHistory;
-                  $log.debug('Successfully fetched google doc history', documentHistory);
-                },
-                function error(statusCode){
-                  $log.error('failed to get document history', statusCode, $stateParams.documentId);
+                    try {
+                      documentHistory.items = documentHistory.items.slice().reverse();
+                      $scope.documentHistory = documentHistory;
+                    }
+                    catch(error){
+                      Notification.error('Something went wrong getting document history');
+                      $log.error('Unable to get documentHistory and reverse array', error, documentHistory);
+                    }
 
-                  if(statusCode !== 401){
-                    Notification.error('Something went wrong getting document history');
+                  },
+                  function error(statusCode){
+                    $log.error('failed to get document history', statusCode, $stateParams.documentId);
+
+                    if(statusCode !== 401){
+                      Notification.error('Something went wrong getting document history');
+                    }
                   }
-                }
-              );
+                );
+              }
+
             }
+          );
 
-          }
-        );
+        }));
 
-      });
+
+      })();
+
+
+
+
 
     });
 

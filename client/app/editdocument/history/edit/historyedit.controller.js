@@ -10,13 +10,13 @@
       /**
        *
        */
-      $timeout(function init() {
+      (function init() {
 
         $timeout(function () {
           $scope.fadeIn = true;
         });
 
-      });
+      })();
 
 
       /**
@@ -24,11 +24,12 @@
        * @param $event
        * @param historyItem
        */
-      $scope.openHistory = function($event, historyItem){
-        $log.debug('open history', $event, historyItem);
+      $scope.openHistory = function($event, $index, historyItem){
+
+        $log.debug('open history', $index, historyItem);
 
         //TODO can probably use state here?
-        $location.path('/editdocument/' + $scope.document._id + '/history/' + $scope.historyEnv + '/view');
+        $location.path('/editdocument/' + $scope.document._id + '/history/' + $scope.historyEnv + '/view/' + historyItem.id);
 
       };
 

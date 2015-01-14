@@ -6,7 +6,7 @@
   var q = require('q');
   var mongoose = require('mongoose');
   var config = require('../config/environment');
-  var https = require('follow-redirects').https;
+  var url = require('url');
   var Log = require('log');
   var log = new Log('googledrive.service');
 
@@ -16,6 +16,11 @@
 
   var google = require('googleapis');
   var OAuth2 = google.auth.OAuth2;
+
+  var httpService = require('../components/http/http.service');
+
+
+  //nasty - google does not have a method for getting a file revision
 
 
   /**
@@ -28,6 +33,8 @@
   var _deferredCache = {};
 
   var _deferredHistoryCache = {};
+
+  var _deferredHistoryContentCache = {};
 
   var _deferredCommentCache = {};
 
@@ -128,8 +135,6 @@
 
     if( ! _deferredCache[deferredId] || (options && options.force)){
 
-      _deferredCache[deferredId] = q.defer();
-
       var httpOptions = {
         name: name || '',
         host: 'docs.google.com',
@@ -137,68 +142,11 @@
         agent: false
       };
 
-      console.log('REQUEST : ' + httpOptions.name + '    url: ' + httpOptions.host + httpOptions.path);
-
-      //TODO or if the request was rejected
-      var googleContentRequest = https.get(httpOptions, function(googleResponse) {
-
-        if (googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
-          console.log('          ---> ' + httpOptions.name + ' 200 response = ' + googleResponse.statusCode);
-
-          // Buffer the body entirely for processing as a whole.
-          var bodyChunks = [];
-          googleResponse.on('data', function (chunk) {
-            // You can process streamed parts here...
-            bodyChunks.push(chunk);
-          }).on('end', function () {
-
-            var content = '';
-
-            try {
-              content = Buffer.concat(bodyChunks);
-              console.log('          ---> ' + httpOptions.name + '   CONTENT found ');
-
-              _deferredCache[deferredId].resolve(content);
-
-            }
-            catch (error) {
-              _deferredCache[deferredId].reject(googleResponse);
-
-              console.log('    ---> ' + httpOptions.name + '   Error parsing response for document: ' + httpOptions.name);
-              console.log('         ' + httpOptions.name + '   CONTENT: ' + content);
-              console.log('         ' + httpOptions.name + '   URL: ' + httpOptions.host + httpOptions.path);
-              console.log(error);
-
-            }
-
-          }).on('error', function (error) {
-            _deferredCache[deferredId].reject(googleResponse);
-            console.log('        ---> ' + httpOptions.name + '   ERROR https.get error: ' + error);
-          });
-
-        }
-        else {
-          _deferredCache[deferredId].reject(googleResponse);
-          console.log('          ---> ' + httpOptions.name + '   ERROR Non 200 response = ' + googleResponse.statusCode);
-        }
-
-      });
-
-      googleContentRequest.setTimeout(10000, function (error) {
-        console.log('        ---> ' + httpOptions.name + '   Google doc timeout: ' + error);
-        _deferredCache[deferredId].reject(error);
-      });
-
-      googleContentRequest.on('error', function (error) {
-        console.log('        ---> ' + options.name + '   ERROR https.get error: ' + error);
-        _deferredCache[deferredId].reject(error);
-      });
+      _deferredCache[deferredId] = httpService.https(httpOptions);
 
     }
 
-
-    return _deferredCache[deferredId].promise;
-
+    return _deferredCache[deferredId];
   }
 
 
@@ -232,15 +180,14 @@
 
           log.debug('authing with accessToken', user.accessToken);
 
-
           function googleCallback(error, body, googleResponse) {
 
             if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
-              log.debug('successful get history response body', body);
+              log.debug('successful get history response', googleResponse.statusCode);
               googleHistoryDeferred.resolve(body);
             }
-            else {
-              log.error('Get document update google error', error, googleResponse.statusCode);
+            else{
+              log.error('Get document history google error', error, googleResponse.statusCode);
               googleHistoryDeferred.reject(googleResponse.statusCode);
             }
           }
@@ -257,18 +204,126 @@
           }
           catch (error) {
             log.error('Error getting google doc history google doc', error);
-            googleHistoryDeferred.reject(error);
+            googleHistoryDeferred.reject(500);
           }
 
         },
         function error(){
-          log.error('could not get user for google update document');
+          log.error('could not get user for google history document');
           googleHistoryDeferred.reject(401);
         });
 
     }
 
     return _deferredHistoryCache[deferredId].promise;
+  }
+
+  /**
+   *
+   */
+  function getDocumentHistoryContent(req, googleDocContentId, googleDocHistoryId, options){
+
+    var deferredId = 'cache_' + googleDocContentId + '_' + googleDocHistoryId;
+    var currentUserDeferred = User.getUserFromRequest(req);
+
+
+    var metadataDeferred = q.defer();
+    var contentDeferred = q.defer();
+
+
+    if( ! _deferredHistoryContentCache[deferredId] || (options && options.force)) {
+
+      var googleHistoryContentDeferred = _deferredHistoryContentCache[deferredId] = q.defer();
+
+      currentUserDeferred.then(
+        function success(user) {
+
+          log.debug('authing with accessToken', user.accessToken);
+
+          //get google meta data
+
+          function googleCallback(error, body, googleResponse) {
+            if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
+              log.debug('successful get history response body', body);
+              metadataDeferred.resolve(body);
+            }
+            else {
+              log.error('Get document history content google error', error, googleResponse.statusCode);
+              metadataDeferred.reject(googleResponse.statusCode);
+            }
+          }
+
+          try {
+            var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
+            oauth2Client.setCredentials({ access_token: user.accessToken });
+            var drive = google.drive({version: 'v2', auth: oauth2Client});
+
+            drive.revisions.get({
+              fileId: googleDocContentId,
+              revisionId: googleDocHistoryId
+            }, googleCallback);
+
+          }
+          catch (error) {
+            log.error('Error getting google doc history content google doc', error);
+            metadataDeferred.reject(500);
+          }
+
+          metadataDeferred.promise.then(
+            function success(metaData){
+
+              var parsedUrl = url.parse(metaData.downloadUrl);
+              var httpsOptions = {
+                name: 'historycontent' + googleDocHistoryId,
+                host: parsedUrl.host || parsedUrl.hostname,
+                path: parsedUrl.path,
+                agent: false,
+                token: user.accessToken
+
+              };
+
+              var httpDeferred = httpService.https(httpsOptions);
+              httpDeferred.then(
+                function success(content){
+                  contentDeferred.resolve(content);
+                },
+                function error(status){
+                  contentDeferred.reject(status);
+                });
+
+
+            },
+            function error(status){
+              log.error('failed to get document history metadata');
+              googleHistoryContentDeferred.reject(status);
+            });
+
+        },
+        function error(userError){
+          log.error('could not get user for google history content document');
+          googleHistoryContentDeferred.reject(401);
+        });
+
+
+      /**
+       *
+       */
+      contentDeferred.promise.then(
+        function success(historyContent){
+
+          log.debug('successful get history content', historyContent);
+
+          googleHistoryContentDeferred.resolve(historyContent);
+        },
+        function error(status){
+          log.debug('error get history content', status);
+          googleHistoryContentDeferred.reject(status);
+        });
+
+
+    }
+
+    return _deferredHistoryContentCache[deferredId].promise;
   }
 
 
@@ -286,8 +341,9 @@
 
     var deferredId = 'cache_' + googleDocContentId;
 
-    //remove our cached copy of the promise
+    //remove our cached copy of the promises
     delete _deferredCache[deferredId];
+    delete _deferredHistoryCache[deferredId];
 
     log.debug('Updating document - current user:', req.user.name);
 
@@ -323,7 +379,7 @@
         }
         catch (error) {
           log.error('Error updating google doc', error);
-          googleContentDeferred.reject(error);
+          googleContentDeferred.reject(500);
         }
 
       }, function error() {
@@ -416,6 +472,7 @@
   exports.updateDocument = updateDocument;
   exports.fetchGoogleDoc = fetchGoogleDoc;
   exports.getDocumentHistory = getDocumentHistory;
+  exports.getDocumentHistoryContent = getDocumentHistoryContent;
 
 
 })();
