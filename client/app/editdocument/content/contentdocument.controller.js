@@ -148,6 +148,14 @@
       };
 
 
+      /**
+       *
+       */
+      $scope.$on('$destroy', function(){
+
+      });
+
+
 
 
 

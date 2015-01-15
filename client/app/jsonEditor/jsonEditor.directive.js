@@ -328,10 +328,33 @@
             editor.destroy();
           }
 
+
+
+          /**
+           *
+           */
+          function blurInputsOnDocumentClick($event){
+
+            var $target = $($event.target);
+            $log.debug($target);
+
+            if($target && ($target.is('input') || $target.is('textarea'))){
+              $log.debug('focusing input or textarea');
+            }
+            else{
+              $log.debug('forcing blur', document.activeElement);
+              document.activeElement.blur();
+            }
+
+          }
+          $(document).on('touchstart', blurInputsOnDocumentClick);
+
           /**
            *
            */
           var destroyHandle = scope.$on('$destroy', function () {
+
+            $(document).off('touchstart', blurInputsOnDocumentClick);
 
             if (editor) {
               destroyEditor(editor);
