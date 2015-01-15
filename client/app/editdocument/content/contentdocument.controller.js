@@ -23,6 +23,15 @@
           $scope.fadeIn = true;
         }, 0);
 
+        prefetchPreviewUrl();
+
+      })();
+
+
+      /**
+       *
+       */
+      function prefetchPreviewUrl(){
 
         //ready the preview url
         var previewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, 'dev');
@@ -34,8 +43,8 @@
             $log.error('errored pre-fetched preview url for dev', status);
           });
 
+      }
 
-      })();
 
       /**
        *
@@ -55,7 +64,10 @@
               $scope.isUpdating = false;
               $inputs.removeAttr('disabled');
             });
+          });
 
+          updateDeferred.then(function success(){
+            prefetchPreviewUrl();
           });
 
         }
