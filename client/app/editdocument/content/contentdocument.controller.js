@@ -23,6 +23,18 @@
           $scope.fadeIn = true;
         }, 0);
 
+
+        //ready the preview url
+        var previewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, 'dev');
+        previewUrlDeferred.then(
+          function success(){
+            $log.debug('successfully pre-fetched preview url for dev');
+          },
+          function error(status){
+            $log.error('errored pre-fetched preview url for dev', status);
+          });
+
+
       })();
 
       /**

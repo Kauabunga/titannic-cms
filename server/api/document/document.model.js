@@ -20,9 +20,8 @@ var DocumentSchema = new Schema({
   previewContentGoogleDocId: String,
   previewContentCache: String,
 
-  //what version of this document is currently displaying on our dev site (if any)
-  previewDocumentId: String,
-  previewDocumentContentCache: String,
+  //what is the current preview content we have requested
+  currentPreviewContentCache: String,
 
   //url path to preview this document
   previewPath: String,

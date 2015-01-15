@@ -40,44 +40,22 @@ exports.index = function(req, res) {
  */
 exports.getPreview = function(req, res){
 
-
-
-
   Document.findById(req.params.id, function (err, document) {
 
     if (err) {
+      log.error('error finding document', err);
       handleError(res, err);
     }
     else if (!document) {
+      log.error('error finding document', 404);
       res.send(404);
     }
     else {
 
-      //get google id
-      req.params.env = req.params.env || 'dev';
-
-      //get the google doc id for the targeted environment
-      var envGoogleDocId;
-      switch(req.params.env){
-        case 'preview':
-          envGoogleDocId = document.previewContentGoogleDocId;
-          break;
-        case 'live':
-          envGoogleDocId = document.liveContentGoogleDocId;
-          break;
-        case 'dev':
-          envGoogleDocId = document.devContentGoogleDocId;
-          break;
-        default:
-          envGoogleDocId = document.devContentGoogleDocId;
-          break;
-      }
-
-
-      var previewDeferred = preview.getPreview(req.params.env, envGoogleDocId);
+      var previewDeferred = preview.getPreview(req.params.id, req.params.env);
 
       previewDeferred.then(
-        function success(){
+        function success() {
           log.debug('successful get preview document');
 
           var responseBody = {
@@ -87,9 +65,9 @@ exports.getPreview = function(req, res){
           res.status(200).json(responseBody);
 
         },
-        function error(statusCode){
+        function error(statusCode) {
 
-          if(typeof statusCode !== "number"){
+          if (typeof statusCode !== "number") {
             statusCode = 500;
           }
 
@@ -97,10 +75,8 @@ exports.getPreview = function(req, res){
           res.send(statusCode);
 
         });
-
     }
   });
-
 
 };
 
@@ -267,6 +243,8 @@ exports.lockDocument = function(docId, key, username){
 };
 
 /**
+ * unlock a document by id
+ * TODO this should be a function on the document
  *
  * @param docId
  */
@@ -304,6 +282,8 @@ exports.unlockById = function(docId){
 
 
 /**
+ *
+ * get the history list of a document
  *
  */
 exports.getHistory = function(req, res){
@@ -350,6 +330,8 @@ exports.getHistory = function(req, res){
 
 /**
  *
+ * get the history content of a document
+ *
  */
 exports.getHistoryContent = function(req, res){
 
@@ -363,7 +345,6 @@ exports.getHistoryContent = function(req, res){
       function success(documentHistoryContent) {
 
         try {
-
           var deserialisedContent = JSON.parse(documentHistoryContent);
           log.debug('          ---> 200 RESPONSE to get history content ' + '\n');
           res.json(200, deserialisedContent);
@@ -409,7 +390,7 @@ exports.update = function(req, res) {
 
   if(req.body && req.body.content){
 
-    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.body.devContentGoogleDocId, req.body.content);
+    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.params.id, req.body.devContentGoogleDocId, req.body.content, 'dev');
 
     googleContentUpdateDeferred.then(
       function success(){
@@ -451,6 +432,7 @@ exports.update = function(req, res) {
 
 
 /**
+ * Update a preview content
  *
  * @param req
  * @param res
@@ -470,7 +452,7 @@ exports.updatePreviewContent = function(req, res){
       }
       else{
 
-        var googleContentUpdateDeferred = googledrive.updateDocument(req, document.previewContentGoogleDocId, req.body);
+        var googleContentUpdateDeferred = googledrive.updateDocument(req, req.params.id, document.previewContentGoogleDocId, req.body, 'preview');
         googleContentUpdateDeferred.then(
           function success(){
 
@@ -503,8 +485,6 @@ exports.updatePreviewContent = function(req, res){
 
 /**
  * Publishes a document
- *
- * TODO should validate that the content passed is identical to the dev content
  */
 exports.publish = function(req, res) {
 
@@ -516,7 +496,7 @@ exports.publish = function(req, res) {
 
   if(req.body && req.body.content && req.body.liveContentGoogleDocId){
 
-    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.body.liveContentGoogleDocId, req.body.content);
+    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.params.id, req.body.liveContentGoogleDocId, req.body.content, 'live');
 
     googleContentUpdateDeferred.then(
       function success(){

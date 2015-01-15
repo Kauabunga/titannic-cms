@@ -64,8 +64,11 @@
           for(i = 0; i < documents.length; i++){
             var currentDocument = documents[i];
 
-            cacheGoogleDoc('init fetch live doc -> ' + currentDocument.name, currentDocument.liveContentGoogleDocId, currentDocument._id);
-            cacheGoogleDoc('init fetch dev doc  -> ' + currentDocument.name, currentDocument.devContentGoogleDocId, currentDocument._id);
+            cacheGoogleDoc('init fetch live doc -> ' + currentDocument.name, currentDocument.liveContentGoogleDocId, currentDocument, 'live');
+            cacheGoogleDoc('init fetch dev doc  -> ' + currentDocument.name, currentDocument.devContentGoogleDocId, currentDocument, 'dev');
+
+
+
           }
         });
 
@@ -80,6 +83,7 @@
             var currentSchema = schemas[i];
 
             cacheGoogleDoc('init fetch schema -> ' + currentSchema.name, currentSchema.googleDocSchemaId, currentSchema._id);
+
           }
         });
       }, 2000);
@@ -94,7 +98,7 @@
    * @param id
    * @param options
    */
-  function cacheGoogleDoc(name, googleId, dbId, options){
+  function cacheGoogleDoc(name, googleId, document, environment, options){
 
     var deferred = q.defer();
     var fetchDeferred = fetchGoogleDoc(name, googleId, options);
@@ -103,6 +107,30 @@
       function success(fetchResponse){
 
         deferred.resolve(fetchResponse);
+
+        //save the fetchResponse in the db - if it fails it is not the end of the world
+        try {
+
+          //TODO fix this junk in fetchGoogleDoc....
+          var contentString = JSON.parse(fetchResponse);
+          contentString = JSON.stringify(contentString);
+
+          document[environment + 'ContentCache'] = contentString;
+          document.save(function(err){
+            if(err){
+              log.error('Could not cache google doc content', err);
+            }
+            else{
+              log.debug('successfully cached document google content for environment', environment, document);
+
+            }
+          });
+
+        }
+        catch(error){
+          log.error('Could not cache google doc content', environment, error);
+        }
+
 
         //var subscribeDeferred = subscribeGoogleDoc(name, googleId, dbId, options);
 
@@ -125,9 +153,11 @@
   /**
    * Attaches the user object to the request if authenticated
    *
-   * //TODO we need to ensure the returned documents are inline with the User role
-   *
    * Otherwise returns 403
+   *
+   * TODO this should return either a well formed json item or a json string
+   * TODO this should return either a well formed json item or a json string
+   * TODO this should return either a well formed json item or a json string
    */
   function fetchGoogleDoc(name, id, options) {
 
@@ -334,10 +364,13 @@
    * @param content
    * @param googleApiKey
    */
-  function updateDocument(req, googleDocContentId, content) {
+  function updateDocument(req, documentId, googleDocContentId, content, environment) {
 
     var currentUserDeferred = User.getUserFromRequest(req);
+    var documentDeferred = q.defer();
     var googleContentDeferred = q.defer();
+
+    var updateDeferred = q.defer();
 
     var deferredId = 'cache_' + googleDocContentId;
 
@@ -345,8 +378,30 @@
     delete _deferredCache[deferredId];
     delete _deferredHistoryCache[deferredId];
 
+
     log.debug('Updating document - current user:', req.user.name);
 
+
+    //cache the content in our document model
+    Document.findById(documentId, function(err, document){
+
+      if(err){
+        log.error('error getting document in updateDocument', err);
+        documentDeferred.reject(500);
+      }
+      else if(! document){
+        log.error('error getting document in updateDocument', 404);
+        documentDeferred.reject(404);
+      }
+      else{
+        documentDeferred.resolve(document);
+      }
+
+    });
+
+    /**
+     *
+     */
     currentUserDeferred.then(
       function success(user) {
 
@@ -356,6 +411,7 @@
 
           if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
             log.debug('successful response');
+
             googleContentDeferred.resolve();
           }
           else {
@@ -388,7 +444,50 @@
       });
 
 
-    return googleContentDeferred.promise;
+    /**
+     *
+     */
+    q.all([documentDeferred.promise, googleContentDeferred.promise]).then(
+      function success(resolves){
+
+        log.debug('successfully got document and google update');
+
+        try {
+          var document = resolves[0];
+
+          var contentString = content;
+          if (typeof contentString !== 'string') {
+            contentString = JSON.stringify(contentString);
+          }
+
+          document[environment + 'ContentCache'] = contentString;
+          document.save(function (err) {
+            if (err) {
+              log.error('error updating document content');
+              updateDeferred.reject(500);
+            }
+            else {
+              log.debug('successfully updated document content cache for env', environment, document);
+              updateDeferred.resolve();
+            }
+          });
+        }
+        catch(error){
+          log.error('error while trying to cache google update content', error);
+          updateDeferred.reject(500);
+        }
+
+      },
+      function error(status){
+        if(typeof status !== 'number'){
+          status = 500;
+        }
+        updateDeferred.reject(status);
+      });
+
+
+
+    return updateDeferred.promise;
   }
 
 
@@ -467,7 +566,6 @@
 
 
 
-  exports.cacheGoogleDoc = cacheGoogleDoc;
   //exports.subscribeChangeEvent = subscribeChangeEvent;
   exports.updateDocument = updateDocument;
   exports.fetchGoogleDoc = fetchGoogleDoc;
