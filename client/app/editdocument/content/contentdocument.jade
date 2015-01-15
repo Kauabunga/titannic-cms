@@ -6,14 +6,20 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
   header#banner.hero-unit
     .container
       h3 Editing {{document.name}}
-      p Change > Update > Preview > Publish
+      p You're looking at the dev version
         br
-        | &nbsp;
+        | Change it
+        i.fa.fa-angle-right
+        | Update it
+        i.fa.fa-angle-right
+        | Preview it
+        i.fa.fa-angle-right
+        | Publish it live
 
 
   .container
     .row.actions
-      .col-sm-6.actions-document
+      .col-sm-7.actions-document
         span
           button.btn.btn-update.btn-info(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
             .circle-loader
@@ -32,7 +38,7 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
             i.fa.fa-paper-plane
             | Publish
 
-      .col-sm-6.actions-editor
+      .col-sm-5.actions-editor
         span
           button.json-editor-btn(ng-click='resetEditor()')
             i.fa.fa-ban
