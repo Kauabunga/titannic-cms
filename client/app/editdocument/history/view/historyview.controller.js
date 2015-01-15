@@ -46,6 +46,18 @@
               function success(historyContent){
                 $log.debug('Successful get history document content', historyContent);
                 $scope.historyContent = historyContent;
+
+                //start fetching the preview url
+                var getPreviewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, $stateParams.env);
+                getPreviewUrlDeferred.then(
+                  function success(){
+                    $log.debug('get preview url success');
+                  },
+                  function error(err){
+                    $log.debug('get preview url error', err);
+                  });
+
+
               },
               function error(status){
                 $log.error('Error get history document content', status);

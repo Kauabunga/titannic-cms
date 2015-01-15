@@ -409,6 +409,13 @@ exports.update = function(req, res) {
           var updated = _.merge(document, req.body);
           updated.save(function (err) {
             if (err) { return handleError(res, err); }
+
+            delete document.devContentCache;
+            delete document.liveContentCache;
+            delete document.previewContentCache;
+            delete document.currentPreviewContentCache;
+
+
             return res.json(200, document);
           });
         });

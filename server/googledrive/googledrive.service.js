@@ -122,7 +122,6 @@
               }
               else{
                 log.debug('successfully cached document google content for environment', environment);
-
               }
             });
 
@@ -375,13 +374,14 @@
 
     var deferredId = 'cache_' + googleDocContentId;
 
-    //remove our cached copy of the promises
-    delete _deferredCache[deferredId];
-    delete _deferredHistoryCache[deferredId];
+
+    var contentString = content;
+    if(typeof contentString !== 'string'){
+      contentString = JSON.stringify(contentString);
+    }
 
 
     log.debug('Updating document - current user:', req.user.name);
-
 
     //cache the content in our document model
     Document.findById(documentId, function(err, document){
@@ -403,91 +403,116 @@
     /**
      *
      */
-    currentUserDeferred.then(
-      function success(user) {
+    documentDeferred.promise.then(
+      function success(document){
 
-        log.debug('authing with accessToken', user.accessToken);
+        //if our current cache is identical then skip the update
+        if(document[environment + 'ContentCache'] && document[environment + 'ContentCache'] === contentString) {
+          log.debug('Content is identical - skipping update');
 
-        function googleCallback(error, body, googleResponse) {
+          //TODO touch document to update date meta etc..
+          //TODO touch document to update date meta etc..
+          //TODO touch document to update date meta etc..
 
-          if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
-            log.debug('successful response');
+          googleContentDeferred.resolve(false);
+        }
+        else {
 
-            googleContentDeferred.resolve();
+          log.debug('Content is different - updating in google doc');
+
+          //remove our cached copy of the promises
+          delete _deferredCache[deferredId];
+          delete _deferredHistoryCache[deferredId];
+
+
+          currentUserDeferred.then(
+            function success(user) {
+
+              log.debug('authing with accessToken', user.accessToken);
+
+              function googleCallback(error, body, googleResponse) {
+
+                if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
+                  log.debug('successful response');
+
+                  //send the document to be updated in the db
+                  googleContentDeferred.resolve(document);
+                }
+                else {
+                  googleContentDeferred.reject(googleResponse.statusCode);
+                }
+              }
+
+              try {
+                var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
+                oauth2Client.setCredentials({ access_token: user.accessToken });
+                var drive = google.drive({version: 'v2', auth: oauth2Client});
+
+                drive.files.update({
+                  fileId: googleDocContentId,
+                  media: {
+                    mimeType: 'application/json',
+                    body: JSON.stringify(content)
+                  }
+                }, googleCallback);
+
+              }
+              catch (error) {
+                log.error('Error updating google doc', error);
+                googleContentDeferred.reject(500);
+              }
+
+            }, function error() {
+              log.error('could not get user for google update document');
+              googleContentDeferred.reject(401);
+            });
           }
-          else {
-            googleContentDeferred.reject(googleResponse.statusCode);
-          }
-        }
 
-        try {
-          var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
-          oauth2Client.setCredentials({ access_token: user.accessToken });
-          var drive = google.drive({version: 'v2', auth: oauth2Client});
-
-          drive.files.update({
-            fileId: googleDocContentId,
-            media: {
-              mimeType: 'application/json',
-              body: JSON.stringify(content)
-            }
-          }, googleCallback);
-
-        }
-        catch (error) {
-          log.error('Error updating google doc', error);
-          googleContentDeferred.reject(500);
-        }
-
-      }, function error() {
-        log.error('could not get user for google update document');
-        googleContentDeferred.reject(401);
+      },
+      function error(err){
+        log.debug('failed ot get document', err);
+        googleContentDeferred.reject(500);
       });
 
 
     /**
      *
      */
-    q.all([documentDeferred.promise, googleContentDeferred.promise]).then(
-      function success(resolves){
+    googleContentDeferred.promise.then(
+      function success(document){
 
         log.debug('successfully got document and google update');
 
-        try {
-          var document = resolves[0];
+        if(document) {
 
+          try {
+            document[environment + 'ContentCache'] = contentString;
 
-          document[environment + 'ContentCache'] = JSON.stringify(content);
-
-          log.debug('');
-          log.debug('');
-          log.debug('');
-          log.debug('');
-          log.debug(document);
-
-          log.debug('');
-          log.debug('');
-          log.debug('');
-          log.debug('');
-
-          document.save(function (err) {
-            if (err) {
-              log.error('error updating document content');
-              updateDeferred.reject(500);
-            }
-            else {
-              log.debug('successfully updated document content cache for env', environment, document);
-              updateDeferred.resolve();
-            }
-          });
+            document.save(function (err) {
+              if (err) {
+                log.error('error updating document content');
+                updateDeferred.reject(500);
+              }
+              else {
+                log.debug('successfully updated document content cache for env', environment, document);
+                updateDeferred.resolve();
+              }
+            });
+          }
+          catch (error) {
+            log.error('error while trying to cache google update content', error);
+            updateDeferred.reject(500);
+          }
         }
-        catch(error){
-          log.error('error while trying to cache google update content', error);
-          updateDeferred.reject(500);
+        else{
+          log.debug('document already updated');
+          //we already have updated the document
+          updateDeferred.resolve();
         }
 
       },
       function error(status){
+        log.error('failed to update google content', status);
         if(typeof status !== 'number'){
           status = 500;
         }

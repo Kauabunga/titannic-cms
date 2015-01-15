@@ -146,9 +146,21 @@ exports.register = function(socket) {
 };
 
 function onSave(socket, doc, cb) {
+
+  delete doc.devContentCache;
+  delete doc.liveContentCache;
+  delete doc.previewContentCache;
+  delete doc.currentPreviewContentCache;
+
   socket.emit('document:save', doc);
 }
 
 function onRemove(socket, doc, cb) {
+
+  delete doc.devContentCache;
+  delete doc.liveContentCache;
+  delete doc.previewContentCache;
+  delete doc.currentPreviewContentCache;
+
   socket.emit('document:remove', doc);
 }

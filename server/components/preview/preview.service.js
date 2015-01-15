@@ -100,6 +100,17 @@
 
           if(envDocumentCache && envDocumentCache !== '' && envDocumentCache === previewDocumentCache){
             log.debug('resolving preview url from cache as preview content is equal to ', environment);
+
+            log.debug('');
+            log.debug('');
+            log.debug('');
+            log.debug(envDocumentCache);
+            log.debug('');
+            log.debug('');
+            log.debug('');
+            log.debug(previewDocumentCache);
+
+
             previewDeferred.resolve();
           }
           else {
