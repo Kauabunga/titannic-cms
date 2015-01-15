@@ -77,6 +77,9 @@
               scope.editorDocumentDeferred.finally(function(){
                 $timeout(function(){
                   scope.editorLoaded = true;
+
+                  //TODO ugly dirty state
+                  scope.editorDirty = false;
                 }, 50);
 
               });

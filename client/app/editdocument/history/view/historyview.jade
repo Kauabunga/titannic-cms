@@ -4,7 +4,7 @@ div(ng-class='{"fadeIn": fadeIn}')
 
   header#banner.hero-unit
     .container
-      h3 {{document.name}} {{historyEnv}} @ {{historyDocumentItem.modifiedDate | amCalendar}}
+      h3 {{document.name}} {{historyEnv}} as of {{historyDocumentItem.modifiedDate | amCalendar}}
       p Here you can restore or preview this document
         br
         | restoring the document will override the current development version

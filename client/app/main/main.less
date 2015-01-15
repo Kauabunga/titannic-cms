@@ -1,25 +1,8 @@
 
 
-.no-touch {
 
-  ul.item-list {
-    li:hover {
-      cursor: pointer;
-      background-color: darken(@gray-2, 15%);
 
-      a {
-        color: #2daddc !important;
-      }
-    }
 
-    li.locked:hover {
-
-      a {
-        color: @red-alert !important;
-      }
-    }
-  }
-}
 
 
 
@@ -73,6 +56,26 @@ body.main{
   .schemas{
     min-height: 600px;
   }
+
+  ul.item-list {
+    li:hover, li:active {
+      cursor: pointer;
+      background-color: darken(@gray-2, 15%);
+
+      a {
+        color: #2daddc !important;
+      }
+    }
+
+    li.locked:hover, li.locked:active {
+
+      a {
+        color: @red-alert !important;
+      }
+    }
+  }
+
+
 
   ul.item-list {
 
