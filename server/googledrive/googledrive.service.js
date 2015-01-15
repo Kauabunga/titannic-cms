@@ -105,7 +105,8 @@
 
         deferred.resolve(fetchResponse);
 
-        if(document){
+        //only attempt to cache if there was a valid document passed to the function
+        if(document && typeof document.save === 'function' && environment){
 
           //save the fetchResponse in the db - if it fails it is not the end of the world
           try {
