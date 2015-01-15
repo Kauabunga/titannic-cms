@@ -4,6 +4,7 @@
 
   angular.module('titannicCmsApp', [
     'ngCookies',
+    'ngTouch',
     'ngResource',
     'ngSanitize',
     'btford.socket-io',
