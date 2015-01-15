@@ -27,6 +27,8 @@ textarea[disabled] {
 
 body.editdocument {
 
+
+
   @media (max-width: @screen-xs-max) {
     .well {
       padding-left: 5px;
@@ -47,6 +49,8 @@ body.editdocument {
 
     background-color: @gray-dark;
     border-color: @gray-2;
+    border-left: 0 transparent solid;
+    border-right: 0 transparent solid;
 
     border-radius: 0;
 
@@ -194,12 +198,17 @@ body.editdocument {
     }
     label {
       color: @grey-light-2;
+      font-family: museo-b;
     }
+
     input, textarea {
-
+      &:focus {
+        outline: none;
+      }
       border: 0;
-
-
+      font-family: "Open Sans", Helvetica, Arial, sans-serif;
+      font-weight: 300;
+      line-height: 1.72em;
       margin-bottom: 12px;
     }
 
