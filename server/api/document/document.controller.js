@@ -140,6 +140,12 @@ exports.show = function(req, res) {
                 var deserialisedContent = JSON.parse(responseBodies[0]);
                 var deserialisedSchema = JSON.parse(responseBodies[1]);
                 var documentObject = document.toObject();
+
+                delete documentObject.devContentCache;
+                delete documentObject.liveContentCache;
+                delete documentObject.previewContentCache;
+                delete documentObject.currentPreviewContentCache;
+
                 documentObject.content = deserialisedContent;
                 documentObject.schema = deserialisedSchema;
 

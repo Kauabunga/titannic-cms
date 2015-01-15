@@ -36,9 +36,6 @@
 
   var _deferredHistoryContentCache = {};
 
-  var _deferredCommentCache = {};
-
-
   /**
    *
    */
@@ -108,27 +105,30 @@
 
         deferred.resolve(fetchResponse);
 
-        //save the fetchResponse in the db - if it fails it is not the end of the world
-        try {
+        if(document){
 
-          //TODO fix this junk in fetchGoogleDoc....
-          var contentString = JSON.parse(fetchResponse);
-          contentString = JSON.stringify(contentString);
+          //save the fetchResponse in the db - if it fails it is not the end of the world
+          try {
 
-          document[environment + 'ContentCache'] = contentString;
-          document.save(function(err){
-            if(err){
-              log.error('Could not cache google doc content', err);
-            }
-            else{
-              log.debug('successfully cached document google content for environment', environment, document);
+            //TODO fix this junk in fetchGoogleDoc....
+            var contentString = JSON.parse(fetchResponse);
+            contentString = JSON.stringify(contentString);
 
-            }
-          });
+            document[environment + 'ContentCache'] = contentString;
+            document.save(function(err){
+              if(err){
+                log.error('Could not cache google doc content', err);
+              }
+              else{
+                log.debug('successfully cached document google content for environment', environment);
 
-        }
-        catch(error){
-          log.error('Could not cache google doc content', environment, error);
+              }
+            });
+
+          }
+          catch(error){
+            log.error('Could not cache google doc content', environment, error);
+          }
         }
 
 
@@ -455,12 +455,20 @@
         try {
           var document = resolves[0];
 
-          var contentString = content;
-          if (typeof contentString !== 'string') {
-            contentString = JSON.stringify(contentString);
-          }
 
-          document[environment + 'ContentCache'] = contentString;
+          document[environment + 'ContentCache'] = JSON.stringify(content);
+
+          log.debug('');
+          log.debug('');
+          log.debug('');
+          log.debug('');
+          log.debug(document);
+
+          log.debug('');
+          log.debug('');
+          log.debug('');
+          log.debug('');
+
           document.save(function (err) {
             if (err) {
               log.error('error updating document content');
