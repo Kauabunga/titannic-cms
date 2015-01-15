@@ -55,20 +55,25 @@
 
           $scope.isUpdating = true;
 
-          var $inputs = $('span.json-editor input');
-          $inputs.attr('disabled', 'disabled');
-          var updateDeferred = Document.updateDocument($stateParams.documentId);
+          //need a timeout here to make sure that we have blured the field
+          $timeout(function(){
 
-          updateDeferred.finally(function(){
-            $timeout(function(){
-              $scope.isUpdating = false;
-              $inputs.removeAttr('disabled');
+            var $inputs = $('span.json-editor input');
+            $inputs.attr('disabled', 'disabled');
+            var updateDeferred = Document.updateDocument($stateParams.documentId);
+
+            updateDeferred.finally(function(){
+              $timeout(function(){
+                $scope.isUpdating = false;
+                $inputs.removeAttr('disabled');
+              });
+            });
+
+            updateDeferred.then(function success(){
+              prefetchPreviewUrl();
             });
           });
 
-          updateDeferred.then(function success(){
-            prefetchPreviewUrl();
-          });
 
         }
 
