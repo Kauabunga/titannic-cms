@@ -14,7 +14,7 @@ router.put('/publish/:id', auth.isAuthenticated(), controller.publish);
 router.patch('/:id', auth.isAuthenticated(), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 
-router.get('/preview/:id/:env', controller.getPreview);
+router.get('/preview/:id/:env/:isPreviewPageReload', auth.isAuthenticated(), controller.getPreview);
 router.put('/updatepreview/:id', auth.isAuthenticated(), controller.updatePreviewContent);
 
 router.get('/historylist/:id', auth.hasRole('admin'), controller.getHistory);

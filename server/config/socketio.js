@@ -11,15 +11,16 @@ function onDisconnect(socket) {
 }
 
 // When the user connects.. perform this
-function onConnect(socket) {
+function onConnect(socketio, socket) {
   // When the client emits 'info', this listens and executes
   socket.on('info', function (data) {
     console.info('[%s] %s', socket.address, JSON.stringify(data, null, 2));
   });
 
   // Insert sockets below
-  require('../api/schema/schema.socket').register(socket);
-  require('../api/document/document.socket').register(socket);
+  require('../api/schema/schema.socket').register(socketio, socket);
+  require('../api/document/document.socket').register(socketio, socket);
+  require('../components/preview/preview.socket').register(socketio, socket);
 }
 
 module.exports = function (socketio) {
@@ -52,7 +53,7 @@ module.exports = function (socketio) {
     });
 
     // Call onConnect.
-    onConnect(socket);
+    onConnect(socketio, socket);
     console.info('[%s] CONNECTED', socket.address);
   });
 };

@@ -11,13 +11,12 @@
 
   var Document = require('../../api/document/document.model');
 
+
+  var previewSocket = require('./preview.socket');
+
   var Log = require('log');
   var log = new Log('preview.service');
 
-
-
-
-  var _previewDeferredCache = {};
 
 
   /**
@@ -57,20 +56,36 @@
   }
 
 
-
-
-
   /**
    *
    *
    * @param httpOptions
    * @returns {*}
    */
-  exports.getPreview = function(documentId, environment, options){
+  exports.getPreview = function(documentId, environment, isPreviewPageReload, options){
 
     //first we need to attempt to update the local sites content (force it to refetch from google)
     var refreshDeferred = q.defer();
     var previewDeferred = q.defer();
+
+    log.debug('preview.service getPreivew', isPreviewPageReload);
+
+    if(typeof isPreviewPageReload === 'string'){
+      if(isPreviewPageReload === 'false'){
+        isPreviewPageReload = false;
+      }
+      else{
+        isPreviewPageReload = true;
+      }
+    }
+
+    //on a successful preview resolution - send a socket event to clients letting them know
+    previewDeferred.promise.then(function success(){
+      if( ! isPreviewPageReload){
+        previewSocket.emitPreviewUpdate(documentId, environment);
+      }
+    });
+
 
     if(environment && documentId) {
 
@@ -96,20 +111,8 @@
             //TODO we should go and get it....
           }
 
-
-
           if(envDocumentCache && envDocumentCache !== '' && envDocumentCache === previewDocumentCache){
             log.debug('resolving preview url from cache as preview content is equal to ', environment);
-
-            log.debug('');
-            log.debug('');
-            log.debug('');
-            log.debug(envDocumentCache);
-            log.debug('');
-            log.debug('');
-            log.debug('');
-            log.debug(previewDocumentCache);
-
 
             previewDeferred.resolve();
           }

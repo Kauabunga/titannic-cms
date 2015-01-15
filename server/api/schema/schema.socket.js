@@ -6,7 +6,7 @@
 
 var Schema = require('./schema.model');
 
-exports.register = function(socket) {
+exports.register = function(socketio, socket) {
   Schema.schema.post('save', function (doc) {
     onSave(socket, doc);
   });

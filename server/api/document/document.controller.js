@@ -52,7 +52,7 @@ exports.getPreview = function(req, res){
     }
     else {
 
-      var previewDeferred = preview.getPreview(req.params.id, req.params.env);
+      var previewDeferred = preview.getPreview(req.params.id, req.params.env, req.params.isPreviewPageReload);
 
       previewDeferred.then(
         function success() {

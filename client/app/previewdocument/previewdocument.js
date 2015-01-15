@@ -11,7 +11,8 @@
         .state('previewdocument', {
           url: '/previewdocument/{documentId}/{environment}',
           templateUrl: 'app/previewdocument/previewdocument.html',
-          controller: 'PreviewdocumentCtrl'
+          controller: 'PreviewdocumentCtrl',
+          authenticate: true
         });
     });
 

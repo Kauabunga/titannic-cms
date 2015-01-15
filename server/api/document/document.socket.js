@@ -55,7 +55,7 @@ function getUserFromSocket(socket){
  *
  * @param socket
  */
-exports.register = function(socket) {
+exports.register = function(socketio, socket) {
 
   var lockedDocumentId;
 

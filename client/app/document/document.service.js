@@ -370,11 +370,13 @@
        *
        * @param docId
        */
-      self.getPreviewUrl = function (docId, environment) {
+      self.getPreviewUrl = function (docId, environment, options) {
 
         var deferred = $q.defer();
+        options = options || {};
 
-        $http.get('/api/documents/preview/' + docId + '/' + environment)
+
+        $http.get('/api/documents/preview/' + docId + '/' + environment + '/' + ((options.fromPreviewPage === true) ? 'true' : 'false'))
           .success(function (data) {
             deferred.resolve(data);
           })
