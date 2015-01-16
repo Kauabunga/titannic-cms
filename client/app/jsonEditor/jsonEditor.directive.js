@@ -57,6 +57,7 @@
           scope.editorReadOnly = (scope.editorReadOnly === 'true' || scope.editorReadOnly === true) ? true : false;
 
 
+          scope.previousChangeContent = undefined;
 
 
 
@@ -200,6 +201,9 @@
             };
           }
 
+
+
+
           /**
            *
            */
@@ -222,9 +226,27 @@
                 element.css('background-color', '');
               }
 
-              scope.editorDirty = true;
+              var editorValue = editor.getValue();
 
-              Document.setDocumentContent($stateParams.documentId, editor.getValue());
+              if(editorValue !== undefined){
+                try {
+
+                  var editorValueString = JSON.stringify(editorValue);
+                  if (scope.previousChangeContent === undefined) {
+                    scope.previousChangeContent = JSON.stringify(editorValue);
+                  }
+                  else if(editorValueString === scope.previousChangeContent) {
+                    $log.debug('content change is identical...');
+                    return;
+                  }
+                }
+                catch(err){
+                  $log.error('error check if change is valid', err);
+                }
+
+                scope.editorDirty = true;
+                Document.setDocumentContent($stateParams.documentId, editorValue);
+              }
             });
           }
 

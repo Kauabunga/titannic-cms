@@ -16,7 +16,8 @@
       $scope.historyContentDeferred = undefined;
 
 
-      $scope.isRestoring = undefined;
+      $scope.isRestoringOnDestroy = false;
+      $scope.restoreReady = false;
       $scope.previewReady = false;
 
 
@@ -46,6 +47,8 @@
               function success(historyContent){
                 $log.debug('Successful get history document content', historyContent);
                 $scope.historyContent = historyContent;
+
+                $scope.restoreReady = true;
 
                 //start fetching the preview url
                 var getPreviewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, $stateParams.env);
@@ -103,6 +106,7 @@
       })();
 
 
+
       /**
        *
        */
@@ -123,19 +127,34 @@
       $scope.restoreDocument = function($event){
 
 
-        if(! $scope.isRestoring){
-          $log.debug('restoring document', $event);
-          $scope.isRestoring = true;
+        //TODO our directive is writting to our documents content service.... it should be writing to the document in its scope?
+        //TODO our directive is writting to our documents content service.... it should be writing to the document in its scope?
+        //TODO our directive is writting to our documents content service.... it should be writing to the document in its scope?
+        //TODO our directive is writting to our documents content service.... it should be writing to the document in its scope?
+        if($scope.restoreReady){
+          $location.path('/editdocument/' + $stateParams.documentId + '/content');
 
-          //TODO implement
-          //TODO implement
-          //TODO implement
-          //TODO implement
-
+          $scope.isRestoringOnDestroy = true;
         }
 
-
       };
+
+      /**
+       *
+       */
+      $scope.$on('$destroy', function(){
+
+        if($scope.isRestoringOnDestroy){
+          $timeout(function(){
+            //TODO need to call update on the new scope - once the new controller scope is loaded
+            $rootScope.$emit('restoredocument');
+          });
+        }
+        else{
+          //need to reset the content back to the original
+          Document.setDocumentContent($stateParams.documentId, $scope.document.contentOriginal);
+        }
+      });
 
 
 

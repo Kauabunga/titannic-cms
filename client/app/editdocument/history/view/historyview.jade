@@ -15,7 +15,7 @@ div(ng-class='{"fadeIn": fadeIn}')
     .row.actions
       .col-sm-6.actions-document
         span
-          button.btn.btn-update.btn-info.btn-restore(ng-class='{"updating": isUpdating, "restoring": isRestoring}', type='submit', ng-click='updateDocument()')
+          button.btn.btn-update.btn-info.btn-restore(ng-class='{"updating": isUpdating || ! restoreReady, "restoring": isRestoring}', type='submit', ng-click='restoreDocument()')
             .circle-loader
             i.fa.fa-clock-o
             | Restore

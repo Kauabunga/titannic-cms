@@ -12,6 +12,9 @@
       $scope.documentContent = undefined;
       $scope.getDocumentDeferred = undefined;
 
+      $scope.isDirty = undefined;
+      $scope.isUpdating = undefined;
+
 
       $scope.fadeIn = undefined;
       $scope.stillLoadingMessage = undefined;
@@ -115,6 +118,62 @@
           });
 
       })();
+
+
+
+      /**
+       *
+       */
+      $scope.prefetchPreviewUrl = function(){
+
+        //ready the preview url
+        var previewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, 'dev');
+        previewUrlDeferred.then(
+          function success(){
+            $log.debug('successfully pre-fetched preview url for dev');
+          },
+          function error(status){
+            $log.error('errored pre-fetched preview url for dev', status);
+          });
+
+      };
+
+
+
+      /**
+       *
+       */
+      $scope.updateDocument = function updateDocument() {
+
+        if(! $scope.isUpdating && ! $scope.isPublishing){
+
+          $scope.isUpdating = true;
+
+          //need a timeout here to make sure that we have blured the field
+          $timeout(function(){
+
+            var $inputs = $('span.json-editor input');
+            $inputs.attr('disabled', 'disabled');
+            var updateDeferred = Document.updateDocument($stateParams.documentId);
+
+            updateDeferred.finally(function(){
+              $timeout(function(){
+                $scope.isUpdating = false;
+                $inputs.removeAttr('disabled');
+              });
+            });
+
+            updateDeferred.then(function success(){
+              $scope.prefetchPreviewUrl();
+            });
+
+          });
+
+
+        }
+
+      };
+
 
     });
 

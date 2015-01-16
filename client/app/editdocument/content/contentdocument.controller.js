@@ -6,10 +6,8 @@
     .controller('EditdocumentContentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
 
       $scope.fadeIn = undefined;
-      $scope.isUpdating = undefined;
-      $scope.isPublishing = undefined;
 
-      $scope.isDirty = undefined;
+      $scope.isPublishing = undefined;
 
       $scope.resetEditor = $scope.resetEditor || undefined;
       $scope.toggleEditorOptions = $scope.toggleEditorOptions || undefined;
@@ -23,61 +21,13 @@
           $scope.fadeIn = true;
         }, 0);
 
-        prefetchPreviewUrl();
+        $scope.prefetchPreviewUrl();
 
       })();
 
 
-      /**
-       *
-       */
-      function prefetchPreviewUrl(){
-
-        //ready the preview url
-        var previewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, 'dev');
-        previewUrlDeferred.then(
-          function success(){
-            $log.debug('successfully pre-fetched preview url for dev');
-          },
-          function error(status){
-            $log.error('errored pre-fetched preview url for dev', status);
-          });
-
-      }
 
 
-      /**
-       *
-       */
-      $scope.updateDocument = function updateDocument() {
-
-        if(! $scope.isUpdating && ! $scope.isPublishing){
-
-          $scope.isUpdating = true;
-
-          //need a timeout here to make sure that we have blured the field
-          $timeout(function(){
-
-            var $inputs = $('span.json-editor input');
-            $inputs.attr('disabled', 'disabled');
-            var updateDeferred = Document.updateDocument($stateParams.documentId);
-
-            updateDeferred.finally(function(){
-              $timeout(function(){
-                $scope.isUpdating = false;
-                $inputs.removeAttr('disabled');
-              });
-            });
-
-            updateDeferred.then(function success(){
-              prefetchPreviewUrl();
-            });
-          });
-
-
-        }
-
-      };
 
 
       /**
@@ -140,19 +90,27 @@
       };
 
 
+
       /**
        *
        */
       $scope.gotoHistory = function(){
-        $location.path('/editdocument/' + $scope.document._id + '/history');
+        $location.path('/editdocument/' + $stateParams.documentId + '/history');
       };
 
 
       /**
        *
        */
-      $scope.$on('$destroy', function(){
+      var restoreHandle = $rootScope.$on('restoredocument', function(){
+        $scope.updateDocument();
+      });
 
+      /**
+       *
+       */
+      $scope.$on('$destroy', function(){
+        restoreHandle();
       });
 
 

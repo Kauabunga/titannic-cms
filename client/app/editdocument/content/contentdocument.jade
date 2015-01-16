@@ -23,8 +23,8 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
         span
           button.btn.btn-update.btn-info(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
             .circle-loader
-            i.fa.fa-refresh
-            | Update
+            i.fa.fa-save
+            | Save
 
         span
           a(ng-href='/previewdocument/{{document._id}}', ng-click='previewDocument($event)', target="_blank")
