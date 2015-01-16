@@ -485,6 +485,9 @@ module.exports = function (grunt) {
     },
 
     env: {
+      serve: {
+        NODE_ENV: 'development'
+      },
       test: {
         NODE_ENV: 'test'
       },
@@ -631,6 +634,7 @@ module.exports = function (grunt) {
     grunt.task.run([
       'clean:server',
       'env:all',
+      'env:serve',
       'injector:less',
       'concurrent:server',
       'injector',
