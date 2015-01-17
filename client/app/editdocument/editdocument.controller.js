@@ -15,7 +15,6 @@
       $scope.isDirty = undefined;
       $scope.isUpdating = undefined;
 
-
       $scope.fadeIn = undefined;
       $scope.stillLoadingMessage = undefined;
 
@@ -35,6 +34,8 @@
 
         if($scope.documentId){
           Document.releaseDocument($scope.documentId);
+
+          $scope.prefetchPreviewUrl($scope.documentId, 'dev');
         }
 
         destroyHandle();
@@ -124,17 +125,21 @@
       /**
        *
        */
-      $scope.prefetchPreviewUrl = function(){
+      $scope.prefetchPreviewUrl = function(environment){
+
+        environment = environment || 'dev';
 
         //ready the preview url
-        var previewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, 'dev');
+        var previewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, environment);
         previewUrlDeferred.then(
           function success(){
-            $log.debug('successfully pre-fetched preview url for dev');
+            $log.debug('successfully pre-fetched preview url for ', environment);
           },
           function error(status){
-            $log.error('errored pre-fetched preview url for dev', status);
+            $log.error('errored pre-fetched preview url for ', environment, status);
           });
+
+        return previewUrlDeferred;
 
       };
 

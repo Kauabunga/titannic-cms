@@ -50,17 +50,6 @@
 
                 $scope.restoreReady = true;
 
-                //start fetching the preview url
-                var getPreviewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, $stateParams.env);
-                getPreviewUrlDeferred.then(
-                  function success(){
-                    $log.debug('get preview url success');
-                  },
-                  function error(err){
-                    $log.debug('get preview url error', err);
-                  });
-
-
               },
               function error(status){
                 $log.error('Error get history document content', status);
@@ -93,6 +82,17 @@
               updatePreviewDeferred.then(function success(){
                 $log.debug('update preview successful');
                 $scope.previewReady = true;
+
+                //start fetching the preview url
+                var getPreviewUrlDeferred = Document.getPreviewUrl($stateParams.documentId, 'preview');
+                getPreviewUrlDeferred.then(
+                  function success(){
+                    $log.debug('get preview url success');
+                  },
+                  function error(err){
+                    $log.debug('get preview url error', err);
+                  });
+
               });
 
             });
@@ -125,7 +125,6 @@
        * @param $event
        */
       $scope.restoreDocument = function($event){
-
 
         //TODO our directive is writting to our documents content service.... it should be writing to the document in its scope?
         //TODO our directive is writting to our documents content service.... it should be writing to the document in its scope?

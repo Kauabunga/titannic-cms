@@ -19,9 +19,26 @@
    * @param environment
    */
   exports.emitPreviewUpdate = function (documentId, environment){
-
     _socketio.emit('preview:urlupdate', documentId, environment);
+  };
 
+
+  /**
+   *
+   * @param documentId
+   * @param environment
+   */
+  exports.emitPreviewUpdateStart = function (documentId, environment){
+    _socketio.emit('preview:urlupdate:start', documentId, environment);
+  };
+
+  /**
+   *
+   * @param documentId
+   * @param environment
+   */
+  exports.emitPreviewUpdateStartError = function (documentId, environment){
+    _socketio.emit('preview:urlupdate:start:error', documentId, environment);
   };
 
   /**

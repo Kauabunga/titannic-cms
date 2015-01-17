@@ -16,7 +16,28 @@
 
       (function init() {
 
-        getPreviewUrl();
+        var previewDeferred = getPreviewUrl();
+
+
+        previewDeferred.then(function(){
+
+          socket.socket.on('preview:urlupdate:start', function(documentId, environment){
+            $log.debug('socket - preview:urlupdate:start', documentId, environment);
+            if($stateParams.documentId === documentId && $scope.environment === environment) {
+              $scope.fadeIn = false;
+            }
+          });
+
+          socket.socket.on('preview:urlupdate:start:error', function(documentId, environment){
+            $log.debug('socket - preview:urlupdate:start:error', documentId, environment);
+            if($stateParams.documentId === documentId && $scope.environment === environment) {
+              $scope.fadeIn = true;
+            }
+          });
+        });
+
+
+
 
       })();
 
@@ -52,13 +73,28 @@
 
               $scope.iframePreviewUrl = data.url;
 
+              /**
+               *
+               */
               socket.socket.on('preview:urlupdate', function(documentId, environment){
+
+
+                //TODO we should be switching between the dev and update routes to display the latest update..... rather than getting stuck on the dev screen
 
                 $log.debug('socket preview:urlupdate event', documentId, environment, $scope.firstLoad);
 
-                socket.socket.removeListener('preview:urlupdate');
-                if($stateParams.documentId === documentId && $scope.environment === environment){
-                  window.location.reload();
+
+
+                if($stateParams.documentId === documentId){
+
+                  if($scope.environment === environment){
+                    //need to force iframe refresh
+                    window.location.reload();
+                  }
+                  else{
+                    $location.path('/previewdocument/' + documentId + '/'+ environment);
+                  }
+
                 }
 
               });
@@ -76,6 +112,7 @@
             $location.path('/');
           });
 
+        return $scope.getPreviewUrlDeferred;
 
       }
 

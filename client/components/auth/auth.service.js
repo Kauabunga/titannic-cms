@@ -49,7 +49,7 @@
 
 
       /**
-       * TODO check login state with server on focus
+       *
        */
       function checkAuthState(){
         _isLoggedInAsync(function(isLoggedIn){

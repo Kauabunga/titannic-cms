@@ -81,10 +81,17 @@
 
     //on a successful preview resolution - send a socket event to clients letting them know
     previewDeferred.promise.then(function success(){
-      if( ! isPreviewPageReload){
-        previewSocket.emitPreviewUpdate(documentId, environment);
-      }
-    });
+        if( ! isPreviewPageReload){
+          previewSocket.emitPreviewUpdate(documentId, environment);
+        }
+      },
+      function error(){
+
+        if( ! isPreviewPageReload) {
+          previewSocket.emitPreviewUpdateStartError(documentId, environment);
+        }
+
+      });
 
 
     if(environment && documentId) {
@@ -106,6 +113,9 @@
           var envDocumentCache = getEnvDocumentContentCache(environment, document);
           var previewDocumentCache = document.currentPreviewContentCache;
 
+          if( ! isPreviewPageReload) {
+            previewSocket.emitPreviewUpdateStart(documentId, environment);
+          }
 
           if(envDocumentCache === undefined){
             //TODO we should go and get it....

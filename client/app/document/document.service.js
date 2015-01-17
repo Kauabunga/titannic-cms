@@ -357,6 +357,7 @@
             if(statusCode !== 401){
               Notification.error('Document service failed to update document');
             }
+
             deferred.reject(statusCode);
             $log.error(error, statusCode);
 

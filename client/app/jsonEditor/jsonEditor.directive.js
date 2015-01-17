@@ -18,7 +18,8 @@
           'editorDisableAdd': '@?',
           'editorReadOnly': '@?',
           'editorToggleOptions': '=?',
-          'editorReset': '=?'
+          'editorReset': '=?',
+          'editorChangeHandle': '&?'
         },
         link: function (scope, element, attrs) {
 
@@ -226,11 +227,13 @@
                 element.css('background-color', '');
               }
 
+
+
               var editorValue = editor.getValue();
-
               if(editorValue !== undefined){
-                try {
 
+                //ensure that the change is valid
+                try {
                   var editorValueString = JSON.stringify(editorValue);
                   if (scope.previousChangeContent === undefined) {
                     scope.previousChangeContent = JSON.stringify(editorValue);
@@ -246,7 +249,9 @@
 
                 scope.editorDirty = true;
                 Document.setDocumentContent($stateParams.documentId, editorValue);
+
               }
+
             });
           }
 
@@ -260,7 +265,12 @@
             var $editorAnchor = element.find('.json-editor-anchor');
 
             var editor = new JSONEditor($editorAnchor[0], options);
-            editor.on('change', changeHandle);
+
+            //need to delay this otherwise it gets fired instantly
+            $timeout(function(){
+              editor.on('change', changeHandle);
+            });
+
 
             if(scope.editorReadOnly){
               var $allInputElements = $('textarea, input, select');

@@ -81,9 +81,9 @@
 
             //give the logout a second
             $timeout(function(){
+              $location.path('/login');
               deferred.reject(response);
             });
-
 
             return deferred.promise;
           }
