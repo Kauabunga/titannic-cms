@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('PreviewdocumentCtrl', function ($scope, $http, Document, $stateParams, Notification, $location, $timeout, socket, $log, Config) {
+    .controller('PreviewdocumentCtrl', function ($scope, $http, Document, $stateParams, Notification, $location, $timeout, socket, $log, Config, $state) {
 
       $scope.fadeIn = undefined;
       $scope.environment = $stateParams.environment || 'dev';
@@ -77,6 +77,7 @@
 
               $scope.iframePreviewUrl = data.url;
 
+
               /**
                *
                */
@@ -87,16 +88,14 @@
 
                 $log.debug('socket preview:urlupdate event', documentId, environment, $scope.firstLoad);
 
-
-
                 if($stateParams.documentId === documentId){
 
-                  if($scope.environment === environment){
+                  if($stateParams.environment === environment){
                     //need to force iframe refresh
-                    window.location.reload();
+                    $state.go($state.current.name, $state.params, { reload: true });
                   }
                   else{
-                    $location.path('/previewdocument/' + documentId + '/'+ environment);
+                    $location.path('/previewdocument/' + documentId + '/' + environment);
                   }
 
                 }
