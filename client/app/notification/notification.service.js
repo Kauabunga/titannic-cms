@@ -11,7 +11,8 @@
       var self = this;
       var confimationActive = false;
       var $n;
-      var $notificationScreen;
+      var $notificationScreen = $('#notification-screen');
+
 
       function fadeoutNoty(){
 
@@ -114,7 +115,8 @@
             options.yesText = options.yesText || 'Delete';
             options.noText = options.noText || 'Cancel';
 
-            $notificationScreen = $('#notification-screen');
+
+            $notificationScreen.css('height', $(document).height() +'px');
 
             $notificationScreen.toggleClass('active', true);
             $timeout(function(){
