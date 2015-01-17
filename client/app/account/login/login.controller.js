@@ -9,6 +9,8 @@
 
       $scope.fadeIn = undefined;
 
+      $scope.stillLoggingIn = undefined;
+
       $timeout(function(){
         $scope.fadeIn = true;
       }, 50);
@@ -54,9 +56,14 @@
 
         setTimeout(function () {
           $body.css('opacity', 0.4);
+
+          setTimeout(function () {
+            $window.location.href = '/auth/' + provider;
+          }, 0);
         }, 0);
 
-        $window.location.href = '/auth/' + provider;
+
+
       };
     });
 

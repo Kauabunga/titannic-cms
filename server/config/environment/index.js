@@ -3,6 +3,7 @@
 var path = require('path');
 var _ = require('lodash');
 
+
 function requiredProcessEnv(name) {
   if(!process.env[name]) {
     throw new Error('You must set the ' + name + ' environment variable');
@@ -63,6 +64,8 @@ var all = {
 
   //address for this site
   domain: (process.env.DOMAIN || 'http://localhost:9000/'),
+  host: (process.env.HOST || 'localhost'),
+
 
   //our targeted site using the cms documents
   localSite: process.env.LOCAL_SITE || 'localhost',

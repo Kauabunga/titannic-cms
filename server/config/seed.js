@@ -60,9 +60,9 @@ var schemas = [
       {
         name : 'About us',
         info : 'About us content',
-        liveContentGoogleDocId: '0B84YdCmz0nrQal9TRjhMMHZhTVk',
+        liveContentGoogleDocId: '0B84YdCmz0nrQck5TWG9TZC1jTGs',
         previewContentGoogleDocId: '0B84YdCmz0nrQdWF4TkU3YVVadmc',
-        devContentGoogleDocId: '0B84YdCmz0nrQck5TWG9TZC1jTGs',
+        devContentGoogleDocId: '0B84YdCmz0nrQal9TRjhMMHZhTVk',
         previewPath: '#!/aboutus'
       }
     ]

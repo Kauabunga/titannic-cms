@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('PreviewdocumentCtrl', function ($scope, $http, Document, $stateParams, Notification, $location, $timeout, socket, $log) {
+    .controller('PreviewdocumentCtrl', function ($scope, $http, Document, $stateParams, Notification, $location, $timeout, socket, $log, Config) {
 
       $scope.fadeIn = undefined;
       $scope.environment = $stateParams.environment || 'dev';
@@ -11,6 +11,7 @@
       $scope.getPreviewUrlDeferred = undefined;
 
       $scope.$previewIframe = $('.previewIframe');
+
 
 
 
@@ -62,6 +63,9 @@
 
         $scope.getPreviewUrlDeferred.then(
           function success(data) {
+
+            var host = Config.get('host');
+            $log.debug('successful getPreviewUrl with host', host, data);
 
             if (data && data.url) {
 

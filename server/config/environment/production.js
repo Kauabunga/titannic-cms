@@ -25,6 +25,8 @@ module.exports = {
 
   domain: 'http://titanic.solnetsolutions.co.nz:9000',
 
+  host: 'titanic.solnetsolutions.co.nz',
+
   seedDB: true
 
 };

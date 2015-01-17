@@ -176,6 +176,12 @@
 
     }
 
+    _deferredCache[deferredId].then(
+      function success(){},
+      function error(){
+        delete _deferredCache[deferredId];
+      });
+
     return _deferredCache[deferredId];
   }
 
@@ -244,6 +250,13 @@
         });
 
     }
+
+    _deferredHistoryCache[deferredId].promise.then(
+      function success(){},
+      function error(){
+        delete _deferredHistoryCache[deferredId];
+      });
+
 
     return _deferredHistoryCache[deferredId].promise;
   }
@@ -350,8 +363,14 @@
           googleHistoryContentDeferred.reject(status);
         });
 
-
     }
+
+
+    _deferredHistoryContentCache[deferredId].promise.then(
+      function success(){},
+      function error(){
+        delete _deferredHistoryCache[deferredId];
+      });
 
     return _deferredHistoryContentCache[deferredId].promise;
   }
