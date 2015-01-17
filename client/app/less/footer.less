@@ -23,6 +23,22 @@ body.main {
 .footer {
 
 
+  .document-name {
+    h3 {
+      color: #555;
+    }
+
+    opacity: 0;
+    .transition(opacity 200ms ease);
+
+    &.fade-in {
+      opacity: 1;
+    }
+  }
+
+  height: 99px;
+
+
   padding-bottom: 40px;
   text-align: center;
   border-bottom: 20px solid @charcoal-lighter;

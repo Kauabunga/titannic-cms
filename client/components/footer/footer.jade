@@ -1,5 +1,7 @@
 footer.footer(ng-controller='FooterCtrl')
   .container
     .row
+      .document-name(ng-class='{"fade-in": fadeInDocumentName}', ng-cloak='')
+        h3 {{documentName}} Document
       .footer-logo
         img.solnet-logo(src='../assets/images/solnet.svg', ng-click='goHome()')

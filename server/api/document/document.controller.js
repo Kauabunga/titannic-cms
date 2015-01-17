@@ -56,18 +56,20 @@ exports.getPreview = function(req, res){
 
       previewDeferred.then(
         function success() {
-          log.debug('successful get preview document');
+          log.debug('successful get preview document', req.hostname, config.env);
 
           var url;
 
           //if the request is coming from an ip address hostname and we are in a development environment serve up a different url
           var ipPattern = /\b(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\b/;
           if(ipPattern.test(req.hostname) && config.env.indexOf('dev') !== -1){
+            log.debug('is ip req host');
             url = config.localSiteProtocol + '://' + req.hostname + ':' + config.localSitePort + '/' + (document.previewPath || '');
           }
           else{
             url = config.localSiteProtocol + '://' + config.localSite + ':' + config.localSitePort + '/' + (document.previewPath || '');
           }
+
 
 
           var responseBody = {
