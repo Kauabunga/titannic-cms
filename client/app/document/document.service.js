@@ -142,8 +142,12 @@
               deferred.resolve(documentHistory);
 
             })
-            .error(function (response, status) {
-              deferred.reject(status);
+            .error(function (response, statusCode) {
+
+              if(statusCode === 503){
+                Notification.error('Google docs is dead yo', {duration: -1});
+              }
+              deferred.reject(statusCode);
             });
         }
 
@@ -170,8 +174,12 @@
               deferred.resolve(documentHistory);
 
             })
-            .error(function(response, status){
-              deferred.reject(status);
+            .error(function(response, statusCode){
+
+              if(statusCode === 503){
+                Notification.error('Google docs is dead yo', {duration: -1});
+              }
+              deferred.reject(statusCode);
             });
         }
 
@@ -223,6 +231,10 @@
               _deferredGetDocument[docId].resolve(document);
 
             }).error(function (data, statusCode) {
+
+              if(statusCode === 503){
+                Notification.error('Google docs is dead yo', {duration: -1});
+              }
 
               $log.error('failed to get document', data);
               _deferredGetDocument[docId].reject(statusCode);
@@ -281,10 +293,16 @@
               Notification.success('Document updated');
 
             })
-            .error(function (error) {
+            .error(function (error, statusCode) {
               deferred.reject();
-              $log.error(error);
-              Notification.error('Document service failed to update document');
+              $log.error(error, statusCode);
+
+              if(statusCode === 503){
+                Notification.error('Google docs is dead yo', {duration: -1});
+              }
+              else{
+                Notification.error('Document service failed to update document');
+              }
 
             });
 
@@ -323,11 +341,16 @@
               Notification.success('Document published');
 
             })
-            .error(function (error) {
-              deferred.reject();
+            .error(function (error, statusCode) {
+              deferred.reject(statusCode);
               $log.error(error);
-              Notification.error('Document service failed to publish document');
 
+              if(statusCode === 503){
+                Notification.error('Google docs is dead yo', {duration: -1});
+              }
+              else{
+                Notification.error('Document service failed to publish document');
+              }
             });
 
         }
@@ -357,8 +380,16 @@
           .error(function (error, statusCode) {
 
             if(statusCode !== 401){
-              Notification.error('Document service failed to update document');
+              if(statusCode === 503){
+                Notification.error('Google docs is dead yo', {duration: -1});
+              }
+              else{
+                Notification.error('Document service failed to update document');
+              }
+
+
             }
+
 
             deferred.reject(statusCode);
             $log.error(error, statusCode);
