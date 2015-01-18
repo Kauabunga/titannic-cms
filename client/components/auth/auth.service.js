@@ -145,15 +145,26 @@
             password: user.password
           }).
             success(function (data) {
-              localLogin();
+
               $cookieStore.put('token', data.token);
               currentUser = User.get();
-              deferred.resolve(data);
+
+              //ensure cookie is all g
+              $timeout(function(){
+                localLogin();
+                deferred.resolve(data);
+              });
+
               return cb();
             }).
             error(function (err) {
-              this.logout();
-              deferred.reject(err);
+              _logout();
+
+              $timeout(function(){
+                localLogout();
+                deferred.reject(err);
+              });
+
               return cb(err);
             }.bind(this));
 

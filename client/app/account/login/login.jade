@@ -7,13 +7,28 @@ div(ng-include='"components/navbar/navbar.html"')
   .row
     .col-xs-10.col-xs-offset-1
       hr
-  .row.login-google-container(ng-class='{"login-focus": loginLocalFocus}', ng-mouseenter='loginLocalFocus = true', ng-mouseleave='loginLocalFocus = false')
-    .col-sm-12
-      a.btn.btn-google-plus.btn-login(ng-class='{"logging-in-google": isLoggingInGoogle}', href='', ng-click='loginOauth("google")')
-        .circle-loader
-        //i.fa.fa-google-plus
-        i.fa
-        | &nbsp;&nbsp;Login with Google
+
+  .row.login-local-container(ng-class='{"login-focus": loginLocalFocus}', ng-mouseenter='loginLocalFocus = true', ng-mouseleave='loginLocalFocus = false')
+    .col-sm-4.col-sm-offset-4
+      form.form(name='form', ng-submit='login(form)', novalidate='')
+        .form-group
+          //label Email
+          input.form-control.email-input(type='text', name='email', ng-model='user.email', ng-minlength='{{1}}', ng-required='true',
+          required='true' ng-class='{"valid": form.email.$valid }', placeholder='Enter your Solnet email')
+        .form-group
+          //label Password
+          input.form-control.password-input(type='password', name='password', ng-required='true', ng-model='user.password', placeholder='Enter your password')
+          //div(style='color: white;') {{form}}
+        .form-group.has-error
+          p.help-block(ng-show='form.email.$error.required && form.password.$error.required && submitted ')
+            | Please enter your email and password.
+          p.help-block(ng-show='! form.email.$error.required && form.password.$error.required && submitted ')
+            | Please enter your password.
+          p.help-block {{ errors.other }}
+          button.btn.btn-login.btn-local(type='submit', ng-class='{"logging-in-local": isLoggingInLocal}', href='')
+            .circle-loader
+            i.fa
+            | &nbsp;&nbsp;Login with Solnet
 
 
     .col-sm-4.col-sm-offset-4.alt-text
@@ -21,25 +36,10 @@ div(ng-include='"components/navbar/navbar.html"')
   .row
     .col-sm-6.col-sm-offset-3.col-xs-10.col-xs-offset-1
       hr
-  .row.login-local-container(ng-class='{"login-focus": googleLoginFocus}', ng-mouseenter='googleLoginFocus = true', ng-mouseleave='googleLoginFocus = false')
-    .col-sm-4.col-sm-offset-4
-      form.form(name='form', ng-submit='login(form)', novalidate='')
-        .form-group
-          //label Email
-          input.form-control.email-input(type='text', name='email', ng-model='user.email', ng-minlength='{{1}}', ng-required='true',
-                                required='true' ng-class='{"valid": form.email.$valid }', placeholder='Enter your Solnet email')
-        .form-group
-          //label Password
-          input.form-control.password-input(type='password', name='password', ng-required='true', ng-model='user.password', placeholder='Enter your password')
-
-        .form-group.has-error
-          p.help-block(ng-show='form.email.$error.required && form.password.$error.required && submitted')
-            | Please enter your email and password.
-          p.help-block {{ errors.other }}
-
-        button.btn.btn-login.btn-local(type='submit', ng-class='{"logging-in-local": isLoggingInLocal}', href='')
-          .circle-loader
-          i.fa
-          | &nbsp;&nbsp;Login with Solnet
-
-  //hr
+  .row.login-google-container(ng-class='{"login-focus": googleLoginFocus}', ng-mouseenter='googleLoginFocus = true', ng-mouseleave='googleLoginFocus = false')
+    .col-sm-12
+      a.btn.btn-google-plus.btn-login(ng-class='{"logging-in-google": isLoggingInGoogle}', href='', ng-click='loginOauth("google")')
+        .circle-loader
+        //i.fa.fa-google-plus
+        i.fa
+        | &nbsp;&nbsp;Login with Google

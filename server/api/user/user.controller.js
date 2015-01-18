@@ -84,12 +84,18 @@ exports.create = function (req, res, next) {
  */
 exports.adminCreate = function (req, res, next) {
 
+  log.debug('admin create user', req.body);
+
   var newUser = new User(req.body);
 
+
   newUser.save(function(err, user) {
-    if (err) return validationError(res, err);
-    var token = jwt.sign({_id: user._id }, config.secrets.session, { expiresInMinutes: 60*5 });
-    res.json({ token: token });
+    if (err) {
+      log.error('error admin create user', err);
+      return validationError(res, err);
+    }
+
+    res.send(201);
   });
 };
 
