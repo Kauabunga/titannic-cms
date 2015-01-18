@@ -48,10 +48,14 @@
               $scope.historyContentDeferred.finally(function(){ $scope.historyContentLoaded = true; });
               $scope.historyContentDeferred.then(
                 function success(historyContent){
+
                   $log.debug('Successful get history document content', historyContent);
                   $scope.historyContent = historyContent;
 
+                  Document.setDocumentContent($stateParams.documentId, historyContent);
+
                   $scope.restoreReady = true;
+
 
                 },
                 function error(status){
