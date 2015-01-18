@@ -25,7 +25,6 @@
   var google = require('googleapis');
   var OAuth2 = google.auth.OAuth2;
 
-  var httpService = require('../../components/http/http.service.js');
 
 
   /**
@@ -73,36 +72,79 @@
     //check to see if the token is out of date - needs refreshing
 
     var googleAuthStateDeferred = _getGoogleAuthState();
+    var accessTokenDeferred = q.defer();
 
+
+    googleAuthStateDeferred.then(
+      function success(googleAuth){
+
+
+        //TODO check how long ago the last refresh was
+        var refreshTokenDeferred = _refreshAccessToken(googleAuth);
+
+
+
+
+        if(! googleAuth.googleAccess.lastRefreshDate){
+
+        }
+
+        else {
+
+        }
+      },
+      function error(){
+        accessTokenDeferred.reject();
+      });
+
+    return accessTokenDeferred.promise;
 
   }
 
 
   /**
-   * Get the refresh token from the db
    *
-   * @private
    */
-  function _getRefreshToken(){
+  function _refreshAccessToken(googleAuthState){
 
     var deferred = q.defer();
 
+    log.debug('refreshing access token with state', googleAuthState);
 
 
+    try {
 
+
+      var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
+      oauth2Client.setCredentials({refreshToken: googleAuthState.googleAccess.refreshToken, refresh_token: googleAuthState.googleAccess.refreshToken});
+      console.log('oauth2Client', oauth2Client);
+
+
+      oauth2Client.refreshAccessToken(function (error, googleResponse) {
+
+
+        if(error){
+          log.debug('new access token? error', error);
+          deferred.reject();
+        }
+        else{
+          log.debug('refresh access token response from goolge', googleResponse);
+
+          //googleResponse.expiry_date: 1421553674063
+          //googleResponse.access_token: 1421553674063
+
+        }
+
+
+      });
+
+    }
+    catch(error){
+      log.error('couldnt get access token from refresh token', error);
+    }
 
 
     return deferred.promise;
-
-  }
-
-  /**
-   *
-   */
-  function _refreshAccessToken(){
-
-
-
   }
 
   /**
@@ -125,7 +167,12 @@
         deferred.reject();
       }
       else{
-        deferred.resolve(googleAuth);
+
+        //TODO make this a singleton
+        //TODO make this a singleton
+        //TODO make this a singleton
+        //TODO make this a singleton
+        deferred.resolve(googleAuth[0]);
       }
 
 

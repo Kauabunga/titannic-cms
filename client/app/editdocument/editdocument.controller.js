@@ -93,6 +93,8 @@
           },
           function error(statusCode) {
 
+            $log.debug('failed to get document', statusCode);
+
             if (statusCode === 401) {
               Notification.error('You need to login to access this document');
               $location.path('/');

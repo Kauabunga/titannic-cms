@@ -180,8 +180,9 @@ exports.show = function(req, res) {
 
             },
             function error(contentFetchError) {
+              log.error('failed to get document', arguments);
               log.error(contentFetchError);
-              res.send(500);
+              res.send(contentFetchError);
             });
 
 

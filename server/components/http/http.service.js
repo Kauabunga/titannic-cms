@@ -79,8 +79,17 @@
 
       });
 
-      request.setTimeout(10000, function (error) {
-        console.log('        ---> ' + httpOptions.name + '   https timeout: ' + error);
+      request.on('socket', function (socket) {
+        socket.setTimeout(10000);
+        socket.on('timeout', function() {
+          console.log('        ---> ' + httpOptions.name + '   https timeout:');
+          deferred.reject(408);
+          request.abort();
+        });
+      });
+
+      request.setTimeout(10000, function () {
+        console.log('        ---> ' + httpOptions.name + '   https timeout:');
         deferred.reject(408);
       });
 

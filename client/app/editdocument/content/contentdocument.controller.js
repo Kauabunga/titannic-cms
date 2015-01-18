@@ -190,7 +190,10 @@
         //TODO if we dirty
 
         //need to reset the content back to the original
-        Document.setDocumentContent($stateParams.documentId, $scope.document.contentOriginal);
+        if($scope.document){
+          Document.setDocumentContent($stateParams.documentId, $scope.document.contentOriginal);
+        }
+
 
       });
 

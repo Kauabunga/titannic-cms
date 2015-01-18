@@ -151,12 +151,15 @@
               }
             });
 
-            /**
-             *
-             */
-            request.setTimeout(10000, function (error) {
-              log.error('failed to get content refresh timeout', error);
-              refreshDeferred.reject(408);
+
+
+            request.on('socket', function (socket) {
+              socket.setTimeout(10000);
+              socket.on('timeout', function() {
+                log.error('failed to get content refresh timeout');
+                refreshDeferred.reject(408);
+                request.abort();
+              });
             });
 
             /**

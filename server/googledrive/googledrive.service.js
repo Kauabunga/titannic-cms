@@ -53,7 +53,7 @@
       //TODO how do we get these requests to work without setTieout - process.nextTick()?
       setTimeout(function(){
 
-        
+
         googleAuthService.getAccessToken();
 
         Document.find(function (err, documents) {
@@ -183,8 +183,11 @@
     }
 
     _deferredCache[deferredId].then(
-      function success(){},
+      function success(){
+
+      },
       function error(){
+        //TODO we should be checking this at the start of the request?
         delete _deferredCache[deferredId];
       });
 
