@@ -5,6 +5,7 @@ var q = require('q');
 var Document = require('./document.model');
 var Schema = require('./../schema/schema.model');
 var googledrive = require('../../googledrive/googledrive.service');
+
 var preview = require('../../components/preview/preview.service');
 
 var https = require('follow-redirects').https;
@@ -484,6 +485,10 @@ exports.updatePreviewContent = function(req, res){
       }
       else{
 
+        //let our sockets know that we are updating preview content
+        preview.updatingPreviewContentEvent(req.params.id, 'preview');
+
+
         var googleContentUpdateDeferred = googledrive.updateDocument(req, req.params.id, document.previewContentGoogleDocId, req.body, 'preview');
         googleContentUpdateDeferred.then(
           function success(){
@@ -493,6 +498,8 @@ exports.updatePreviewContent = function(req, res){
 
           },
           function error(statusCode){
+
+            preview.updatingPreviewContentErrorEvent(req.params.id, 'preview');
 
             if(typeof statusCode !== "number"){
               statusCode = 500;

@@ -55,6 +55,25 @@
     return document[environment + 'ContentCache'];
   }
 
+  /**
+   *
+   * @param documentId
+   * @param environment
+   */
+  exports.updatingPreviewContentEvent = function(documentId, environment){
+    previewSocket.emitPreviewUpdateStart(documentId, environment);
+  };
+
+
+  /**
+   *
+   * @param documentId
+   * @param environment
+   */
+  exports.updatingPreviewContentErrorEvent = function(documentId, environment){
+    previewSocket.emitPreviewUpdateStartError(documentId, environment);
+  };
+
 
   /**
    *

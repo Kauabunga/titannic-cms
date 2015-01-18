@@ -52,6 +52,7 @@
               $log.debug('change handle in content document controller - updating preview content', document);
 
               devPreviewDeferred.then(function success() {
+
                 updatePreviewDocumentChanges(document, false);
               });
             });
@@ -82,6 +83,11 @@
 
           if(! isInit){
             $scope.isPreviewLoading = true;
+
+            //Here we want to notify all other tabs that we have made a change and will be refreshing
+            //      time to start the loading icon
+
+
           }
 
           $scope.previewUpdateDeferred = Document.updatePreviewDocument(document._id, document.content);
@@ -90,6 +96,9 @@
             function success(){
               $scope.isDevPreview = false;
               $scope.prefetchPreviewUrl('preview');
+            },
+            function error(){
+              //In an error case - need to tell the tabs that there was an error....
             });
         }
       }

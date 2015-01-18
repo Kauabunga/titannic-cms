@@ -182,6 +182,18 @@
 
       /**
        *
+       */
+      $scope.previewDocument = function previewDocument($event, document){
+        //Do not want to trigger the edit document click trigger
+        $event.preventDefault();
+        $event.stopPropagation();
+
+        $location.path('/previewdocument/' + document._id + '/dev');
+
+      };
+
+      /**
+       *
        * @param $event
        * @param document
        */
