@@ -1,7 +1,7 @@
 div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
   div.container
     div.navbar-header
-      button.navbar-toggle(type='button', ng-click='isCollapsed = !isCollapsed')
+      button.navbar-toggle(ng-show='isLoggedIn()', type='button', ng-click='isCollapsed = !isCollapsed')
         span.sr-only Toggle navigation
         span.icon-bar
         span.icon-bar
@@ -10,7 +10,7 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
         img.solnet-logo(src="../assets/images/solnet.svg")
 
 
-    div#navbar-main.navbar-collapse.collapse(collapse='isCollapsed')
+    div#navbar-main.navbar-collapse(ng-class='{"collapse": isCollapsed, "animated": ! isCollapsed, "fadeInDown": ! isCollapsed}')
       ul.nav.navbar-nav
         li(ng-repeat='item in menu', ng-show='isLoggedIn()', ng-class='{active: isActive(item.link)}')
           a(ng-href='{{item.link}}') {{item.title}}
@@ -22,7 +22,7 @@ div.navbar.navbar-default.navbar-static-top(ng-controller='NavbarCtrl')
         //li(ng-hide='isLoggedIn()', ng-class='{active: isActive("/signup")}')
           a(href='/signup') Sign up
 
-        li(ng-show='isLoggedIn()')
+        li.hidden-xs(ng-show='isLoggedIn()')
           p.navbar-text.username Hello
             span {{ getCurrentUser().name }}
 
