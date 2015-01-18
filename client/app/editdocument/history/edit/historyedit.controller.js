@@ -3,21 +3,16 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('EditdocumentHistoryEditCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
+    .controller('EditdocumentHistoryEditCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout, $state) {
 
-      $scope.fadeIn = undefined;
 
-      /**
-       *
-       */
-      (function init() {
-
-        $timeout(function () {
-          $scope.fadeIn = true;
-        });
-
-      })();
-
+      //TODO this should only fade in on first route to this state
+      //TODO this should only fade in on first route to this state
+      //TODO this should only fade in on first route to this state
+      //TODO this should only fade in on first route to this state
+      //TODO this should only fade in on first route to this state
+      //TODO this should only fade in on first route to this state
+      $scope.fadeIn = true;
 
       /**
        *

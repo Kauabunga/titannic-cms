@@ -24,15 +24,20 @@ body.main {
 
 
   .document-name {
+    position: relative;
+    display: none;
+
     h3 {
       color: #555;
     }
 
     opacity: 0;
-    .transition(opacity 200ms ease);
+    .transition(all 200ms ease);
+    transform: translateY(10px);
 
     &.fade-in {
       opacity: 1;
+      transform: translateY(0px);
     }
   }
 

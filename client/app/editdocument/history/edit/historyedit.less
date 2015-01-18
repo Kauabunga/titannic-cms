@@ -13,8 +13,25 @@ body.editdocument.history.edit {
 
 
 
-  .history-row {
+  .circle-loader.circle-loader-large {
 
+  }
+
+
+  .history-container {
+
+    opacity: 0;
+    transform: translateY(10px);
+    .transition(all 0.2s ease);
+
+    &.loaded {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+
+  }
+
+  .history-row {
 
     .index-number {
       h3 {

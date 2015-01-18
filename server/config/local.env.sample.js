@@ -26,6 +26,8 @@ module.exports = {
   GOOGLE_API_KEY: '',
   GOOGLE_WATCH_CALLBACK: '/api/google/watchcallback',
 
+  GOOGLE_ACCESS_ACCOUNT_REFRESH_TOKEN: '1/alvSO0JR0PClZVuaalupfL3XXXXXXXXXXXXXXXXXXXX',
+
   // Control debug level for modules using visionmedia/debug
   DEBUG: ''
 };

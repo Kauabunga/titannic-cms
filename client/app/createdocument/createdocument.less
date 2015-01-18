@@ -35,8 +35,18 @@ body.createdocument {
 
   input, select, textarea {
 
+    .transition(opacity 200ms ease);
+
+    &:focus {
+      opacity: @input-opacity-focus;
+      border-color: transparent;
+      outline: none !important;
+    }
+    border-color: transparent;
+
     border-radius: 0 !important;
     box-shadow: none;
+
 
     opacity: @input-opacity;
   }

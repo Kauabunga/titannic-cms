@@ -33,7 +33,7 @@ div(ng-class='{"fadeIn": fadeIn}')
     .row
       .col-sm-8.col-sm-offset-2
         .history-loader.circle-loader.circle-loader-large(ng-class='{"active": ! documentHistoryLoaded}')
-        .history-container
+        .history-container(ng-class='{"loaded": documentHistoryLoaded}')
 
           //TODO abstract main styling
           //TODO abstract main styling

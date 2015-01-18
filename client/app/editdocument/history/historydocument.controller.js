@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('EditdocumentHistoryCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
+    .controller('EditdocumentHistoryCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout, $state) {
 
 
       $scope.fadeIn = undefined;
@@ -18,6 +18,8 @@
 
 
 
+
+
       /**
        *
        */
@@ -26,6 +28,7 @@
         $timeout(function () {
           $scope.fadeIn = true;
         });
+
 
 
         $scope.$watch('getDocumentDeferred', _.once(function(){
@@ -45,7 +48,7 @@
                 $scope.documentHistoryDeferred.finally(function(){
                   $timeout(function(){
                     $scope.documentHistoryLoaded = true;
-                  });
+                  }, 20);
 
                 });
                 $scope.documentHistoryDeferred.then(
