@@ -350,7 +350,7 @@
            * @param editor
            */
           function destroyEditor(editor){
-            
+
             if($textareaResizeElements){
               $textareaResizeElements.trigger('autosize.destroy');
             }

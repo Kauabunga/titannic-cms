@@ -19,6 +19,8 @@ body.editdocument.content {
   }
 
 
+
+
   .actions-editor {
     margin-top: 15px;
   }
@@ -72,6 +74,16 @@ body.editdocument.content {
     }
   }
 
+
+  input, textarea, select {
+
+    &:hover {
+      opacity: @input-opacity-hover;
+    }
+    &:focus {
+      opacity: @input-opacity-focus;
+    }
+  }
 
 
   .circle-loader {
