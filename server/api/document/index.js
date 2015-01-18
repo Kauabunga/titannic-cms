@@ -6,18 +6,18 @@ var auth = require('../../auth/auth.service');
 
 var router = express.Router();
 
-router.get('/', auth.isAuthenticated(), controller.index);
-router.get('/:id', auth.isAuthenticated(), controller.show);
-router.post('/', auth.hasRole('admin'), controller.create);
-router.put('/:id', auth.isAuthenticated(), controller.update);
-router.put('/publish/:id', auth.isAuthenticated(), controller.publish);
-router.patch('/:id', auth.isAuthenticated(), controller.update);
+router.get('/', auth.hasRole('user'), controller.index);
+router.get('/:id', auth.hasRole('user'), controller.show);
+router.post('/', auth.hasRole('editor'), controller.create);
+router.put('/:id', auth.hasRole('editor'), controller.update);
+router.put('/publish/:id', auth.hasRole('publisher'), controller.publish);
+router.patch('/:id', auth.hasRole('editor'), controller.update);
 router.delete('/:id', auth.hasRole('admin'), controller.destroy);
 
-router.get('/preview/:id/:env/:isPreviewPageReload', auth.isAuthenticated(), controller.getPreview);
-router.put('/updatepreview/:id', auth.isAuthenticated(), controller.updatePreviewContent);
+router.get('/preview/:id/:env/:isPreviewPageReload', auth.hasRole('user'), controller.getPreview);
+router.put('/updatepreview/:id', auth.hasRole('user'), controller.updatePreviewContent);
 
-router.get('/historylist/:id', auth.hasRole('admin'), controller.getHistory);
-router.get('/historydocument/:id/:historyId', auth.hasRole('admin'), controller.getHistoryContent);
+router.get('/historylist/:id', auth.hasRole('user'), controller.getHistory);
+router.get('/historydocument/:id/:historyId', auth.hasRole('user'), controller.getHistoryContent);
 
 module.exports = router;

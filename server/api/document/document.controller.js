@@ -8,7 +8,7 @@ var googledrive = require('../../googledrive/googledrive.service');
 var preview = require('../../components/preview/preview.service');
 
 var https = require('follow-redirects').https;
-
+var UserController = require('../user/user.controller');
 
 var config = require('../../config/environment');
 
@@ -517,6 +517,7 @@ exports.updatePreviewContent = function(req, res){
 
 /**
  * Publishes a document
+ *
  */
 exports.publish = function(req, res) {
 
@@ -525,7 +526,6 @@ exports.publish = function(req, res) {
   if(req.body._id) { delete req.body._id; }
 
   //get user from the session -> helper in user
-
   if(req.body && req.body.content && req.body.liveContentGoogleDocId){
 
     var googleContentUpdateDeferred = googledrive.updateDocument(req, req.params.id, req.body.liveContentGoogleDocId, req.body.content, 'live');
@@ -553,8 +553,6 @@ exports.publish = function(req, res) {
         res.send(statusCode);
       });
 
-
-
   }
   else{
     //TODO is it mandatory to update a document with content?
@@ -562,7 +560,6 @@ exports.publish = function(req, res) {
     log.error('Content not passed while updating document');
     res.send(400);
   }
-
 };
 
 

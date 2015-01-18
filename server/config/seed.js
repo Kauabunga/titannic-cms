@@ -31,7 +31,10 @@ var schemas = [
         liveContentGoogleDocId: '0B84YdCmz0nrQZUtVODBYNkJFTVE',
         previewContentGoogleDocId: '0B84YdCmz0nrQZTBiLUZQNGVSUTA',
         devContentGoogleDocId: '0B84YdCmz0nrQamtJTUJUVlpBOU0',
-        previewPath: '#!/'
+        previewPath: '#!/',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
       }
     ]
   },
@@ -48,7 +51,10 @@ var schemas = [
         liveContentGoogleDocId: '0B84YdCmz0nrQYVBZcHVkTVNTQjg',
         previewContentGoogleDocId: '0B84YdCmz0nrQb2haSmVyeFhUaEE',
         devContentGoogleDocId: '0B84YdCmz0nrQcXlrQjQ2MlVqUVU',
-        previewPath: '#!/careers'
+        previewPath: '#!/careers',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
       }
     ]
   },
@@ -65,7 +71,10 @@ var schemas = [
         liveContentGoogleDocId: '0B84YdCmz0nrQck5TWG9TZC1jTGs',
         previewContentGoogleDocId: '0B84YdCmz0nrQdWF4TkU3YVVadmc',
         devContentGoogleDocId: '0B84YdCmz0nrQal9TRjhMMHZhTVk',
-        previewPath: '#!/aboutus'
+        previewPath: '#!/aboutus',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
       }
     ]
   },
@@ -82,7 +91,10 @@ var schemas = [
         liveContentGoogleDocId: '0B84YdCmz0nrQb093WGY3ZjZWbVk',
         previewContentGoogleDocId: '0B84YdCmz0nrQU21DOXJhRWZaNnM',
         devContentGoogleDocId: '0B84YdCmz0nrQOHhnOEJsLWY1akE',
-        previewPath: '#!/services'
+        previewPath: '#!/services',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
       }
     ]
   },
@@ -99,7 +111,10 @@ var schemas = [
         liveContentGoogleDocId: '0B84YdCmz0nrQaWQ3dzRWdjhkanc',
         previewContentGoogleDocId: '0B84YdCmz0nrQb3VZMWw4enhUSGM',
         devContentGoogleDocId: '0B84YdCmz0nrQbFExTXpXVjZlLW8',
-        previewPath: '#!/'
+        previewPath: '#!/',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
       }
     ]
   },
@@ -116,7 +131,10 @@ var schemas = [
         liveContentGoogleDocId: '0B84YdCmz0nrQbndockJGNDQ1WGM',
         previewContentGoogleDocId: '0B84YdCmz0nrQS0pQYmM5UHVEVnM',
         devContentGoogleDocId: '0B84YdCmz0nrQMG85NTIwQzZ0TUk',
-        previewPath: '#!/casestudies'
+        previewPath: '#!/casestudies',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
       }
     ]
   },
@@ -133,7 +151,10 @@ var schemas = [
         liveContentGoogleDocId: '0B84YdCmz0nrQZTRMUkZJeXFXbHM',
         previewContentGoogleDocId: '0B84YdCmz0nrQaEZ4X182cjBrSWs',
         devContentGoogleDocId: '0B84YdCmz0nrQZi1DSmdoYURWTms',
-        previewPath: '#!/contactus'
+        previewPath: '#!/contactus',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
       }
     ]
   },
@@ -150,7 +171,10 @@ var schemas = [
         liveContentGoogleDocId: '0B84YdCmz0nrQWExzV2VKemh1Um8',
         previewContentGoogleDocId: '0B84YdCmz0nrQb1ltdDNRWU5Bcnc',
         devContentGoogleDocId: '0B84YdCmz0nrQYTNGN0MyOW9MM1E',
-        previewPath: '#!/'
+        previewPath: '#!/',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
       }
     ]
   }

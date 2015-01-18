@@ -81,7 +81,13 @@
 
         //TODO check how long ago the last refresh was
         var refreshTokenDeferred = _refreshAccessToken(googleAuth);
-
+        refreshTokenDeferred.then(
+          function success(token){
+            accessTokenDeferred.resolve(token);
+          },
+          function error(){
+            accessTokenDeferred.reject();
+          });
 
 
 
@@ -92,6 +98,7 @@
         else {
 
         }
+
       },
       function error(){
         accessTokenDeferred.reject();
@@ -114,7 +121,6 @@
 
     try {
 
-
       var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
       oauth2Client.setCredentials({refreshToken: googleAuthState.googleAccess.refreshToken, refresh_token: googleAuthState.googleAccess.refreshToken});
       console.log('oauth2Client', oauth2Client);
@@ -132,7 +138,9 @@
 
           //googleResponse.expiry_date: 1421553674063
           //googleResponse.access_token: 1421553674063
+          deferred.resolve(googleResponse.access_token);
 
+          //TODO write state to db
         }
 
 

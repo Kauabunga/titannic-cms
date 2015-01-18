@@ -28,19 +28,20 @@ exports.roles = function(req, res){
   res.json({roles: config.userRoles});
 };
 
+
 /**
  *
  */
-exports.getUserFromRequest = function(req){
+exports.getUserFromRequest = function(req) {
 
   log.debug('getting user from session');
   var deferred = q.defer();
 
-  if(!req || ! req.user || ! req.user._id){
+  if (!req || !req.user || !req.user._id) {
     deferred.reject();
     log.error('getting user from session error on request');
   }
-  else{
+  else {
     User.findById(req.user._id, function (err, user) {
       log.debug('getting user from session success', user.name);
 

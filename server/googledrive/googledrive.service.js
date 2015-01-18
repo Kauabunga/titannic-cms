@@ -204,8 +204,49 @@
    */
 
 
+  /**
+   *
+   * @param req
+   * @returns {*}
+   * @private
+   */
+  function _getAccessToken(req) {
+
+    var deferred = q.defer();
+    var currentUserDeferred = User.getUserFromRequest(req);
 
 
+    currentUserDeferred.then(
+      function success(user) {
+
+        if(user.provider === 'google'){
+          log.debug('got token from google user', user.accessToken);
+          deferred.resolve(user.accessToken);
+        }
+        else{
+          //get the access token from our shared user
+
+          var accessTokenDeferred = googleAuthService.getAccessToken();
+          accessTokenDeferred.then(
+            function success(token){
+              log.debug('got token from shared google user', token);
+              deferred.resolve(token);
+            },
+            function error(){
+              deferred.reject();
+            });
+
+        }
+
+      },
+      function error() {
+
+        deferred.reject();
+      });
+
+
+    return deferred.promise;
+  }
 
 
   /**
@@ -214,16 +255,19 @@
   function getDocumentHistory(req, googleDocContentId, options){
 
     var deferredId = 'cache_' + googleDocContentId;
-    var currentUserDeferred = User.getUserFromRequest(req);
+
+    var accessTokenDeferred = _getAccessToken(req);
 
     if( ! _deferredHistoryCache[deferredId] || (options && options.force)) {
 
       var googleHistoryDeferred = _deferredHistoryCache[deferredId] = q.defer();
 
-      currentUserDeferred.then(
-        function success(user) {
+      accessTokenDeferred.then(
+        function success(token) {
 
-          log.debug('authing with accessToken', user.accessToken);
+
+
+          log.debug('authing with accessToken', token);
 
           function googleCallback(error, body, googleResponse) {
 
@@ -239,7 +283,7 @@
 
           try {
             var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
-            oauth2Client.setCredentials({ access_token: user.accessToken });
+            oauth2Client.setCredentials({ access_token: token });
             var drive = google.drive({version: 'v2', auth: oauth2Client});
 
             drive.revisions.list({
@@ -254,7 +298,7 @@
 
         },
         function error(){
-          log.error('could not get user for google history document');
+          log.error('could not get token for google history document');
           googleHistoryDeferred.reject(401);
         });
 
@@ -276,7 +320,8 @@
   function getDocumentHistoryContent(req, googleDocContentId, googleDocHistoryId, options){
 
     var deferredId = 'cache_' + googleDocContentId + '_' + googleDocHistoryId;
-    var currentUserDeferred = User.getUserFromRequest(req);
+
+    var accessTokenDeferred = _getAccessToken(req);
 
 
     var metadataDeferred = q.defer();
@@ -287,10 +332,11 @@
 
       var googleHistoryContentDeferred = _deferredHistoryContentCache[deferredId] = q.defer();
 
-      currentUserDeferred.then(
-        function success(user) {
+      accessTokenDeferred.then(
+        function success(token) {
 
-          log.debug('authing with accessToken', user.accessToken);
+
+          log.debug('authing with accessToken', token);
 
           //get google meta data
 
@@ -307,7 +353,7 @@
 
           try {
             var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
-            oauth2Client.setCredentials({ access_token: user.accessToken });
+            oauth2Client.setCredentials({ access_token: token });
             var drive = google.drive({version: 'v2', auth: oauth2Client});
 
             drive.revisions.get({
@@ -330,7 +376,7 @@
                 host: parsedUrl.host || parsedUrl.hostname,
                 path: parsedUrl.path,
                 agent: false,
-                token: user.accessToken
+                token: token
 
               };
 
@@ -351,8 +397,8 @@
             });
 
         },
-        function error(userError){
-          log.error('could not get user for google history content document');
+        function error(){
+          log.error('could not get token for google history content document');
           googleHistoryContentDeferred.reject(401);
         });
 
@@ -394,7 +440,7 @@
    */
   function updateDocument(req, documentId, googleDocContentId, content, environment) {
 
-    var currentUserDeferred = User.getUserFromRequest(req);
+    var accessTokenDeferred = _getAccessToken(req);
     var documentDeferred = q.defer();
     var googleContentDeferred = q.defer();
 
@@ -453,10 +499,10 @@
           delete _deferredHistoryCache[deferredId];
 
 
-          currentUserDeferred.then(
-            function success(user) {
+          accessTokenDeferred.then(
+            function success(token) {
 
-              log.debug('authing with accessToken', user.accessToken);
+              log.debug('authing with accessToken', token);
 
               function googleCallback(error, body, googleResponse) {
 
@@ -473,7 +519,7 @@
 
               try {
                 var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
-                oauth2Client.setCredentials({ access_token: user.accessToken });
+                oauth2Client.setCredentials({ access_token: token });
                 var drive = google.drive({version: 'v2', auth: oauth2Client});
 
                 drive.files.update({
@@ -491,7 +537,7 @@
               }
 
             }, function error() {
-              log.error('could not get user for google update document');
+              log.error('could not get token for google update document');
               googleContentDeferred.reject(401);
             });
           }

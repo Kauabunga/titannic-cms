@@ -26,14 +26,8 @@ var DocumentSchema = new Schema({
   //url path to preview this document
   previewPath: String,
 
-  //local copy of the document before/after it is pushed to google docs
-  localDocCopy: String,
-
   //link to schema id
   schemaId: String,
-
-  //environment the document targets
-  environment: String,
 
   //what user role is required to view
   viewRole: String,
