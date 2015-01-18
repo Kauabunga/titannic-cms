@@ -31,7 +31,7 @@ var all = {
   },
 
   // List of user roles
-  userRoles: ['guest', 'user', 'admin'],
+  userRoles: ['guest', 'user', 'editor', 'publisher', 'admin'],
 
   // MongoDB connection options
   mongo: {
@@ -59,7 +59,8 @@ var all = {
     clientSecret: process.env.GOOGLE_SECRET || 'secret',
     callbackURL:  (process.env.DOMAIN || '') + '/auth/google/callback',
     apiKey: process.env.GOOGLE_API_KEY || 'api-key',
-    watchCallbackUrl: process.env.GOOGLE_WATCH_CALLBACK || 'api/google/watchcallback'
+    watchCallbackUrl: process.env.GOOGLE_WATCH_CALLBACK || 'api/google/watchcallback',
+    refreshToken: process.env.GOOGLE_ACCESS_ACCOUNT_REFRESH_TOKEN || 'refresh-token'
   },
 
   //address for this site

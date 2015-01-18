@@ -7,9 +7,11 @@
 
 
 var q = require('q');
+var config = require('./environment');
 var User = require('../api/user/user.model');
 var Document = require('../api/document/document.model');
 var Schema = require('../api/schema/schema.model');
+var GoogleAuthModel = require('../googledrive/auth/googleauth.model');
 
 
 
@@ -203,6 +205,23 @@ Schema.find({}).remove(function() {
   });
 
 });
+
+
+/**
+ *
+ */
+GoogleAuthModel.find({}).remove(function(){
+
+  GoogleAuthModel.create({
+    googleAccess: {
+      refreshToken: config.google.refreshToken
+    }
+  }, function(){
+    console.log('finished seeding GoogleAuthModel model');
+  });
+
+});
+
 
 /**
  *

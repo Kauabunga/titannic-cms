@@ -7,9 +7,16 @@
 // Set default node environment to production
 process.env.NODE_ENV = process.env.NODE_ENV || 'production';
 
+
+//TODO figure out how to use require config + mappings
+var requireConfig = require('./config/require');
+
+
 var express = require('express');
 var mongoose = require('mongoose');
 var config = require('./config/environment');
+
+
 
 console.log('****** CONFIG *****');
 console.log(config);

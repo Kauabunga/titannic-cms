@@ -20,6 +20,9 @@
   var httpService = require('../components/http/http.service');
 
 
+  var googleAuthService = require('./auth/googleauth.service');
+
+
   //nasty - google does not have a method for getting a file revision
 
 
@@ -49,6 +52,9 @@
 
       //TODO how do we get these requests to work without setTieout - process.nextTick()?
       setTimeout(function(){
+
+        
+        googleAuthService.getAccessToken();
 
         Document.find(function (err, documents) {
           if(err){
