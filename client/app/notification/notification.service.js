@@ -5,7 +5,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .service('Notification', function ($log, $timeout, $rootScope, $location) {
+    .service('Notification', function ($log, $timeout, $rootScope, $location, hotkeys) {
 
 
       var self = this;
@@ -88,6 +88,7 @@
 
         function cancelNoty(){
           closeNoty();
+          hotkeys.del('esc');
           $notificationScreen.off('click', cancelNoty);
           _noCallback();
         }
@@ -105,6 +106,16 @@
         return function (content, yesCallback, noCallback, options) {
 
           if( ! confimationActive){
+
+
+            hotkeys.add({
+              combo: 'esc',
+              callback: function(event, hotkey){
+                event.preventDefault();
+                $log.debug('hotkey', event, hotkey);
+                cancelNoty();
+              }
+            });
 
             confimationActive = true;
 

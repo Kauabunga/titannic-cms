@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('EditdocumentContentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout) {
+    .controller('EditdocumentContentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout, hotkeys) {
 
       $scope.fadeIn = undefined;
 
@@ -71,6 +71,36 @@
 
 
       })();
+
+
+      /**
+       * listen to save hotkeys
+       */
+
+      function saveHotkey(event, hotkey){
+        $log.debug('hotkey', event, hotkey);
+
+      }
+
+      hotkeys.add({
+        combo: 'ctrl+s',
+        callback: function(event, hotkey){
+          event.preventDefault();
+          $log.debug('hotkey', event, hotkey);
+          $scope.updateDocument();
+        }
+      });
+
+      hotkeys.add({
+        combo: 'command+s',
+        callback: function(event, hotkey){
+          event.preventDefault();
+          $log.debug('hotkey', event, hotkey);
+          $scope.updateDocument();
+        }
+      });
+
+
 
 
       /**
@@ -203,6 +233,9 @@
           Document.setDocumentContent($stateParams.documentId, $scope.document.contentOriginal);
         }
 
+
+        hotkeys.del('command+s');
+        hotkeys.del('ctrl+s');
 
       });
 

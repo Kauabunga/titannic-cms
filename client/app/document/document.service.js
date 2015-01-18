@@ -147,6 +147,9 @@
               if(statusCode === 503){
                 Notification.error('Google docs is dead yo', {duration: -1});
               }
+              else if(statusCode === 403){
+                Notification.error('Your google account does not have access to this account!!', {duration: -1});
+              }
               deferred.reject(statusCode);
             });
         }
@@ -178,6 +181,9 @@
 
               if(statusCode === 503){
                 Notification.error('Google docs is dead yo', {duration: -1});
+              }
+              else if(statusCode === 403){
+                Notification.error('Your google account does not have access to this account!!', {duration: -1});
               }
               deferred.reject(statusCode);
             });
@@ -234,6 +240,9 @@
 
               if(statusCode === 503){
                 Notification.error('Google docs is dead yo', {duration: -1});
+              }
+              else if(statusCode === 403){
+                Notification.error('Your google account does not have access to this account!!', {duration: -1});
               }
 
               $log.error('failed to get document', data);
@@ -300,6 +309,9 @@
               if(statusCode === 503){
                 Notification.error('Google docs is dead yo', {duration: -1});
               }
+              else if(statusCode === 403){
+                Notification.error('Your google account does not have access to this account!!', {duration: -1});
+              }
               else{
                 Notification.error('Document service failed to update document');
               }
@@ -348,6 +360,9 @@
               if(statusCode === 503){
                 Notification.error('Google docs is dead yo', {duration: -1});
               }
+              else if(statusCode === 403){
+                Notification.error('Your google account does not have access to this account!!', {duration: -1});
+              }
               else{
                 Notification.error('Document service failed to publish document');
               }
@@ -382,6 +397,9 @@
             if(statusCode !== 401){
               if(statusCode === 503){
                 Notification.error('Google docs is dead yo', {duration: -1});
+              }
+              else if(statusCode === 403){
+                Notification.error('Your google account does not have access to this account!!', {duration: -1});
               }
               else{
                 Notification.error('Document service failed to update document');

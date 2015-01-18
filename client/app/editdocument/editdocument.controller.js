@@ -171,7 +171,7 @@
             });
 
             updateDeferred.then(function success(){
-              $scope.prefetchPreviewUrl();
+              $scope.prefetchPreviewUrl('dev');
             });
 
           });

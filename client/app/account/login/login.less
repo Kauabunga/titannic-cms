@@ -22,7 +22,8 @@
 .btn-twitter {
   .button-variant(@btnText; @btnTwitterBackground; @btnTwitterBackgroundHighlight);
 }
-.btn-google-plus {
+.btn-google-plus,
+.btn-login, {
   .button-variant(@btnText; @btnGooglePlusBackground; @btnGooglePlusBackgroundHighlight);
 }
 .btn-github {
@@ -36,6 +37,111 @@
 
 
 body.login {
+
+  .main-ui-view{
+    padding-bottom: 0;
+  }
+
+
+  .alt-text {
+    text-align: center;
+  }
+
+  .login-area {
+    margin-bottom: 0;
+    margin-top: 30px;
+
+  }
+
+  input {
+
+
+    font-family: Museo;
+
+    margin-left: 10%;
+    width: 80%;
+
+    .transition(all 200ms ease);
+    border-radius: 0;
+    border:none;
+    -webkit-box-sizing: none;
+    -moz-box-sizing: none;
+    box-sizing: none;
+
+
+    color: @grey-light-2;
+
+    padding: 20px 30px;
+
+    &:focus{
+      background-color: @grey-light-2;
+      color: #111;
+      opacity: @input-opacity-focus !important;
+    }
+
+    &:hover{
+      opacity: @input-opacity-hover;
+    }
+
+  }
+
+  input.email-input{
+    text-align: center;
+  }
+
+
+  .login-local-container,
+  .login-google-container
+  {
+    opacity: 0.65;
+    .transition(all 500ms ease);
+    &.login-focus{
+      opacity: 1;
+    }
+  }
+
+
+
+
+  input.ng-invalid {
+    background-color: @grey-light-2;
+  }
+
+  input.valid {
+    background-color: #333;
+    opacity: 1;
+
+    &:hover {
+      background-color: lighten(#333, 2%);
+    }
+
+    &:focus{
+
+      background-color: @grey-light-2;
+      opacity: @input-opacity-focus;
+    }
+
+  }
+
+
+
+
+  input.password-input {
+    color: @charcoal !important;
+
+
+  }
+
+
+  input.email-input {
+
+  }
+
+
+
+  .form {
+    margin-top: 30px;
+  }
 
 
 
@@ -55,22 +161,24 @@ body.login {
 
 
   .circle-loader {
-    left: 15px;
+    left: 10px;
   }
 
 
 
   //change the cursor when we start to login
-  &.logging-in {
+  .logging-in-google {
+
     .btn {
       cursor: default !important;
     }
+
 
     .circle-loader {
       opacity: 1;
     }
 
-    .btn-google-plus {
+    &.btn-google-plus {
 
       background-color: @gray-dark;
 
@@ -80,6 +188,26 @@ body.login {
     }
   }
 
+
+
+  .btn-google-plus {
+    margin-top: 40px !important;
+    margin-bottom: 80px !important;
+
+    &.btn-local {
+      margin-top: 20px !important;
+    }
+
+  };
+
+
+  .help-block {
+
+
+
+  }
+
+  .btn-local,
   .btn-google-plus {
 
     i{
@@ -91,7 +219,8 @@ body.login {
 
     left: 50%;
     margin-left: -90px;
-    margin-bottom: 100px;
+    margin-bottom: 60px;
+    margin-top: 20px;
     position: relative;
     font-family: Museo;
     font-weight: bold;
@@ -99,13 +228,13 @@ body.login {
     border-radius: 0;
     box-shadow: none;
     border: none;
-    padding: 10px 20px;
+    padding: 10px 30px;
     .transition (background-color 0.2s ease);
   }
 
   .login-help-text {
     letter-spacing: -1.5px;
-    margin: 50px 0 20px 0;
+    margin: 50px 0 30px 0;
     text-align: center;
   }
 

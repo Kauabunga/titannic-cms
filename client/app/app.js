@@ -9,6 +9,7 @@
     'ngSanitize',
     'btford.socket-io',
     'ui.router',
+    'cfp.hotkeys',
     'angularMoment'
   ])
   /**
@@ -23,11 +24,26 @@
       $locationProvider.html5Mode(true);
       $httpProvider.interceptors.push('authInterceptor');
 
+
+
+      //TODO abstract to config server provider / inject as js?
+      if($('#server-config #env').text() === 'production'){
+        $logProvider.debugEnabled(false);
+      }
+
+
+      //allow other devices to access the preview iframe on our dev envs
+      var devHost = 'self';
+      if($('#server-config #host').text()){
+        devHost = 'http://' + $('#server-config #host').text() + '/**';
+      }
+
       $sceDelegateProvider.resourceUrlWhitelist([
         // Allow same origin resource loads.
         'self',
         // Allow loading from our assets domain.  Notice the difference between * and **.
         'http://localhost/**',
+        devHost,
 
         'http://titanic.solnetsolutions.co.nz:80/**',
         'http://titanic.solnetsolutions.co.nz/**',
@@ -47,11 +63,6 @@
         'http://blacklist.example.com'
       ]);
 
-
-      //TODO abstract to config server provider / inject as js?
-      if($('#server-config #env').text() === 'production'){
-        $logProvider.debugEnabled(false);
-      }
 
 
     })

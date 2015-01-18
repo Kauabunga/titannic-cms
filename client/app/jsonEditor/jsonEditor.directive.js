@@ -238,10 +238,6 @@
                   if (scope.previousChangeContent === undefined) {
                     scope.previousChangeContent = JSON.stringify(editorValue);
                   }
-                  else if(editorValueString === scope.previousChangeContent) {
-                    $log.debug('content change is identical...');
-                    return;
-                  }
                 }
                 catch(err){
                   $log.error('error check if change is valid', err);
@@ -256,6 +252,7 @@
           }
 
 
+          var keyupThrottleChange = _.throttle(changeHandle, 5000);
 
           /**
            *
@@ -271,9 +268,9 @@
               editor.on('change', changeHandle);
             });
 
+            var $allInputElements = $('textarea, input, select');
 
             if(scope.editorReadOnly){
-              var $allInputElements = $('textarea, input, select');
               $allInputElements.attr('disabled', 'true');
               $allInputElements.toggleClass('disabled', true);
             }
@@ -353,12 +350,12 @@
            * @param editor
            */
           function destroyEditor(editor){
-
+            
             if($textareaResizeElements){
               $textareaResizeElements.trigger('autosize.destroy');
             }
 
-            editor.off('change', changeHandle);
+            editor.off('change', keyupThrottleChange);
 
             editor.destroy();
           }
