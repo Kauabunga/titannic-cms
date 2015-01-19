@@ -294,6 +294,15 @@
         },
 
         /**
+         * Check if a user is a publisher
+         *
+         * @return {Boolean}
+         */
+        isPublisher: function () {
+          return currentUser.role === 'publisher';
+        },
+
+        /**
          * Get auth token
          */
         getToken: function () {

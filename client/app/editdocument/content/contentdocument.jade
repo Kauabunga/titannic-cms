@@ -33,7 +33,7 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
               i.fa.fa-search
               | Preview
 
-        span(ng-if='isAdmin()')
+        span(ng-if='isPublisher() || isAdmin()')
           button.btn.btn-publish.btn-warning(ng-class='{"dirty": isDirty, "updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='publishDocument()')
             .circle-loader
             i.fa.fa-paper-plane

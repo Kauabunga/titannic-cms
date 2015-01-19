@@ -251,18 +251,35 @@ GoogleAuthModel.find({}).remove(function(){
  *
  */
 User.find({}).remove(function() {
-  User.create({
-    provider: 'local',
-    name: 'Test User',
-    email: 'test@test.com',
-    password: 'test'
-  }, {
-    provider: 'local',
-    role: 'admin',
-    name: 'Admin',
-    email: 'admin@admin.com',
-    password: 'admin'
-  }, function() {
+  User.create(
+    {
+      provider: 'local',
+      name: 'Test User',
+      email: 'user@user.com',
+      password: 'user'
+    },
+    {
+      provider: 'local',
+      name: 'Editor',
+      role: 'editor',
+      email: 'editor@editor.com',
+      password: 'editor'
+    },
+    {
+      provider: 'local',
+      name: 'Publisher',
+      role: 'publisher',
+      email: 'publisher@publisher.com',
+      password: 'publisher'
+    },
+    {
+      provider: 'local',
+      role: 'admin',
+      name: 'Admin',
+      email: 'admin@admin.com',
+      password: 'admin'
+    },
+    function() {
       console.log('finished populating users');
     }
   );
