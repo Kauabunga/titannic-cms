@@ -23,6 +23,7 @@
 
       $scope.navigateAwayDirtyHandle = undefined;
       $scope.navigateAwayDirtyTargetState = undefined;
+      $scope.navigateNotificationActive = false;
 
 
 
@@ -210,23 +211,28 @@
 
         function yesCallback(){
           $scope.isDirty = false;
+          $scope.navigateNotificationActive = false;
           $state.go($scope.navigateAwayDirtyTargetState.name, toParams);
         }
 
         function noCallback(){
           $scope.navigateAwayDirtyTargetState = undefined;
+          
+          $scope.navigateNotificationActive = false;
 
           //TODO need to tidy up the browser history stack
         }
 
-        if($scope.isDirty){
+        if($scope.isDirty && ! $scope.navigateNotificationActive){
 
           $log.debug('Attempting to navigate away while in a dirty state', toState);
 
+          $scope.navigateNotificationActive = true;
           //keep record of what state the user is trying to get away to
           $scope.navigateAwayDirtyTargetState = toState;
 
           event.preventDefault();
+          $scope.navigateNotificationActive = true;
           Notification.confirmation('Your document has been changed. You will lose all changes if you leave this page', yesCallback, noCallback, {yesText: 'Leave page', noText: 'Cancel'});
         }
 
@@ -259,8 +265,11 @@
 
         //TODO if we dirty
         //TODO if we dirty
-        //TODO if we dirty we probably want to restore this content - maybe with a notification
         //TODO if we dirty
+        //TODO if we dirty
+        $scope.isDirty = false;
+        $scope.navigateNotificationActive = false;
+
 
         //need to reset the content back to the original
         if($scope.document){
