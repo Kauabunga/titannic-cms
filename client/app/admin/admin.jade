@@ -26,13 +26,20 @@ div
           .row
             .col-sm-12
               ul.list-group
-                li.list-group-item(ng-repeat='user in users')
+                li.list-group-item(ng-repeat='userItem in users track by $index')
                   .row
-                    .col.xs-1.col-sm-2.user-role {{user.role}}
-                    .col-xs-11.col-sm-10
-                      strong.user-name {{user.name}}
-                      br
-                      span.text-muted.user-email {{user.email}}
-                      a.trash(ng-click='delete(user)')
-                        i.fa.fa-times
+                    //.col.xs-1.col-sm-2.user-role {{user.role}}
+                    .col-xs-12.col-sm-12
+                      .row.no-margin
+                        .col-xs-4.user-name-container
+                          strong.user-name {{userItem.name}}
+                          br
+                          span.text-muted.user-email {{userItem.email}}
+                        .col-xs-7
+                          //style='width: {{100/roles.length + "%;"}} '
+                          div.roles-container(ng-repeat='role in roles track by $index')
+                            button.btn.btn-role.user-role(ng-class='{"is-active": userItem.role === role}', ng-click='setUserRole($event, userItem, role)') {{role}}
+                        .col-xs-1.delete-container
+                          a.trash(ng-click='delete(userItem)')
+                            i.fa.fa-times
 

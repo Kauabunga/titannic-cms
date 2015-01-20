@@ -4,7 +4,8 @@
 
   angular.module('titannicCmsApp')
     .factory('User', function ($resource) {
-      return $resource('/api/users/:id/:controller', {
+      return $resource('/api/users/:id/:controller',
+        {
           id: '@_id'
         },
         {
@@ -14,6 +15,15 @@
               controller: 'password'
             }
           },
+
+
+          setRole: {
+            method: 'PUT',
+            params: {
+              controller: 'role'
+            }
+          },
+
           get: {
             method: 'GET',
             params: {

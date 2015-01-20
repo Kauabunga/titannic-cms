@@ -145,6 +145,29 @@ exports.changePassword = function(req, res, next) {
 };
 
 /**
+ * Change a users role
+ */
+exports.changeRole = function(req, res, next) {
+
+  log.debug('change user role', req.params.id, req.body.role);
+
+  var userId = req.params.id;
+
+  User.findById(userId, function (err, user) {
+    if(err){
+      log.error('error changing role', err);
+      return res.send(500);
+    }
+    user.role = req.body.role;
+    user.save(function(err) {
+      if (err) { return validationError(res, err); }
+      res.send(200);
+    });
+  });
+};
+
+
+/**
  * Get my info
  */
 exports.me = function(req, res, next) {

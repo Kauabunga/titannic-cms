@@ -16,6 +16,7 @@ router.get('/:id', auth.isAuthenticated(), controller.show);
 
 //create endpoints for both anon and admin
 router.post('/admincreate', auth.hasRole('admin'), controller.adminCreate);
+router.put('/:id/role', auth.hasRole('admin'), controller.changeRole);
 router.post('/', controller.create);
 
 module.exports = router;
