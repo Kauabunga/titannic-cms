@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .controller('EditdocumentContentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout, hotkeys) {
+    .controller('EditdocumentContentCtrl', function ($scope, $stateParams, $log, $http, Document, Notification, $rootScope, $location, socket, $timeout, hotkeys, $state) {
 
       $scope.fadeIn = undefined;
 
@@ -21,6 +21,8 @@
       $scope.changeHandle = undefined;
       $scope.restoreHandle = undefined;
 
+      $scope.navigateAwayDirtyHandle = undefined;
+      $scope.navigateAwayDirtyTargetState = undefined;
 
 
 
@@ -201,6 +203,34 @@
       };
 
 
+      /**
+       *
+       */
+      $scope.navigateAwayDirtyHandle = $rootScope.$on('$stateChangeStart', function(event, toState, toParams, fromState, fromParams){
+
+        function yesCallback(){
+          $scope.isDirty = false;
+          $state.go($scope.navigateAwayDirtyTargetState.name, toParams);
+        }
+
+        function noCallback(){
+          $scope.navigateAwayDirtyTargetState = undefined;
+
+          //TODO need to tidy up the browser history stack
+        }
+
+        if($scope.isDirty){
+
+          $log.debug('Attempting to navigate away while in a dirty state', toState);
+
+          //keep record of what state the user is trying to get away to
+          $scope.navigateAwayDirtyTargetState = toState;
+
+          event.preventDefault();
+          Notification.confirmation('Your document has been changed. You will lose all changes if you leave this page', yesCallback, noCallback, {yesText: 'Leave page', noText: 'Cancel'});
+        }
+
+      });
 
 
       /**
@@ -221,6 +251,10 @@
 
         if($scope.changeHandle){
           $scope.changeHandle();
+        }
+
+        if($scope.navigateAwayDirtyHandle){
+          $scope.navigateAwayDirtyHandle();
         }
 
         //TODO if we dirty
