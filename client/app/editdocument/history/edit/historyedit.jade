@@ -23,7 +23,7 @@ div(ng-class='{"fadeIn": fadeIn}')
         span
           a(ng-href='/editdocument/{{document._id}}/history/dev', ng-click='changeEnv($event, "dev")')
             button.btn.btn-success(type='button', ng-class='{"active": historyEnv === "dev"}')
-              | Dev
+              | Demo
 
         span
           a(ng-href='/editdocument/{{document._id}}/history/live', ng-click='changeEnv($event, "live")')

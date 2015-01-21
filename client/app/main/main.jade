@@ -16,14 +16,14 @@ div(ng-class='{"fadeIn": fadeIn}')
       .documents.col-sm-10.col-sm-offset-1
         .row.list-title
           .col-xs-8
-            h1.page-header Documents
+            h1.page-header Content
           .col-xs-4(ng-if='isAdmin()')
             button.btn.btn-primary.btn-create(type='button', ng-click='createDocument()') +
-              span &nbsp;Create
+              span &nbsp;New Content
 
 
         .row
-          ul.item-list.document-item-list(ng-repeat='document in documentList')
+          ul.item-list.document-item-list(ng-repeat='document in documentList | orderBy:"name"')
             li(ng-click='editDocument(document)', tooltip='{{document.info}}', ng-class='{"locked": document.lockedKey !== undefined}')
               a
                 | {{document.name}}
@@ -39,12 +39,12 @@ div(ng-class='{"fadeIn": fadeIn}')
       .schemas.col-sm-10.col-sm-offset-1(ng-if="isAdmin()")
         .row.list-title
           .col-xs-8
-            h1.page-header Schemas
+            h1.page-header Content Structure
           .col-xs-4
             button.btn.btn-primary.btn-create(type='button', ng-click='createSchema()') +
-              span &nbsp;Create
+              span &nbsp;New Content Structure
         .row
-          ul.item-list.schema-item-list(ng-repeat='schema in schemaList')
+          ul.item-list.schema-item-list(ng-repeat='schema in schemaList | orderBy:"name"')
             li(ng-click='editSchema(schema)', tooltip='{{schema.info}}')
               a
                 | {{schema.name}}

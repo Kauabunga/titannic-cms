@@ -15,7 +15,9 @@
           'editorDocument': '=',
           'editorDocumentDeferred': '=',
           'editorDocumentContent': '=',
-          'editorDisableAdd': '@?',
+          'editorDisableAdd': '=?',
+          'editorDisableDelete': '=?',
+          'editorDisableReorder': '=?',
           'editorReadOnly': '@?',
           'editorToggleOptions': '=?',
           'editorReset': '=?',
@@ -54,7 +56,10 @@
 
           scope.editorLoaded = false;
           scope.editorDirty = false;
+
           scope.editorDisableAdd = (scope.editorDisableAdd === 'true' || scope.editorDisableAdd === true) ? true : false;
+          scope.editorDisableDelete = (scope.editorDisableDelete === 'true' || scope.editorDisableDelete === true) ? true : false;
+          scope.editorDisableReorder = (scope.editorDisableReorder === 'true' || scope.editorDisableReorder === true) ? true : false;
           scope.editorReadOnly = (scope.editorReadOnly === 'true' || scope.editorReadOnly === true) ? true : false;
 
 
@@ -62,11 +67,13 @@
 
 
 
-          $log.debug(scope.editorEnableAdd);
 
 
           scope.editorDocument = scope.editorDocument || undefined;
           scope.editorDocumentDeferred = scope.editorDocumentDeferred || undefined;
+
+
+          $log.debug('json editor scope', scope);
 
 
           /**
@@ -159,7 +166,7 @@
 
 
           /**
-           *
+           * TODO - no longer needed?
            */
           scope.toggleOptions = scope.editorToggleOptions = function () {
             scope.optionsEnabled = !scope.optionsEnabled;
@@ -198,8 +205,8 @@
               //disable_edit_json: !scope.optionsEnabled,
               disable_edit_json: true,
               disable_array_add: scope.editorDisableAdd,
-              disable_array_delete: !scope.optionsEnabled,
-              disable_array_reorder: !scope.optionsEnabled,
+              disable_array_delete: scope.editorDisableDelete,
+              disable_array_reorder: scope.editorDisableReorder,
               no_additional_properties: true,
               show_errors: 'always'
             };

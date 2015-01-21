@@ -177,21 +177,14 @@
 
 
       /**
-       * TODO if document is not dirty then use the current dev copy to prev
-       * TODO if document is not dirty then use the current dev copy to prev
-       * TODO if document is not dirty then use the current dev copy to prev
-       * TODO if document is not dirty then use the current dev copy to prev
        *
-       * TODO     if the document becomes dirty - update the preview document with the current copy and disable button
-       *          on becoming clean again - use the dev copy
-       *
-       *          TODO will need to tidy dodgey dity states
        *
        */
       $scope.previewDocument = function previewDocument($event) {
-        if($scope.isUpdating || $scope.isPublishing || $scope.isPreviewLoading){
-          $event.preventDefault();
-        }
+        // we can just let this go whenever
+        //if($scope.isUpdating || $scope.isPublishing || $scope.isPreviewLoading){
+        //  $event.preventDefault();
+        //}
       };
 
 
@@ -217,7 +210,7 @@
 
         function noCallback(){
           $scope.navigateAwayDirtyTargetState = undefined;
-          
+
           $scope.navigateNotificationActive = false;
 
           //TODO need to tidy up the browser history stack
@@ -233,7 +226,7 @@
 
           event.preventDefault();
           $scope.navigateNotificationActive = true;
-          Notification.confirmation('Your document has been changed. You will lose all changes if you leave this page', yesCallback, noCallback, {yesText: 'Leave page', noText: 'Cancel'});
+          Notification.confirmation('You will lose all changes if you leave this page', yesCallback, noCallback, {yesText: 'Leave', noText: 'Cancel'});
         }
 
       });

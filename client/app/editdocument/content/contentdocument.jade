@@ -23,28 +23,31 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
         span
           button.btn.btn-update.btn-info.btn-save(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
             .circle-loader
-            i.fa.fa-save
+            //i.fa.fa-save
+            i 1.
             | Save
 
         span
           a(ng-href='/previewdocument/{{document._id}}/{{isDevPreview ? "dev" : "preview"}}', ng-click='previewDocument($event)', target="_blank")
             button.btn.btn-success.btn-preview(type='button', ng-class='{"updating": isUpdating || isPreviewLoading, "publishing": isPublishing, "preview-loading": isPreviewLoading}')
               .circle-loader
-              i.fa.fa-search
+              //i.fa.fa-search
+              i 2.
               | Preview
 
         span(ng-if='isPublisher() || isAdmin()')
           button.btn.btn-publish.btn-warning(ng-class='{"dirty": isDirty, "updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='publishDocument()')
             .circle-loader
-            i.fa.fa-paper-plane
+            //i.fa.fa-paper-plane
+            i 3.
             | Publish
 
       .col-sm-5.actions-editor
-        span
+        //span
           button.json-editor-btn(ng-click='resetEditor()')
             i.fa.fa-ban
             | Reset
-        span
+        //span
           button.json-editor-btn(ng-click='toggleEditorOptions()')
             i.fa.fa-cog
             | Options
@@ -59,7 +62,8 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
       .col-sm-12.still-loading-container(ng-class='{"still-loading": stillLoadingMessage}')
         h2 Still loading
       .col-sm-12
-        span.json-editor(editor-dirty='isDirty', editor-document='document', editor-reset='resetEditor', editor-toggle-options='toggleEditorOptions'
+        span.json-editor(editor-dirty='isDirty', editor-document='document', editor-reset='resetEditor', editor-toggle-options='toggleEditorOptions',
+                editor-disable-delete='false',
                 editor-document-content='document.content', editor-document-deferred='getDocumentDeferred')
 
 

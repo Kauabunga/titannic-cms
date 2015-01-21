@@ -13,6 +13,12 @@
     'angularMoment'
   ])
   /**
+   * constants
+   */
+  .constant('angularMomentConfig', {
+    timezone: 'Pacific/Auckland'
+  })
+  /**
    *
    * Config
    */
@@ -109,10 +115,12 @@
    * App run
    *
    */
-    .run(function ($rootScope, $location, Auth, $window, Notification, $log, $timeout) {
+    .run(function ($rootScope, $location, Auth, $window, Notification, $log, $timeout, amMoment) {
 
       $log.debug(angular);
 
+
+      amMoment.changeLocale('en-gb');
 
 
       /**

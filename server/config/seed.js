@@ -18,14 +18,14 @@ var GoogleAuthModel = require('../googledrive/auth/googleauth.model');
 var schemas = [
   {
     schema: {
-      name : 'Nav',
-      info : 'Nav schema',
+      name : 'Navigation',
+      info : 'Navigation schema',
       googleDocSchemaId: '0B84YdCmz0nrQWjc5SzdDVEYwWXM'
     },
     documents: [
       {
-        name : 'Nav',
-        info : 'Nav content',
+        name : 'Navigation',
+        info : 'Navigation content',
 
         //TODO the amount of env's should be configurable
         liveContentGoogleDocId: '0B84YdCmz0nrQZUtVODBYNkJFTVE',
