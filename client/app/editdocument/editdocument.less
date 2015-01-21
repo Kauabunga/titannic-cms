@@ -183,68 +183,40 @@ body.editdocument {
 
   }
 
-//
-//
-//
-//  .movedown, .delete, .moveup {
-//    text-indent: -9999px;
-//    position: relative;
-//    padding-left: 20px;
-//    padding-right: 20px;
-//    padding-top: 5px;
-//    padding-bottom: 5px;
-//
-//    .transition(all 200ms ease);
-//
-//    border: none;
-//
-//    &:after {
-//      font-family: "FontAwesome";
-//      text-indent: 0;
-//      display: block;
-//      width: 20px;
-//      height: 20px;
-//      position: absolute;
-//    }
-//  }
-//
-//  .delete {
-//    padding-left: 15px;
-//    padding-right: 15px;
-//    background: @gray-2 !important;
-//
-//    &:after {
-//      content: "\f00d";
-//      top: 5px;
-//      left: 5px;
-//    }
-//    &:hover {
-//      background: @btn-danger-bg !important;
-//    }
-//  }
-//
-//  .movedown {
-//    color: @gray-light;
-//    &:after {
-//      content: "\f149";
-//      top: 5px;
-//      left: 10px;
-//    }
-//  }
-//
-//  .moveup {
-//    color: @gray-light;
-//    &:after {
-//      content: "\f148";
-//      top: 5px;
-//      left: 10px;
-//    }
-//  }
 
 
+  .bottom-actions {
+
+    .row.actions {
+      margin: 0 !important;
+    }
+
+    border-top: 1px #777 solid;
+
+    .transition(transform 500ms ease);
+
+    position: fixed;
+
+    bottom: 0;
+    z-index: 999999999999999;
+    background-color: #333;
+
+    width: 100%;
+    margin: 0;
+    padding-top: 10px;
+    padding-bottom: 15px;
+
+    &.headroom.slideDown,
+    &.headroom.headroom--top {
+      transform: translateY(101px);
+    }
+
+    &.headroom.slideUp {
+      transform: translateY(0px);
+    }
 
 
-
+  }
 
 
 

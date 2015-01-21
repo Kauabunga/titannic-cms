@@ -1,12 +1,10 @@
 div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
 
-  div(ng-include='"components/navbar/navbar.html"')
-
 
   header#banner.hero-unit
     .container
       h3 Editing {{document.name}}
-      p You're looking at the dev version
+      p
         br
         | Change it
         i.fa.fa-angle-right
@@ -16,46 +14,18 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
         i.fa.fa-angle-right
         | Publish it live
 
+  .headroom.bottom-actions(headroom='', tolerance='5', offset='330',
+        classes='{"initial":"animated","pinned":"slideDown","unpinned":"slideUp","top":"headroom--top","notTop":"headroom--not-top"}')
+    div(ng-include='"components/edit-actions/edit-actions.html"')
+
+
+  div(ng-include='"components/edit-actions/edit-actions.html"')
+
+
+
+
 
   .container
-    .row.actions
-      .col-sm-10.actions-document
-        span
-          button.btn.btn-update.btn-info.btn-save(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
-            .circle-loader
-            i.fa.fa-save
-            //i 1.
-            span Save &nbsp;|&nbsp; {{document.name}}
-
-        span
-          a(ng-href='/previewdocument/{{document._id}}/{{isDevPreview ? "dev" : "preview"}}', ng-click='previewDocument($event)', target="_blank")
-            button.btn.btn-success.btn-preview(type='button', ng-class='{"updating": isUpdating || isPreviewLoading, "publishing": isPublishing, "preview-loading": isPreviewLoading}')
-              .circle-loader
-              i.fa.fa-search
-              //span 2 |
-              span Preview &nbsp;|&nbsp; {{document.name}}
-
-        span(ng-if='isPublisher() || isAdmin()')
-          button.btn.btn-publish.btn-warning(ng-class='{"dirty": isDirty, "updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='publishDocument()')
-            .circle-loader
-            i.fa.fa-paper-plane
-            span Publish &nbsp;|&nbsp; {{document.name}}
-
-      .col-sm-2.actions-editor
-        //span
-          button.json-editor-btn(ng-click='resetEditor()')
-            i.fa.fa-ban
-            | Reset
-        //span
-          button.json-editor-btn(ng-click='toggleEditorOptions()')
-            i.fa.fa-cog
-            | Options
-        span
-          button.json-editor-btn(ng-click='gotoHistory()')
-            i.fa.fa-history
-            | View History
-
-
 
     .row.json-editor-row
       .col-sm-12.still-loading-container(ng-class='{"still-loading": stillLoadingMessage}')

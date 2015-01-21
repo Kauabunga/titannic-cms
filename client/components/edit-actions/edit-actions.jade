@@ -1,0 +1,37 @@
+.container
+  .row.actions
+    .col-sm-10.actions-document
+      span
+        a(ng-href='/previewdocument/{{document._id}}/{{isDevPreview ? "dev" : "preview"}}', ng-click='previewDocument($event)', target="_blank")
+          button.btn.btn-success.btn-preview(type='button', ng-class='{"updating": isUpdating || isPreviewLoading, "publishing": isPublishing, "preview-loading": isPreviewLoading}')
+            .circle-loader
+            i.fa.fa-search
+            //span 2 |
+            span Preview &nbsp;|&nbsp; {{document.name}}
+
+      span
+        button.btn.btn-update.btn-info.btn-save(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
+          .circle-loader
+          i.fa.fa-save
+          //i 1.
+          span Save &nbsp;|&nbsp; {{document.name}}
+
+      span(ng-if='isPublisher() || isAdmin()')
+        button.btn.btn-publish.btn-warning(ng-class='{"dirty": isDirty, "updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='publishDocument()')
+          .circle-loader
+          i.fa.fa-paper-plane
+          span Publish &nbsp;|&nbsp; {{document.name}}
+
+    .col-sm-2.actions-editor
+      //span
+        button.json-editor-btn(ng-click='resetEditor()')
+          i.fa.fa-ban
+          | Reset
+      //span
+        button.json-editor-btn(ng-click='toggleEditorOptions()')
+          i.fa.fa-cog
+          | Options
+      span
+        button.json-editor-btn(ng-click='gotoHistory()')
+          i.fa.fa-history
+          | View History
