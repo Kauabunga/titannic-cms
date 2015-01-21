@@ -107,7 +107,7 @@
                       });
 
                     });
-                  });
+                  }, 50);
 
                 },
                 function error(statusCode) {

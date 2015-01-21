@@ -32,9 +32,6 @@
        */
       (function init() {
 
-        $timeout(function () {
-          $scope.fadeIn = true;
-        }, 0);
 
         var devPreviewDeferred = $scope.prefetchPreviewUrl('dev');
 
@@ -47,6 +44,9 @@
            */
           $scope.getDocumentDeferred.then(function success(document) {
 
+            $timeout(function () {
+              $scope.fadeIn = true;
+            }, 0);
 
             /**
              * Listen to document change events so we are able to pre-fetch the preview for the user by updating the content on the preview copy

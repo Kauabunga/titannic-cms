@@ -19,30 +19,29 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
 
   .container
     .row.actions
-      .col-sm-7.actions-document
+      .col-sm-10.actions-document
         span
           button.btn.btn-update.btn-info.btn-save(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
             .circle-loader
-            //i.fa.fa-save
-            i 1.
-            | Save
+            i.fa.fa-save
+            //i 1.
+            span Save &nbsp;|&nbsp; {{document.name}}
 
         span
           a(ng-href='/previewdocument/{{document._id}}/{{isDevPreview ? "dev" : "preview"}}', ng-click='previewDocument($event)', target="_blank")
             button.btn.btn-success.btn-preview(type='button', ng-class='{"updating": isUpdating || isPreviewLoading, "publishing": isPublishing, "preview-loading": isPreviewLoading}')
               .circle-loader
-              //i.fa.fa-search
-              i 2.
-              | Preview
+              i.fa.fa-search
+              //span 2 |
+              span Preview &nbsp;|&nbsp; {{document.name}}
 
         span(ng-if='isPublisher() || isAdmin()')
           button.btn.btn-publish.btn-warning(ng-class='{"dirty": isDirty, "updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='publishDocument()')
             .circle-loader
-            //i.fa.fa-paper-plane
-            i 3.
-            | Publish
+            i.fa.fa-paper-plane
+            span Publish &nbsp;|&nbsp; {{document.name}}
 
-      .col-sm-5.actions-editor
+      .col-sm-2.actions-editor
         //span
           button.json-editor-btn(ng-click='resetEditor()')
             i.fa.fa-ban
@@ -54,7 +53,7 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
         span
           button.json-editor-btn(ng-click='gotoHistory()')
             i.fa.fa-history
-            | History
+            | View History
 
 
 
@@ -63,7 +62,7 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
         h2 Still loading
       .col-sm-12
         span.json-editor(editor-dirty='isDirty', editor-document='document', editor-reset='resetEditor', editor-toggle-options='toggleEditorOptions',
-                editor-disable-delete='false',
+                editor-disable-delete='false', editor-disable-reorder='true',
                 editor-document-content='document.content', editor-document-deferred='getDocumentDeferred')
 
 
