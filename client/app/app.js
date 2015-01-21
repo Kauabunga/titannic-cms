@@ -9,6 +9,7 @@
     'ngSanitize',
     'btford.socket-io',
     'ui.router',
+    'headroom',
     'cfp.hotkeys',
     'angularMoment'
   ])
