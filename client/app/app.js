@@ -124,6 +124,31 @@
       amMoment.changeLocale('en-gb');
 
 
+
+
+
+      /**
+       * temporary warning to say that chrome is currently the only smoke tested browser
+       */
+      function browserWarningCallback(){
+        if(window.localStorage){
+          window.localStorage.setItem('browser:warning', true);
+        }
+      }
+      $timeout(function(){
+        if(window.localStorage){
+          var hasAlreadyDismissed = window.localStorage.getItem('browser:warning');
+          $log.debug(hasAlreadyDismissed);
+          if(hasAlreadyDismissed === null){
+            var isChrome = /Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor);
+            if(! isChrome){
+              Notification.confirmation('This has only been smoke tested in Chrome. There may be explosions using this browser.', browserWarningCallback, browserWarningCallback, {yesText: 'Okay', noText: 'Okay'});
+            }
+          }
+        }
+      }, 1000);
+
+
       /**
        * Redirect to login if route requires auth and you're not logged in
        */
