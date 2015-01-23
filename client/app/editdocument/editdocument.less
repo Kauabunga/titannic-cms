@@ -189,6 +189,7 @@ body.editdocument {
     border-top: 1px #777 solid;
 
     .transition(transform 500ms ease);
+    transform: translateY(0px);
 
     position: fixed;
 
@@ -201,13 +202,9 @@ body.editdocument {
     padding-top: 10px;
     padding-bottom: 15px;
 
-    &.headroom.slideDown,
+
     &.headroom.headroom--top {
       transform: translateY(101px);
-    }
-
-    &.headroom.slideUp {
-      transform: translateY(0px);
     }
 
 
