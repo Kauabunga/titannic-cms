@@ -7,20 +7,23 @@
             .circle-loader
             i.fa.fa-search
             //span 2 |
-            span Preview {{document.name}}
+            span(class='hidden-md hidden-lg hidden-xl') Preview
+            span(class='hidden-xs hidden-sm') Preview {{document.name}}
 
       span
         button.btn.btn-update.btn-info.btn-save(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
           .circle-loader
           i.fa.fa-save
           //i 1.
-          span Save {{document.name}}
+          span(class='hidden-md hidden-lg hidden-xl') Save
+          span(class='hidden-xs hidden-sm') Save {{document.name}}
 
       span(ng-if='isPublisher() || isAdmin()')
         button.btn.btn-publish.btn-warning(ng-class='{"dirty": isDirty, "updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='publishDocument()')
           .circle-loader
           i.fa.fa-paper-plane
-          span Publish {{document.name}}
+          span(class='hidden-md hidden-lg hidden-xl') Publish
+          span(class='hidden-xs hidden-sm') Publish {{document.name}}
 
     .col-sm-3.actions-editor
       //span
@@ -31,7 +34,8 @@
         button.json-editor-btn(ng-click='toggleEditorOptions()')
           i.fa.fa-cog
           | Options
-      span
+      span(class='hidden-xs')
         button.json-editor-btn(ng-click='gotoHistory()')
-          i.fa.fa-history
-          | View {{document.name}} History
+          i.fa.fa-history(class='hidden-md hidden-lg hidden-xl') &nbsp;History
+          i.fa.fa-history(class='hidden-xs hidden-sm') &nbsp;View {{document.name}} History
+
