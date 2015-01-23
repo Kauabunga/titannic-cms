@@ -3950,7 +3950,8 @@
         //this.remove_all_rows_button.style.display = 'none';
         this.table.style.display = 'none';
       } else if (this.value.length === 1 || this.hide_delete_buttons) {
-        //this.table.style.display = '';
+        
+        this.table.style.display = '';
         //this.remove_all_rows_button.style.display = 'none';
 
         // If there are minItems items in the array, hide the delete button beneath the rows
