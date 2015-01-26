@@ -160,8 +160,6 @@ exports.show = function(req, res) {
                 var deserialisedSchema = JSON.parse(responseBodies[1]);
                 var documentObject = document.toObject();
 
-                delete documentObject.devContentCache;
-                delete documentObject.liveContentCache;
                 delete documentObject.previewContentCache;
                 delete documentObject.currentPreviewContentCache;
 
@@ -426,15 +424,18 @@ exports.update = function(req, res) {
         Document.findById(req.params.id, function (err, document) {
           if (err) { return handleError(res, err); }
           if(!document) { return res.send(404); }
+
+          delete req.body.devContentCache;
+          delete req.body.liveContentCache;
+          delete req.body.previewContentCache;
+          delete req.body.currentPreviewContentCache;
+
           var updated = _.merge(document, req.body);
           updated.save(function (err) {
             if (err) { return handleError(res, err); }
 
-            delete document.devContentCache;
-            delete document.liveContentCache;
             delete document.previewContentCache;
             delete document.currentPreviewContentCache;
-
 
             return res.json(200, document);
           });
@@ -545,6 +546,10 @@ exports.publish = function(req, res) {
         Document.findById(req.params.id, function (err, document) {
           if (err) { return handleError(res, err); }
           if(!document) { return res.send(404); }
+
+          delete document.previewContentCache;
+          delete document.currentPreviewContentCache;
+
           return res.json(200, document);
         });
 

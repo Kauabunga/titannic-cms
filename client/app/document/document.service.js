@@ -292,11 +292,16 @@
 
           $log.debug('Submitting document', updateDocument);
 
+          delete updateDocument.liveContentCache;
+          delete updateDocument.devContentCache;
+          delete updateDocument.contentOriginal;
+
           $http.put('/api/documents/' + updateDocument._id, updateDocument)
             .success(function () {
               deferred.resolve();
 
               _documents[docId].contentOriginal = angular.copy(_documents[docId].content);
+              _documents[docId].devContentCache = JSON.stringify(_documents[docId].content);
 
               $rootScope.$emit('document:updated');
               Notification.success('Document updated');
@@ -343,11 +348,16 @@
 
           $log.debug('Submitting document to publish', publishDocument);
 
+          delete publishDocument.contentOriginal;
+          delete publishDocument.liveContentCache;
+          delete publishDocument.devContentCache;
+
           $http.put('/api/documents/publish/' + publishDocument._id, publishDocument)
             .success(function () {
               deferred.resolve();
 
               _documents[docId].contentOriginal = angular.copy(_documents[docId].content);
+              _documents[docId].liveContentCache = JSON.stringify(_documents[docId].content);
 
               $rootScope.$emit('document:publish');
               Notification.success('Document published');

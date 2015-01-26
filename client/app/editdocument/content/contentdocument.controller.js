@@ -27,6 +27,7 @@
 
 
 
+
       /**
        *
        */
@@ -48,6 +49,34 @@
               $scope.fadeIn = true;
             }, 0);
 
+
+            /**
+             *
+             */
+            $scope.$watch('isDirty', function(){
+
+              if( ! $scope.isDirty){
+                var contentString = JSON.stringify(document.content);
+
+                //can be going from dirty -> saved or from dirty to published on the first fire
+                //our publish state is handled by the publish function
+                if( ! $scope.fadeIn && contentString === document.liveContentCache){
+                  $scope.isPublished = true;
+                  $scope.isSaved = false;
+                }
+                else if(contentString === document.devContentCache){
+                  $scope.isPublished = false;
+                  $scope.isSaved = true;
+                }
+              }
+              else{
+                $scope.isPublished = false;
+                $scope.isSaved = false;
+              }
+
+            });
+
+
             /**
              * Listen to document change events so we are able to pre-fetch the preview for the user by updating the content on the preview copy
              */
@@ -55,7 +84,6 @@
               $log.debug('change handle in content document controller - updating preview content', document);
 
               devPreviewDeferred.then(function success() {
-
                 updatePreviewDocumentChanges(document, false);
               });
             });
@@ -67,13 +95,10 @@
             });
           });
 
-
         }));
 
-
-
-
       })();
+
 
 
       /**
@@ -119,8 +144,6 @@
 
             //Here we want to notify all other tabs that we have made a change and will be refreshing
             //      time to start the loading icon
-
-
           }
 
           $scope.previewUpdateDeferred = Document.updatePreviewDocument(document._id, document.content);
@@ -152,12 +175,16 @@
 
           var publishDeferred = Document.publishDocument($stateParams.documentId);
 
+          publishDeferred.then(function success(){
+            $scope.isPublished = true;
+            $scope.isSaved = false;
+          });
+
           publishDeferred.finally(function(){
             $timeout(function(){
               $scope.isPublishing = false;
               $inputs.removeAttr('disabled');
             });
-
           });
         }
 

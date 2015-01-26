@@ -18,18 +18,36 @@ body.editdocument {
     }
 
     &.dirty {
-
       h4.dirty-header {
         opacity: 1 !important;
-
         i{
           margin-right: 6px;
         }
       }
-
     }
 
-    h4.dirty-header {
+    &.published {
+      h4.published-header {
+        opacity: 1 !important;
+        i{
+          margin-right: 6px;
+        }
+      }
+    }
+
+    &.saved {
+      h4.saved-header {
+        opacity: 1 !important;
+        i{
+          margin-right: 6px;
+        }
+      }
+    }
+
+
+
+
+    h4.json-header {
       .transition(opacity 0.2s ease);
       position: absolute;
       opacity: 0;

@@ -12,6 +12,8 @@
         restrict: 'EAC',
         scope: {
           'editorDirty': '=?',
+          'editorPublished': '=?',
+          'editorSaved': '=?',
           'editorDocument': '=',
           'editorDocumentDeferred': '=',
           'editorDocumentContent': '=',
@@ -245,12 +247,15 @@
                 //ensure that the change is valid
                 try {
                   var editorValueString = JSON.stringify(editorValue);
+
                   if (scope.previousChangeContent === undefined) {
                     scope.previousChangeContent = JSON.stringify(editorValue);
                   }
                 }
                 catch(err){
                   $log.error('error check if change is valid', err);
+
+
                 }
 
                 scope.editorDirty = true;

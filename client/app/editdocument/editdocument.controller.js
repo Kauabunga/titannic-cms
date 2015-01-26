@@ -14,6 +14,8 @@
 
       $scope.isDirty = undefined;
       $scope.isUpdating = undefined;
+      $scope.isPublished = undefined;
+      $scope.isSaved = undefined;
 
       $scope.fadeIn = undefined;
       $scope.stillLoadingMessage = undefined;

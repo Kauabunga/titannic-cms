@@ -31,7 +31,7 @@ div.edit-document-container(ng-class='{"fadeIn": fadeIn}')
       .col-sm-12.still-loading-container(ng-class='{"still-loading": stillLoadingMessage}')
         h2 Still loading
       .col-sm-12
-        span.json-editor(editor-dirty='isDirty', editor-document='document', editor-reset='resetEditor', editor-toggle-options='toggleEditorOptions',
+        span.json-editor(editor-published='isPublished', editor-saved='isSaved', editor-dirty='isDirty', editor-document='document', editor-reset='resetEditor', editor-toggle-options='toggleEditorOptions',
                 editor-disable-delete='false', editor-disable-reorder='true',
                 editor-document-content='document.content', editor-document-deferred='getDocumentDeferred')
 

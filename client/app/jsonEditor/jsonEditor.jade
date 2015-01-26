@@ -3,11 +3,17 @@
 
 .row
   .col-lg-12.json-editor-col
-    .json-editor-root(ng-class='{"loaded": editorLoaded, "dirty": editorDirty}')
+    .json-editor-root(ng-class='{"loaded": editorLoaded, "dirty": editorDirty, "saved": editorSaved, "published": editorPublished}')
 
-        h4.dirty-header
+        h4.dirty-header.json-header
           i.fa.fa-pencil
           | Edited
+        h4.published-header.json-header
+          i.fa.fa-paper-plane
+          | Published
+        h4.saved-header.json-header
+          i.fa.fa-save
+          | Saved
 
         .json-editor-anchor
 
