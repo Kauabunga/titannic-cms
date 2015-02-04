@@ -18,6 +18,28 @@ var GoogleAuthModel = require('../googledrive/auth/googleauth.model');
 var schemas = [
   {
     schema: {
+      name : 'Easy Answers',
+      info : 'Easy Answers schema',
+      googleDocSchemaId: '0B84YdCmz0nrQUDhiNFJmNEhaZWM'
+    },
+    documents: [
+      {
+        name : 'ACC Levy form',
+        info : 'ACC Levy form',
+
+        //TODO the amount of env's should be configurable
+        liveContentGoogleDocId: '0B84YdCmz0nrQaUJXSzNIWDZidVU',
+        previewContentGoogleDocId: '0B84YdCmz0nrQdDg4QnJ5c3pXR2M',
+        devContentGoogleDocId: '0B84YdCmz0nrQaUJXSzNIWDZidVU',
+        previewPath: '#!/',
+        viewRole: 'guest',
+        editRole: 'editor',
+        publishRole: 'publisher'
+      }
+    ]
+  },
+  {
+    schema: {
       name : 'Navigation',
       info : 'Navigation schema',
       googleDocSchemaId: '0B84YdCmz0nrQWjc5SzdDVEYwWXM'
