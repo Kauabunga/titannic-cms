@@ -57,6 +57,11 @@
         'titanic.solnetsolutions.co.nz:80/**',
         'titanic.solnetsolutions.co.nz/**',
 
+        'http://titannic-dev-heroku.herokuapp.com:80/**',
+        'http://titannic-dev-heroku.herokuapp.com/**',
+        'titannic-dev-heroku.herokuapp.com:80/**',
+        'titannic-dev-heroku.herokuapp.com/**',
+
         'solnet.co.nz/**',
         'www.solnet.co.nz/**',
         'http://www.solnet.co.nz:80/**',
