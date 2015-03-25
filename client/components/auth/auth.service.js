@@ -28,7 +28,6 @@
         if (event.key === loggedInEvent) {
 
           if (!_isLoggedIn()) {
-            currentUser = User.get();
             window.location.pathname = '/';
           }
         }
@@ -148,13 +147,13 @@
               currentUser = User.get();
 
               //ensure cookie is all g
-              $timeout(function(){
-                deferred.resolve(data);
 
-                //need to reload here to have our websockets re auth with their tokens
-                window.location.pathname = '/';
+              deferred.resolve(data);
 
-              });
+              //need to reload here to have our websockets re auth with their tokens
+              window.location.pathname = '/';
+
+
 
               return cb();
             }).

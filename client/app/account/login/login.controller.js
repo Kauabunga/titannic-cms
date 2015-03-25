@@ -50,7 +50,6 @@
 
         if (form.$valid) {
 
-
           $scope.isLoggingInLocal = true;
 
           Auth.login({
@@ -64,9 +63,6 @@
                 localStorage.setItem('latestEmail', $scope.user.email);
               }
 
-              $timeout(function(){
-                $location.path('/');
-              });
 
             })
             .catch(function (err) {
