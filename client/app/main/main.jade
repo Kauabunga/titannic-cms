@@ -23,7 +23,7 @@ div(ng-class='{"fadeIn": fadeIn}')
 
 
         .row
-          ul.item-list.document-item-list(ng-repeat='document in documentList | orderBy:"name"')
+          ul.item-list.document-item-list(ng-repeat='document in documentList | orderBy:"name" track by document._id')
             li(ng-click='editDocument(document)', tooltip='{{document.info}}', ng-class='{"locked": document.lockedKey !== undefined}')
               a
                 | {{document.name}}
