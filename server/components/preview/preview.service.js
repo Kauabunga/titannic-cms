@@ -150,6 +150,10 @@
             //get the google doc id for the targeted environment
             var envGoogleDocId = getGoogleDocId(environment, document);
 
+
+
+            var httpClient = (config.localSiteProtocol.indexOf('https') !== -1) ? https : http;
+
             var options = {
               host: config.localSite,
               port: config.localSitePort,
@@ -159,7 +163,6 @@
 
             log.debug('preview query with options:', options);
 
-            var httpClient = (config.localSiteProtocol.indexOf('https') !== -1) ? https : http;
             var request = httpClient.get(options, function (res) {
               log.debug('Response from force update', res.statusCode);
               if (res.statusCode >= 200 && res.statusCode < 300) {

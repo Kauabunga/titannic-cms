@@ -32,6 +32,16 @@
       $httpProvider.interceptors.push('authInterceptor');
 
 
+      (function redirectHttps(){
+        function isHttpsHost(location){
+          return location.indexOf('secure-atoll-5152.herokuapp.com') !== -1;
+        }
+
+        if(window.location.href && window.location.href.indexOf('http://') !== -1 && isHttpsHost(window.location.href)){
+          window.location.href = window.location.href.replace('http://', 'https://');
+        }
+      })();
+
 
       //TODO abstract to config server provider / inject as js?
       if($('#server-config #env').text() === 'production'){
@@ -40,9 +50,11 @@
 
 
       //allow other devices to access the preview iframe on our dev envs
-      var devHost = 'self';
+      var devHostHttp = 'self';
+      var devHostHttps = 'self';
       if($('#server-config #host').text()){
-        devHost = 'http://' + $('#server-config #host').text() + '/**';
+        devHostHttp = 'http://' + $('#server-config #host').text() + '/**';
+        devHostHttps = 'https://' + $('#server-config #host').text() + '/**';
       }
 
       $sceDelegateProvider.resourceUrlWhitelist([
@@ -50,7 +62,8 @@
         'self',
         // Allow loading from our assets domain.  Notice the difference between * and **.
         'http://localhost/**',
-        devHost,
+        devHostHttp,
+        devHostHttps,
 
         'http://titanic.solnetsolutions.co.nz:80/**',
         'http://titanic.solnetsolutions.co.nz/**',
@@ -61,6 +74,10 @@
         'http://titannic-dev-heroku.herokuapp.com/**',
         'titannic-dev-heroku.herokuapp.com:80/**',
         'titannic-dev-heroku.herokuapp.com/**',
+
+        'titannic-dev-heroku.herokuapp.com:443/**',
+        'https://titannic-dev-heroku.herokuapp.com:443/**',
+        'https://titannic-dev-heroku.herokuapp.com/**',
 
         'solnet.co.nz/**',
         'www.solnet.co.nz/**',

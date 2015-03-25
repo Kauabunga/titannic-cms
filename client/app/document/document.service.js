@@ -61,7 +61,7 @@
 
       };
 
-      
+
       self.getAll();
 
 
@@ -464,6 +464,7 @@
 
         $http.get('/api/documents/preview/' + docId + '/' + environment + '/' + ((options.fromPreviewPage === true) ? 'true' : 'false'))
           .success(function (data) {
+            $log.debug('preview response', data);
             deferred.resolve(data);
           })
           .error(function (error) {
