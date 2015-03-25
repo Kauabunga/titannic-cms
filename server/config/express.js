@@ -38,7 +38,6 @@ module.exports = function(app) {
   app.enable('trust proxy');
 
   function isHttpsHost(host){
-    console.log('isHttpsHost', host);
     return host && host.indexOf('secure-atoll-5152.herokuapp.com') !== -1;
   }
 
