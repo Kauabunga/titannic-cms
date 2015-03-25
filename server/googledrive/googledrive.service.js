@@ -210,7 +210,7 @@
    * @returns {*}
    * @private
    */
-  function _getAccessToken(req) {
+  function _getAccessToken(req, environment) {
 
     var deferred = q.defer();
     var currentUserDeferred = User.getUserFromRequest(req);
@@ -219,7 +219,8 @@
     currentUserDeferred.then(
       function success(user) {
 
-        if(user.provider === 'google'){
+        //If we are targeting the preview environment then always use our shared user
+        if(user.provider === 'google' && environment !== 'preview'){
           log.debug('got token from google user', user.accessToken);
           deferred.resolve(user.accessToken);
         }
@@ -440,7 +441,7 @@
    */
   function updateDocument(req, documentId, googleDocContentId, content, environment) {
 
-    var accessTokenDeferred = _getAccessToken(req);
+    var accessTokenDeferred = _getAccessToken(req, environment);
     var documentDeferred = q.defer();
     var googleContentDeferred = q.defer();
 
