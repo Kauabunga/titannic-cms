@@ -29,7 +29,7 @@ div(ng-include='"components/navbar/navbar.html"')
 
 
   .row.login-local-container(ng-class='{"login-focus": loginLocalFocus}', ng-mouseenter='loginLocalFocus = true', ng-mouseleave='loginLocalFocus = false')
-    .col-sm-4.col-sm-offset-4
+    .col-sm-6.col-sm-offset-3
       form.form(name='form', ng-submit='login(form)', novalidate='')
         .form-group
           //label Email
