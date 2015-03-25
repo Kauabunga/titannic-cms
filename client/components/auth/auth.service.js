@@ -151,8 +151,8 @@
 
               //ensure cookie is all g
               $timeout(function(){
-                localLogin();
                 deferred.resolve(data);
+                $timeout(function(){localLogin();}, 200);
               });
 
               return cb();
