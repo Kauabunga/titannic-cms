@@ -144,16 +144,9 @@
             success(function (data) {
 
               $cookieStore.put('token', data.token);
-              currentUser = User.get();
-
-              //ensure cookie is all g
-
-              deferred.resolve(data);
 
               //need to reload here to have our websockets re auth with their tokens
               window.location.pathname = '/';
-
-
 
               return cb();
             }).
