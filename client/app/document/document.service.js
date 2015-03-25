@@ -3,12 +3,14 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .service('Document', function ($log, $q, $http, $rootScope, Notification, socket, $timeout) {
+    .service('Document', function ($log, $q, $http, $rootScope, Notification, socket, $timeout, Auth) {
 
       var _documents = {};
       var _deferredGetDocument = {};
 
       var self = this;
+
+      self.getAllDeferredCache = undefined;
 
 
       /**
@@ -23,22 +25,44 @@
       };
 
 
+
       /**
        *
        */
       self.getAll = function () {
 
-        var deferred = $q.defer();
+        if(Auth.isLoggedIn()){
 
-        $http.get('/api/documents').success(function (documents) {
-          deferred.resolve(documents);
-        }).error(function (data, statusCode) {
-          deferred.reject(data, statusCode);
-          Notification.error('Document service failed to fetch all documents');
-        });
+          if( ! self.getAllDeferredCache ) {
 
-        return deferred.promise;
+            var deferred = self.getAllDeferredCache = $q.defer();
+
+            $http.get('/api/documents').success(function (documents) {
+              deferred.resolve(documents);
+              socket.syncUpdates('document', documents);
+
+              var rootScopeLogoutHandle = $rootScope.$on('logout', function(){
+                self.getAllDeferredCache = undefined;
+                socket.unsyncUpdates('document');
+                rootScopeLogoutHandle();
+              });
+
+            }).error(function (data, statusCode) {
+              deferred.reject(data, statusCode);
+              Notification.error('Document service failed to fetch all documents');
+            });
+
+          }
+          return self.getAllDeferredCache.promise;
+        }
+        else{
+          return $q.reject();
+        }
+
       };
+
+      
+      self.getAll();
 
 
       /**
