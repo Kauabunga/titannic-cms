@@ -460,7 +460,7 @@
 
         var deferred = $q.defer();
         options = options || {};
-
+        $log.debug('document service::getPreviewUrl docId, environment', docId, environment);
 
         $http.get('/api/documents/preview/' + docId + '/' + environment + '/' + ((options.fromPreviewPage === true) ? 'true' : 'false'))
           .success(function (data) {

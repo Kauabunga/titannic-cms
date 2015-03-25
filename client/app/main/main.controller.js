@@ -64,10 +64,15 @@
             schemaDeferred = $q.when();
           }
 
+
+          var currentTime = new Date().getTime();
+
           $q.all([documentDeferred, schemaDeferred]).finally(function () {
+            var diffTime = new Date().getTime() - currentTime;
+            var timeout = Math.min(diffTime, 400);
             $timeout(function () {
               $scope.fadeIn = true;
-            });
+            }, timeout);
           });
 
           documentDeferred.then(

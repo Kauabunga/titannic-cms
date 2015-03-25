@@ -37,7 +37,7 @@
         if($scope.documentId){
           Document.releaseDocument($scope.documentId);
 
-          $scope.prefetchPreviewUrl($scope.documentId, 'dev');
+          $scope.prefetchPreviewUrl('dev');
         }
 
         destroyHandle();
