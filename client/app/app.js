@@ -32,15 +32,6 @@
       $httpProvider.interceptors.push('authInterceptor');
 
 
-      (function redirectHttps(){
-        function isHttpsHost(location){
-          return location.indexOf('secure-atoll-5152.herokuapp.com') !== -1;
-        }
-
-        if(window.location.href && window.location.href.indexOf('http://') !== -1 && isHttpsHost(window.location.href)){
-          window.location.href = window.location.href.replace('http://', 'https://');
-        }
-      })();
 
 
       //TODO abstract to config server provider / inject as js?

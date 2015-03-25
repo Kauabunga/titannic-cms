@@ -31,6 +31,38 @@ module.exports = function(app) {
   app.use(cookieParser());
   app.use(passport.initialize());
 
+  // Enable reverse proxy support in Express. This causes the
+  // the "X-Forwarded-Proto" header field to be trusted so its
+  // value can be used to determine the protocol. See
+  // http://expressjs.com/api#app-settings for more details.
+  app.enable('trust proxy');
+
+  function isHttpsHost(host){
+    console.log('isHttpsHost', host);
+    return host && host.indexOf('secure-atoll-5152.herokuapp.com') !== -1;
+  }
+
+  // Add a handler to inspect the req.secure flag (see
+  // http://expressjs.com/api#req.secure). This allows us
+  // to know whether the request was via http or https.
+  app.use (function (req, res, next) {
+
+    if(isHttpsHost(req.headers.host)){
+      if (req.secure) {
+        // request was via https, so do no special handling
+        next();
+      } else {
+        // request was via http, so redirect to https
+        res.redirect('https://' + req.headers.host + req.url);
+      }
+    }
+    else{
+      next();
+    }
+
+  });
+
+
   // Persist sessions with mongoStore
   // We need to enable sessions for passport twitter because its an oauth 1.0 strategy
   app.use(session({
@@ -39,7 +71,7 @@ module.exports = function(app) {
     saveUninitialized: true,
     store: new mongoStore({ mongoose_connection: mongoose.connection })
   }));
-  
+
   if ('production' === env) {
     app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
     app.use(express.static(path.join(config.root, 'public')));
