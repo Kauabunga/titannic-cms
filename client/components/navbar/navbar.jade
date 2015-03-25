@@ -1,5 +1,6 @@
 div(ng-controller='NavbarCtrl')
   div.navbar.navbar-default.navbar-fixed-top.headroom(headroom='', tolerance='5', offset='205',
+        ng-class='{"fade-in": fadeIn}'
         classes='{"initial":"animated","pinned":"slideDown","unpinned":"slideUp","top":"headroom--top","notTop":"headroom--not-top"}')
 
 

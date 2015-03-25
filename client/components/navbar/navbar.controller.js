@@ -14,11 +14,17 @@
       $scope.isAdmin = Auth.isAdmin;
       $scope.getCurrentUser = Auth.getCurrentUser;
 
+      $scope.fadeIn = undefined;
+
       $scope.goHome = function () {
         if (Auth.isLoggedIn()) {
           $location.path('/');
         }
       };
+
+      $timeout(function(){
+        $scope.fadeIn = true;
+      }, 200);
 
       $scope.logout = function () {
         Auth.logout();
