@@ -28,7 +28,7 @@ div(ng-class='{"fadeIn": fadeIn}')
               a
                 | {{document.name}}
                 button.close(type='button', ng-click='deleteDocument($event, document)', ng-if='isAdmin()') ×
-                button.close(type='button', ng-click='historyDocument($event, document)')
+                button.close(type='button', ng-click='historyDocument($event, document)', middle-click='historyDocument($event, document)')
                   i.fa.fa-history
                 button.close.btn-preview(type='button', ng-click='previewDocument($event, document)')
                   i.fa.fa-search
