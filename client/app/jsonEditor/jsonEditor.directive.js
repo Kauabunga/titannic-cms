@@ -23,7 +23,9 @@
           'editorReadOnly': '@?',
           'editorToggleOptions': '=?',
           'editorReset': '=?',
-          'editorChangeHandle': '&?'
+          'editorChangeHandle': '&?',
+          'editorDisableState': '=?',
+          'editorEnableAdditionalProperties': '=?'
         },
         link: function (scope, element, attrs) {
 
@@ -59,6 +61,8 @@
           scope.editorLoaded = false;
           scope.editorDirty = false;
 
+          scope.editorDisableState = (scope.editorDisableState === 'true' || scope.editorDisableState === true) ? true : false;
+          scope.editorEnableAdditionalProperties = (scope.editorEnableAdditionalProperties === 'true' || scope.editorEnableAdditionalProperties === true) ? true : false;
           scope.editorDisableAdd = (scope.editorDisableAdd === 'true' || scope.editorDisableAdd === true) ? true : false;
           scope.editorDisableDelete = (scope.editorDisableDelete === 'true' || scope.editorDisableDelete === true) ? true : false;
           scope.editorDisableReorder = (scope.editorDisableReorder === 'true' || scope.editorDisableReorder === true) ? true : false;
@@ -96,6 +100,8 @@
               });
               scope.editorDocumentDeferred.then(
                 function success(document) {
+
+                  $log.debug('json editor init - document deferred success');
 
                   $timeout(function(){
                     var jsonEditorOptions = getEditorOptions();
@@ -196,6 +202,9 @@
            *
            */
           function getEditorOptions() {
+
+            $log.debug('json editor getEditorOptions()', scope.editorDocument.schema, scope.editorDocumentContent);
+
             return {
               schema: scope.editorDocument.schema,
               theme: 'bootstrap2',
@@ -209,7 +218,7 @@
               disable_array_add: scope.editorDisableAdd,
               disable_array_delete: scope.editorDisableDelete,
               disable_array_reorder: scope.editorDisableReorder,
-              no_additional_properties: true,
+              no_additional_properties: ! scope.editorEnableAdditionalProperties,
               show_errors: 'always'
             };
           }
@@ -259,7 +268,16 @@
                 }
 
                 scope.editorDirty = true;
-                Document.setDocumentContent($stateParams.documentId, editorValue);
+
+                try{
+                  Document.setDocumentContent($stateParams.documentId, editorValue);
+                }
+                catch(error){
+
+                  $log.debug('Json editor failed to update document content');
+                }
+
+
 
               }
 

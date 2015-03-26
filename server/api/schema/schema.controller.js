@@ -3,6 +3,11 @@
 var _ = require('lodash');
 var Schema = require('./schema.model');
 
+var googledrive = require('../../googledrive/googledrive.service');
+
+var Log = require('log');
+var log = new Log('schema.controller');
+
 // Get list of schemas
 exports.index = function(req, res) {
   Schema.find(function (err, schemas) {
@@ -16,7 +21,36 @@ exports.show = function(req, res) {
   Schema.findById(req.params.id, function (err, schema) {
     if(err) { return handleError(res, err); }
     if(!schema) { return res.send(404); }
-    return res.json(schema);
+
+
+    var googleSchemaDeferred = googledrive.fetchGoogleDoc(schema.name, schema.googleDocSchemaId);
+
+    googleSchemaDeferred.then(
+      function success(schemaContent){
+
+        try {
+
+          var deserialisedSchema = JSON.parse(schemaContent);
+          var schemaObject = schema.toObject();
+
+          schemaObject.content = deserialisedSchema;
+
+
+          res.status(200).json(schemaObject);
+
+
+        }
+        catch (jsonParseError) {
+          log.error('Error parsing schema content', jsonParseError);
+          res.send(500);
+        }
+
+      },
+      function error(err){
+        console.log('Error getting schema', JSON.stringify(err));
+        return res.send(500);
+      });
+
   });
 };
 

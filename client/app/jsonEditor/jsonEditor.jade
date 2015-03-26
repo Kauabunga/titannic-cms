@@ -5,13 +5,13 @@
   .col-lg-12.json-editor-col
     .json-editor-root(ng-class='{"loaded": editorLoaded, "dirty": editorDirty, "saved": editorSaved, "published": editorPublished}')
 
-        h4.dirty-header.json-header
+        h4.dirty-header.json-header(ng-hide='editorDisableState')
           i.fa.fa-pencil
           | Edited
-        h4.published-header.json-header
+        h4.published-header.json-header(ng-hide='editorDisableState')
           i.fa.fa-paper-plane
           | Published
-        h4.saved-header.json-header
+        h4.saved-header.json-header(ng-hide='editorDisableState')
           i.fa.fa-save
           | Saved
 

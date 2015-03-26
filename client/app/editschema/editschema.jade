@@ -1,9 +1,28 @@
-div.edit-schema-container
+div.edit-schema-container(ng-class='{"fadeIn": fadeIn}')
 
 
   div(ng-include='"components/navbar/navbar.html"')
 
-  .col-md-12
-      h1 TODO :)
+
+  header#banner.hero-unit
+    .container
+      h3 Edit schema
+      p Here you can preview the document content structures
+        br
+        | &nbsp;
 
 
+
+  .container
+
+    .row &nbsp;
+    .row &nbsp;
+
+
+    .row.json-editor-row
+      .col-sm-12
+
+        .history-loader.circle-loader.circle-loader-large(ng-class='{"active": ! historyContentLoaded}')
+        span.json-editor(editor-dirty='isDirty', editor-document='schemaDocument', editor-disable-add='true', editor-disable-reorder='true',
+        editor-disable-delete='true', editor-read-only='true', editor-disable-state='true', editor-enable-additional-properties='true',
+        editor-document-content='schemaDocumentContent', editor-document-deferred='schemaPromise')
