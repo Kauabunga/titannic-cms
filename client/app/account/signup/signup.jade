@@ -33,18 +33,8 @@ div(ng-include='"components/navbar/navbar.html"')
             | {{ errors.password }}
 
         div
-          button.btn.btn-inverse.btn-lg.btn-login(type='submit')
+          button.btn.btn-create(type='submit')
             | Sign up
-          = ' '
-          a.btn.btn-default.btn-lg.btn-register(href='/login')
-            | Login
 
 
-        hr
 
-        div
-          a.btn.btn-google-plus(href='', ng-click='loginOauth("google")')
-            i.fa.fa-google-plus
-            |  Connect with Google+
-
-  hr

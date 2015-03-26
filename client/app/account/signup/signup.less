@@ -12,5 +12,62 @@ body.signup {
   }
 
 
+  label {
+    font-size: 120%;
+    margin-top: 10px;
+    color: @grey-light-2;
+  }
+
+
+  .has-error {
+    input {
+      color: @grey-light-2;
+    }
+  }
+
+
+  input.ng-dirty.ng-invalid {
+    color: @grey-light-2;
+  }
+
+  input, select {
+
+    &:focus {
+      outline: none;
+      box-shadow: none;
+    }
+
+    margin-top: 10px;
+
+    padding: 25px 20px;
+
+    border-radius: 0;
+    box-shadow: none;
+
+
+    -webkit-appearance: none;
+  }
+
+
+
+  .btn.btn-create {
+
+    background-color: @medium-blue;
+
+    color: @gray-darker !important;
+
+    margin-right: 0;
+
+    .transition(opacity 0.2s ease);
+    opacity: 1;
+
+    &:hover,
+    &:active {
+      opacity: 0.7 !important;
+    }
+
+  }
+
+
 
 }

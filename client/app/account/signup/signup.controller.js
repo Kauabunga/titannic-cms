@@ -18,7 +18,7 @@
           })
             .then(function () {
               // Account created, redirect to home
-              $location.path('/');
+              window.location.pathname = '/';
             })
             .catch(function (err) {
               err = err.data;
@@ -33,9 +33,6 @@
         }
       };
 
-      $scope.loginOauth = function (provider) {
-        $window.location.href = '/auth/' + provider;
-      };
     });
 
 })();

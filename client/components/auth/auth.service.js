@@ -3,7 +3,7 @@
   'use strict';
 
   angular.module('titannicCmsApp')
-    .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, $log, $timeout, $window) {
+    .factory('Auth', function Auth($location, $rootScope, $http, User, $cookieStore, $q, $log, $timeout, $window, $state) {
 
       var currentUser = {};
       if ($cookieStore.get('token')) {
@@ -49,14 +49,21 @@
        *
        */
       function checkAuthState(){
-        _isLoggedInAsync(function(isLoggedIn){
-          if(! isLoggedIn){
-            _logout();
-            $rootScope.$apply(function () {
-              $location.path('/login');
-            });
-          }
-        });
+
+        //TODO check current route auth state
+        $log.debug($state);
+
+        if($state.current.authenticate){
+          _isLoggedInAsync(function(isLoggedIn){
+            if(! isLoggedIn){
+              _logout();
+              $rootScope.$apply(function () {
+                $location.path('/login');
+              });
+            }
+          });
+        }
+
       }
       window.addEventListener('focus', checkAuthState);
 
@@ -147,7 +154,7 @@
               $cookieStore.put('token', data.token);
 
               //need to reload here to have our websockets re auth with their tokens
-              window.location.pathname = '/';
+              deferred.resolve(data);
 
               return cb();
             }).

@@ -63,6 +63,10 @@
                 localStorage.setItem('latestEmail', $scope.user.email);
               }
 
+              $timeout(function(){
+                window.location.pathname = '/';
+              });
+
 
             })
             .catch(function (err) {
