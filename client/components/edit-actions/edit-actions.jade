@@ -10,7 +10,7 @@
             span(class='hidden-md hidden-lg hidden-xl') Preview
             span(class='hidden-xs hidden-sm') Preview {{document.name}}
 
-      span
+      span(ng-if='isEditor() || isPublisher() || isAdmin()')
         button.btn.btn-update.btn-info.btn-save(ng-class='{"updating": isUpdating, "publishing": isPublishing}', type='submit', ng-click='updateDocument()')
           .circle-loader
           i.fa.fa-save

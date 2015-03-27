@@ -198,12 +198,20 @@
         return Auth.isAdmin();
       };
 
-        /**
+      /**
        *
        * @returns {Boolean}
        */
       $rootScope.isPublisher = function(){
         return Auth.isPublisher();
+      };
+
+      /**
+       *
+       * @returns {Boolean}
+       */
+      $rootScope.isEditor = function(){
+        return Auth.isEditor();
       };
 
       //add a class based upon the current route
