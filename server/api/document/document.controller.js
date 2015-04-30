@@ -5,30 +5,22 @@ var q = require('q');
 var Document = require('./document.model');
 var Schema = require('./../schema/schema.model');
 var googledrive = require('../../googledrive/googledrive.service');
-
 var preview = require('../../components/preview/preview.service');
-
 var https = require('follow-redirects').https;
-var UserController = require('../user/user.controller');
-
 var config = require('../../config/environment');
-
-
 var Log = require('log');
 var log = new Log('document.controller');
 
 
 /**
  * Get list of documents
+ *
  * @param req
  * @param res
  */
-exports.index = function(req, res) {
+exports.index = function getDocuments(req, res) {
   Document.find(function (err, documents) {
-    if(err) { return handleError(res, err); }
-
-    //TODO we need to ensure the returned documents are inline with the User role
-
+    if (err) { return handleError(res, err); }
     return res.json(200, documents);
   });
 };
@@ -53,9 +45,7 @@ exports.getPreview = function(req, res){
     }
     else {
 
-      var previewDeferred = preview.getPreview(req.params.id, req.params.env, req.params.isPreviewPageReload);
-
-      previewDeferred.then(
+      preview.getPreview(req.params.id, req.params.env, req.params.isPreviewPageReload).then(
         function success() {
 
           req.headers.host = req.headers.host || 'localhost';
@@ -75,13 +65,7 @@ exports.getPreview = function(req, res){
             url = config.localSiteProtocol + '://' + config.localSite + ':' + config.localSitePort + '/' + (document.previewPath || '');
           }
 
-
-
-          var responseBody = {
-            url: url
-          };
-
-          res.status(200).json(responseBody);
+          res.status(200).json({ url: url });
 
         },
         function error(statusCode) {
@@ -132,16 +116,13 @@ exports.show = function(req, res) {
 
       //Get the documents schema
       Schema.findById(document.schemaId, function (err, schema) {
+        if(err) { schemaDeferred.reject(); }
         log.debug('Schema found: ' + JSON.stringify(schema));
         schemaDeferred.resolve(schema);
       });
 
       schemaDeferred.promise.then(
         function success(schema) {
-
-          //TODO we need to fetch the google doc from goooogle - should really be using correct api + library as we will have to when editing?
-          //TODO distinguish google errors from server errors
-
 
           log.debug('Fetching google doc and schema');
           var googleContentDeferred = googledrive.fetchGoogleDoc(document.name, document.devContentGoogleDocId);
@@ -168,8 +149,6 @@ exports.show = function(req, res) {
 
                 log.debug('          ---> 200 RESPONSE to client' + '\n');
                 res.status(200).json(documentObject);
-
-
               }
               catch (jsonParseError) {
                 log.error(jsonParseError);
@@ -184,13 +163,6 @@ exports.show = function(req, res) {
               res.send(contentFetchError);
             });
 
-
-          //TODO we need to store the content in our own database using the User id as a key
-          //      if the document is not saved we can keep the edit for as long as it doesn't get updated by someone else
-          //      if the document is updated then we need to only allow the user to view their old edits and perhaps copy them
-          //      somewhere else
-
-
         },
         function error(getSchemaObjectError) {
           log.error(getSchemaObjectError);
@@ -201,7 +173,7 @@ exports.show = function(req, res) {
 
     });
   }
-  else{
+  else {
     log.error('invalid params to get document');
     res.send(400);
   }
@@ -536,11 +508,8 @@ exports.publish = function(req, res) {
   //get user from the session -> helper in user
   if(req.body && req.body.content && req.body.liveContentGoogleDocId){
 
-    var googleContentUpdateDeferred = googledrive.updateDocument(req, req.params.id, req.body.liveContentGoogleDocId, req.body.content, 'live');
-
-    googleContentUpdateDeferred.then(
+    googledrive.updateDocument(req, req.params.id, req.body.liveContentGoogleDocId, req.body.content, 'live').then(
       function success(){
-
         log.debug('succesfully published google doc document -> updating local info');
         //dont want to update the document in our db on an publish request
         Document.findById(req.params.id, function (err, document) {
@@ -555,20 +524,15 @@ exports.publish = function(req, res) {
 
       },
       function error(statusCode){
-
         if(typeof statusCode !== "number"){
           statusCode = 500;
         }
-
         log.error('Failed to update google doc content', statusCode);
-
         res.send(statusCode);
       });
 
   }
-  else{
-    //TODO is it mandatory to update a document with content?
-    //      should separate documents meta data from content
+  else {
     log.error('Content not passed while updating document');
     res.send(400);
   }
@@ -592,6 +556,12 @@ exports.destroy = function(req, res) {
   });
 };
 
+/**
+ *
+ * @param res
+ * @param err
+ * @returns {*}
+ */
 function handleError(res, err) {
   return res.send(500, err);
 }

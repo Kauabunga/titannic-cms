@@ -2,14 +2,12 @@
 
 var _ = require('lodash');
 var Schema = require('./schema.model');
-
 var googledrive = require('../../googledrive/googledrive.service');
-
 var Log = require('log');
 var log = new Log('schema.controller');
 
 // Get list of schemas
-exports.index = function(req, res) {
+exports.index = function getSchemas(req, res) {
   Schema.find(function (err, schemas) {
     if(err) { return handleError(res, err); }
     return res.json(200, schemas);
