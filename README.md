@@ -1,4 +1,5 @@
-## Google-doc-json CMS ![Travis-ci build status](https://travis-ci.org/Kauabunga/titannic-cms.svg)
+## GoogleDocs CMS [<img src="https://travis-ci.org/Kauabunga/titannic-cms.svg">](https://travis-ci.org/Kauabunga/titannic-cms) [<img src="https://david-dm.org/Kauabunga/titannic-cms.svg">](https://david-dm.org/Kauabunga/titannic-cms) [![Coverage Status](https://coveralls.io/repos/Kauabunga/titannic-cms/badge.svg?branch=master)](https://coveralls.io/r/Kauabunga/titannic-cms?branch=master)
+
 
 
 > A json based cms that uses google docs as a document store.
