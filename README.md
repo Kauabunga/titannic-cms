@@ -1,4 +1,4 @@
-## GoogleDocs CMS [<img src="https://travis-ci.org/Kauabunga/titannic-cms.svg">](https://travis-ci.org/Kauabunga/titannic-cms) [<img src="https://david-dm.org/Kauabunga/titannic-cms.svg">](https://david-dm.org/Kauabunga/titannic-cms) [![Coverage Status](https://coveralls.io/repos/Kauabunga/titannic-cms/badge.svg?branch=master)](https://coveralls.io/r/Kauabunga/titannic-cms?branch=master)
+## GoogleDocs CMS [<img src="https://travis-ci.org/Kauabunga/titannic-cms.svg">](https://travis-ci.org/Kauabunga/titannic-cms) [<img src="https://david-dm.org/Kauabunga/titannic-cms.svg">](https://david-dm.org/Kauabunga/titannic-cms) [![Coverage Status](https://coveralls.io/repos/Kauabunga/titannic-cms/badge.svg?branch=master)](https://coveralls.io/r/Kauabunga/titannic-cms?branch=master) [![Code Climate](https://codeclimate.com/github/Kauabunga/titannic-cms/badges/gpa.svg)](https://codeclimate.com/github/Kauabunga/titannic-cms)
 
 
 
