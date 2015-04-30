@@ -1,49 +1,42 @@
-titannic-cms
-============
-
-Google-doc-json CMS
+## Google-doc-json CMS ![Travis-ci build status](https://travis-ci.org/Kauabunga/titannic-cms.svg)
 
 
-Some nice and mankey temporary setup instructions :)
+> A json based cms that uses google docs as a document store.
 
 
+1. Clone the git repo
 
-1. Pull the git repo
-      COMMANDS      
         git clone git@github.com:Kauabunga/titannic-cms.git
     
 2. Install / config / start mongodb
-      COMMANDS
+
         brew install mongodb
         sudo mkdir -p /data/db
         sudo chmod -R 777 /data/db
         mongod
 
 3. Install node and npm
-      COMMANDS
+        
         brew install node
     
 3. Install npm packages
-      COMMANDS
+
         npm install
     
 4. Install bower packages
-      COMMANDS
+
         npm install -g bower
         bower install
     
 5. Server config @ /server/config/local.env.js (there is a sample config example commited)
-    - we need two properties: GOOGLE_ID & GOOGLE_SECRET
-    - this should never be commited to the repository
+    - We need two properties: GOOGLE_ID & GOOGLE_SECRET
+    - This should never be commited to the repository
     
 6. Set development environment variable
-      WINDOW COMMAND
-        set NODE_ENV=development
-      MAC COMMAND
+            
         export NODE_ENV=development
     
-7. Run using grunt
-      COMMANDS
-        grunt serve
+7. Run dev environment using grunt
 
+        grunt serve
 

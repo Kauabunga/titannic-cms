@@ -16,7 +16,8 @@ module.exports = function (grunt) {
     ngtemplates: 'grunt-angular-templates',
     protractor: 'grunt-protractor-runner',
     injector: 'grunt-asset-injector',
-    buildcontrol: 'grunt-build-control'
+    buildcontrol: 'grunt-build-control',
+    mochacov: 'grunt-mocha-cov'
   });
 
   // Time how long tasks take. Can help when optimizing build times
@@ -401,6 +402,24 @@ module.exports = function (grunt) {
       }
     },
 
+    coveralls: {
+      // Options relevant to all targets
+      options: {
+        // When true, grunt-coveralls will only print a warning rather than
+        // an error, to prevent CI builds from failing unnecessarily (e.g. if
+        // coveralls.io is down). Optional, defaults to false.
+        force: false
+      },
+
+      test: {
+        // LCOV coverage file (can be string, glob or array)
+        src: 'coverage-results/extra-results-*.info',
+        options: {
+          // Any options for just this target
+        }
+      }
+    },
+
     // Run some tasks in parallel to speed up the build process
     concurrent: {
       server: [
@@ -471,6 +490,31 @@ module.exports = function (grunt) {
       src: ['server/**/*.spec.js']
     },
 
+    mochacov: {
+      unit: {
+        options: {
+          reporter: 'spec'
+        }
+      },
+      coverage: {
+        options: {
+          coveralls: true
+        }
+      },
+      coveralls: {
+        options: {
+          coveralls: {
+            serviceName: 'travis-ci'
+          }
+        }
+      },
+      options: {
+        files: ['server/**/*.spec.js'],
+        ui: 'bdd',
+        colors: true
+      }
+    },
+
     protractor: {
       options: {
         configFile: 'protractor.conf.js'
@@ -530,7 +574,7 @@ module.exports = function (grunt) {
         files: {
           '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.less'
         }
-      },
+      }
     },
 
     injector: {
@@ -594,7 +638,7 @@ module.exports = function (grunt) {
           ]
         }
       }
-    },
+    }
   });
 
   // Used for delaying livereload until after server has restarted
@@ -657,7 +701,8 @@ module.exports = function (grunt) {
       return grunt.task.run([
         'env:all',
         'env:test',
-        'mochaTest'
+        //'mochaTest'
+        'mochacov'
       ]);
     }
 

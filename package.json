@@ -33,6 +33,7 @@
     "socketio-jwt": "^2.0.2"
   },
   "devDependencies": {
+    "blanket": "^1.1.6",
     "connect-livereload": "~0.4.0",
     "grunt": "~0.4.4",
     "grunt-angular-templates": "^0.5.4",
@@ -56,6 +57,7 @@
     "grunt-express-server": "~0.4.17",
     "grunt-google-cdn": "~0.4.0",
     "grunt-karma": "~0.8.2",
+    "grunt-mocha-cov": "^0.4.0",
     "grunt-mocha-test": "~0.10.2",
     "grunt-newer": "~0.7.0",
     "grunt-ng-annotate": "^0.2.3",
@@ -97,5 +99,12 @@
     "test": "grunt test",
     "update-webdriver": "node node_modules/grunt-protractor-runner/node_modules/protractor/bin/webdriver-manager update"
   },
-  "private": true
+  "private": true,
+  "config": {
+    "blanket": {
+      "pattern": [
+        "src"
+      ]
+    }
+  }
 }
