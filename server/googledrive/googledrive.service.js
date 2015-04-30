@@ -9,21 +9,14 @@
   var url = require('url');
   var Log = require('log');
   var log = new Log('googledrive.service');
-
   var User = require('../api/user/user.controller');
   var Document = require('../api/document/document.model');
   var Schema = require('../api/schema/schema.model');
-
   var google = require('googleapis');
   var OAuth2 = google.auth.OAuth2;
-
   var httpService = require('../components/http/http.service');
-
-
   var googleAuthService = require('./auth/googleauth.service');
 
-
-  //nasty - google does not have a method for getting a file revision
 
 
   /**
@@ -34,9 +27,7 @@
    * @private
    */
   var _deferredCache = {};
-
   var _deferredHistoryCache = {};
-
   var _deferredHistoryContentCache = {};
 
   /**
@@ -137,16 +128,6 @@
           }
         }
 
-
-        //var subscribeDeferred = subscribeGoogleDoc(name, googleId, dbId, options);
-
-        //subscribeDeferred.then(
-        //  function success(){
-        //    deferred.resolve();
-        //  },
-        //  function error(){
-        //    deferred.reject();
-        //});
       },
       function error(){
         deferred.reject();
@@ -162,13 +143,11 @@
    * Otherwise returns 403
    *
    * TODO this should return either a well formed json item or a json string
-   * TODO this should return either a well formed json item or a json string
-   * TODO this should return either a well formed json item or a json string
+   *
    */
   function fetchGoogleDoc(name, id, options) {
 
     var deferredId = 'cache_' + id;
-
     if( ! _deferredCache[deferredId] || (options && options.force)){
 
       var httpOptions = {
@@ -177,15 +156,10 @@
         path: '/uc?id=' + id + '&export=download' + '&random=' + (Math.random() * 100000),
         agent: false
       };
-
       _deferredCache[deferredId] = httpService.https(httpOptions);
-
     }
 
-    _deferredCache[deferredId].then(
-      function success(){
-
-      },
+    _deferredCache[deferredId].then(null,
       function error(){
         //TODO we should be checking this at the start of the request?
         delete _deferredCache[deferredId];
@@ -193,16 +167,6 @@
 
     return _deferredCache[deferredId];
   }
-
-
-  /**
-   *
-   *
-   *      AUTHENTICATED
-   *
-   *
-   */
-
 
   /**
    *
@@ -214,7 +178,6 @@
 
     var deferred = q.defer();
     var currentUserDeferred = User.getUserFromRequest(req);
-
 
     currentUserDeferred.then(
       function success(user) {
@@ -441,22 +404,18 @@
    */
   function updateDocument(req, documentId, googleDocContentId, content, environment) {
 
+    log.debug('Updating document - current user:', req.user.name);
+
     var accessTokenDeferred = _getAccessToken(req, environment);
     var documentDeferred = q.defer();
     var googleContentDeferred = q.defer();
-
     var updateDeferred = q.defer();
-
     var deferredId = 'cache_' + googleDocContentId;
-
 
     var contentString = content;
     if(typeof contentString !== 'string'){
       contentString = JSON.stringify(contentString);
     }
-
-
-    log.debug('Updating document - current user:', req.user.name);
 
     //cache the content in our document model
     Document.findById(documentId, function(err, document){
@@ -550,9 +509,6 @@
       });
 
 
-    /**
-     *
-     */
     googleContentDeferred.promise.then(
       function success(document){
 
@@ -594,88 +550,10 @@
         updateDeferred.reject(status);
       });
 
-
-
     return updateDeferred.promise;
   }
 
 
-
-
-
-  /**
-   *
-   * @param name
-   * @param id
-   * @param options
-   */
-  function subscribeGoogleDoc(name, googleId, dbId, options) {
-
-    var deferred = q.defer();
-
-
-    log.debug('subscribeGoogleDoc', name);
-
-
-    function googleCallback(error, body, googleResponse){
-
-      if (googleResponse && googleResponse.statusCode >= 200 && googleResponse.statusCode < 300) {
-        log.debug('successful subscribe/watch response');
-        deferred.resolve();
-      }
-      else {
-        log.error('error subscribe/watch response', error);
-        deferred.reject();
-      }
-
-    }
-
-
-    try {
-
-
-      //var oauth2Client = new OAuth2(config.google.clientID, config.google.clientSecret, config.google.callbackURL);
-      //
-      //oauth2Client.setCredentials({
-      //  access_token: user.accessToken
-      //});
-
-      var drive = google.drive({version: 'v2', apiKey: config.google.apiKey});
-
-
-      drive.files.watch({
-        fileId: googleId,
-        id: dbId,//string, A UUID or similar unique string that identifies this channel.
-        //expiration:  '', //long, Date and time of notification channel expiration, expressed as a Unix timestamp, in milliseconds. Optional.
-        //token:  '', //string, An arbitrary string delivered to the target address with each notification delivered over this channel. Optional.
-        type: 'web_hook', //string, The type of delivery mechanism used for this channel. The only option is web_hook.
-        address: config.domain //string The address where notifications are delivered for this channel.
-      }, googleCallback);
-    }
-    catch(error){
-      log.error('failed to watch google doc', error);
-    }
-
-
-    //TODO subscribe for updates
-    //TODO create subscription service api
-
-    return deferred.promise;
-
-  }
-
-  /**
-   * TODO create endpoint for service api to call back
-   */
-  function subscribeChangeEvent(){
-
-
-  }
-
-
-
-
-  //exports.subscribeChangeEvent = subscribeChangeEvent;
   exports.updateDocument = updateDocument;
   exports.fetchGoogleDoc = fetchGoogleDoc;
   exports.getDocumentHistory = getDocumentHistory;

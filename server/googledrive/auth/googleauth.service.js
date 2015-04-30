@@ -89,8 +89,6 @@
             accessTokenDeferred.reject();
           });
 
-
-
         if(! googleAuth.googleAccess.lastRefreshDate){
 
         }
@@ -176,9 +174,6 @@
       }
       else{
 
-        //TODO make this a singleton
-        //TODO make this a singleton
-        //TODO make this a singleton
         //TODO make this a singleton
         deferred.resolve(googleAuth[0]);
       }
