@@ -19,9 +19,24 @@ var session = require('express-session');
 var mongoStore = require('connect-mongo')(session);
 var mongoose = require('mongoose');
 
+/**
+ *
+ * @param app
+ */
 module.exports = function(app) {
   var env = app.get('env');
 
+  configAll(app);
+
+  if ('production' === env) { configProduction(app); }
+  if ('development' === env || 'test' === env) { configDevelopment(app); }
+};
+
+/**
+ *
+ * @param app
+ */
+function configAll(app){
   app.set('views', config.root + '/server/views');
   app.set('view engine', 'jade');
   app.use(compression());
@@ -37,30 +52,7 @@ module.exports = function(app) {
   // http://expressjs.com/api#app-settings for more details.
   app.enable('trust proxy');
 
-  function isHttpsHost(host){
-    return host && host.indexOf('secure-atoll-5152.herokuapp.com') !== -1;
-  }
-
-  // Add a handler to inspect the req.secure flag (see
-  // http://expressjs.com/api#req.secure). This allows us
-  // to know whether the request was via http or https.
-  app.use (function (req, res, next) {
-
-    if(isHttpsHost(req.headers.host)){
-      if (req.secure) {
-        // request was via https, so do no special handling
-        next();
-      } else {
-        // request was via http, so redirect to https
-        res.redirect('https://' + req.headers.host + req.url);
-      }
-    }
-    else{
-      next();
-    }
-
-  });
-
+  app.use(forceHttpsRedirect);
 
   // Persist sessions with mongoStore
   // We need to enable sessions for passport twitter because its an oauth 1.0 strategy
@@ -70,20 +62,60 @@ module.exports = function(app) {
     saveUninitialized: true,
     store: new mongoStore({ mongoose_connection: mongoose.connection })
   }));
+}
 
-  if ('production' === env) {
-    app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
-    app.use(express.static(path.join(config.root, 'public')));
-    app.set('appPath', config.root + '/public');
-    app.use(morgan('dev'));
+/**
+ *
+ * @param app
+ */
+function configProduction(app){
+  app.use(favicon(path.join(config.root, 'public', 'favicon.ico')));
+  app.use(express.static(path.join(config.root, 'public')));
+  app.set('appPath', config.root + '/public');
+  app.use(morgan('dev'));
+}
+
+/**
+ *
+ * @param app
+ */
+function configDevelopment(app){
+  app.use(require('connect-livereload')());
+  app.use(express.static(path.join(config.root, '.tmp')));
+  app.use(express.static(path.join(config.root, 'client')));
+  app.set('appPath', 'client');
+  app.use(morgan('dev'));
+  app.use(errorHandler()); // Error handler - has to be last
+}
+
+
+/**
+ *
+ * @param host
+ * @returns {*|boolean}
+ */
+function isHttpsHost(host){
+  return host && host.indexOf('secure-atoll-5152.herokuapp.com') !== -1;
+}
+
+/**
+ * Add a handler to inspect the req.secure flag (see
+ * http://expressjs.com/api#req.secure). This allows us
+ * to know whether the request was via http or https. *
+ */
+function forceHttpsRedirect (req, res, next) {
+
+  if(isHttpsHost(req.headers.host)){
+    if (req.secure) {
+      // request was via https, so do no special handling
+      next();
+    } else {
+      // request was via http, so redirect to https
+      res.redirect('https://' + req.headers.host + req.url);
+    }
+  }
+  else{
+    next();
   }
 
-  if ('development' === env || 'test' === env) {
-    app.use(require('connect-livereload')());
-    app.use(express.static(path.join(config.root, '.tmp')));
-    app.use(express.static(path.join(config.root, 'client')));
-    app.set('appPath', 'client');
-    app.use(morgan('dev'));
-    app.use(errorHandler()); // Error handler - has to be last
-  }
-};
+}
