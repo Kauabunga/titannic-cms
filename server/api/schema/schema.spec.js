@@ -79,6 +79,7 @@ describe('GET /api/schemas', function() {
             .get('/api/schemas')
             .expect(200)
             .set('Authorization', 'Bearer ' + res.body.token)
+            .expect('Content-Type', /json/)
             .end(function(err, res){
               res.should.have.status(200);
               done();
